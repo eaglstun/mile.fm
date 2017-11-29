@@ -6,14 +6,14 @@
 </ul>
 
 <div id="profile1" class="profileTab">
-	<img src="/content/profile/<?php echo trim( $profile['pic']) ? $profile['pic'] : 'defaultFriend.gif'; ?>" id="currentUserPic" class="profilePic"/>
+	<img src="/content/profile/<?= trim( $profile['pic']) ? $profile['pic'] : 'defaultFriend.gif'; ?>" id="currentUserPic" class="profilePic"/>
 	
-	<h2 class="username"><?php echo $profile['user']; ?></h2>
+	<h2 class="username"><?= $profile['user']; ?></h2>
 	
-	<div id="profileHTML"><?php echo $profile['profile']; ?></div>  
+	<div id="profileHTML"><?= $profile['profile']; ?></div>  
 	
 	<div id="userExternal">
-	<?php echo $externalSites; ?>
+	<?= $externalSites; ?>
 	</div>
 	
 	<div class="spacer"></div>
@@ -22,7 +22,7 @@
 <div id="profile2" style="display:none" class="profileTab">
 	<p class="helperText">The text in your profile that the public will see. <nobr>Keep it short!</nobr></p>
 	<form name="cp_prof" action="" method="POST">
-		<textarea name="profile" id="profileEdit"><?php echo $profile['profile']; ?></textarea>
+		<textarea name="profile" id="profileEdit"><?= $profile['profile']; ?></textarea>
 		
 		<div class="buttonContainer">
 			<a class="fakeButton" onclick="sendProfile();return false">Submit</a>
@@ -57,9 +57,9 @@
 		<div>
 			<select id="profileNewLink" onchange="updateExt()" name="extid" class="stdInput">
 				<option value="">select</option>
-				<?php foreach( $allsites as $k=>$v ): ?>
-					<option value="<?php echo $v['id'] ?>" url="<?php echo $v['url'] ?>" username="<?php echo $v['username'] ?>" uid="<?php echo $v['uid'] ?>"><?php echo $v['site'] ?></option>
-				<?php endforeach ?>
+				<? foreach( $allsites as $k=>$v ): ?>
+					<option value="<?= $v['id'] ?>" url="<?= $v['url'] ?>" username="<?= $v['username'] ?>" uid="<?= $v['uid'] ?>"><?= $v['site'] ?></option>
+				<? endforeach ?>
 			</select>
 		</div>
 		

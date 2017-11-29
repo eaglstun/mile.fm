@@ -1,16 +1,19 @@
 <?
-class statsMVC extends Action{
-	function init(){
-		if(isset($_SESSION['userauth']) && $_SESSION['userauth'] & 64){
+class statsMVC extends Action
+{
+	function init()
+	{
+		if (isset($_SESSION['userauth']) && $_SESSION['userauth'] & 64) {
 			//all good
 		} else {
 			$this->Redirect();
 		}
-		
+
 		$this->theme = "admin";
 	}
-	
-	function indexAction(){
+
+	function indexAction()
+	{
 		$this->view = "admin/stats";
 		
 		//get the unique vistors(by ip)
@@ -33,26 +36,26 @@ class statsMVC extends Action{
 		$res = $this->db->exec($sql);
 		$this->vars['enter'] = $res;
 	}
-	
-	function detailAction(){
+
+	function detailAction()
+	{
 		$this->view = "admin/stats-detail";
-		
-		if (isset($_REQUEST['ip']) ){
+
+		if (isset($_REQUEST['ip'])) {
 			$ip = $_REQUEST['ip'];
 		} else {
-			$this->Redirect('admin/stats' );
+			$this->Redirect('admin/stats');
 		}
-		
+
 		$sql = "SELECT * FROM tracking WHERE `ip`='$ip'
 				ORDER BY stamp DESC";
 		$res = $this->db->exec($sql);
 		
 		//no results?
-		if( !count($res) ){
-			$this->Redirect('admin/stats' );
+		if (!count($res)) {
+			$this->Redirect('admin/stats');
 		};
-		
-		$this->vars['dets'] = $res;	
+
+		$this->vars['dets'] = $res;
 	}
 }
-?>

@@ -1,82 +1,88 @@
 <?
-class userMVC extends Action{
+class userMVC extends Action
+{
 
-	function init(){
-		require_once('php/class_User.php' );	
+	function init()
+	{
+		require_once('php/class_User.php');
 	}
-	
-	function indexAction(){
+
+	function indexAction()
+	{
 		$this->disableLayout();
 	}
 	
 	//reset user's password
-	function resetAction(){
+	function resetAction()
+	{
 		$this->disableLayout();
-		
+
 		$User = new User($this->db);
 		$User->setEmail($_POST['email']);
-		
-		if( $User->resetPass() ){
+
+		if ($User->resetPass()) {
 			$this->json['success'] = true;
-			$this->json['message'] = 'Your new password has been sent to '.$_POST['email'];
+			$this->json['message'] = 'Your new password has been sent to ' . $_POST['email'];
 		} else {
 			$this->json['success'] = false;
 			$this->json['message'] = 'That email is not found.  Please check and try again.';
 		}
-		
+
 	}
 	
 	//get a user's profile
-	function profileAction(){
+	function profileAction()
+	{
 		$this->disableLayout();
 		$User = new User($this->db);
 		
 		//if there is no id in POST, assume we want to edit our own 
 		//of course validate 
-		if(!isset($_POST['userid']) ){
+		if (!isset($_POST['userid'])) {
 			$userid = $User->getID();
-			
+
 			$this->vars['profile'] = $User->loadProfile();
-			
+
 			$this->vars['site'] = $User->loadExternal();
-			$this->vars['externalSites'] = $this->Render('user-external' );
+			$this->vars['externalSites'] = $this->Render('user-external');
 			
 			//get all the sites
 			$sql = "SELECT *, '' as username, '' as uid FROM external_sites E
 					WHERE E.active = '1'
 					ORDER BY site ASC";
-					
-			$allsites = $this->db->exec($sql, 'id' );
-			
+
+			$allsites = $this->db->exec($sql, 'id');
+
 			$sql = "SELECT * FROM user_external U 
 					WHERE U.userid = '$userid' ";
-					
-			$usersites = $this->db->exec($sql, 'siteid' );
+
+			$usersites = $this->db->exec($sql, 'siteid');
 			
 			//merge em
-			foreach( $usersites as $k=>$v){
-				if( isset($allsites[$k]) ){
+			foreach ($usersites as $k => $v) {
+				if (isset($allsites[$k])) {
 					$allsites[$k]['username'] = $v['username'];
 					$allsites[$k]['uid'] = $v['uid'];
 				}
 			}
-			
+
 			$this->vars['allsites'] = $allsites;
-			
-			echo $this->Render('user-profile' );
+
+			echo $this->Render('user-profile');
 		} else if (isset($_POST['userid'])) {
 			//or else get the profile for this person
-		
+
 		} else {
 			//??
 		}
 	}
 	
 	//update a users profile 
-	function updateProfAction(){
+	function updateProfAction()
+	{
 		$this->disableLayout();
 		$User = new User($this->db);
-		
+
 		$userid = $User->getID();
 		$profile = strip_tags($_POST['profile']);
 		
@@ -84,90 +90,93 @@ class userMVC extends Action{
 		$sql = "SELECT pic FROM user_profile 
 				WHERE `userid` = '$userid' 
 				LIMIT 1";
-				
+
 		$res = $this->db->exec($sql);
 		$pic = count($res) ? $res[0]['pic'] : '';
-		
+
 		$sql = "REPLACE INTO user_profile 
 				(userid, profile, pic)
 				VALUES 
 				('$userid', '$profile', '$pic') ";
-				
+
 		$this->db->execute($sql);
-		
+
 		$this->json['success'] = true;
 		$this->json['profile'] = stripslashes($profile);
 	}
 	
 	//update a users external link
-	function updateExtAction(){
+	function updateExtAction()
+	{
 		$this->disableLayout();
 		$User = new User($this->db);
-		
+
 		$userid = $User->getID();
-		
+
 		$extid = intval($_POST['extid']);
 		$extusername = trim($_POST['extusername']);
-		
-		if( !$extid ){
+
+		if (!$extid) {
 			$this->json['success'] = false;
 			return;
 		}
-		
+
 		$sql = "REPLACE INTO eric_mile_users.user_external 
 				(userid, siteid, username) 
 				VALUES 
 				('$userid', '$extid', '$extusername')";
-				
+
 		$this->db->execute($sql);
-		
+
 		$this->json['success'] = true;
 		
 		//render links
 		$this->vars['site'] = $User->loadExternal();
-		$this->json['links'] = $this->Render('user-external' );
+		$this->json['links'] = $this->Render('user-external');
 	}
 	
 	//build the public profile, for friend viewing 
-	function publicAction(){
-		
+	function publicAction()
+	{
+
 		$this->disableLayout();
-		
+
 		$userid = $_POST['userid'];
 		
 		//intantiate user and set to who we are viewing
 		$User = new User($this->db);
 		$User->setID($userid);
-		
-		
+
+
 		$sql = "SELECT L.id, L.user, U.*  
 				FROM user_list L
 				LEFT JOIN  user_profile U
 				ON L.id = U.userid
 				WHERE L.id = '$userid'
 				LIMIT 1";
-				
+
 		$result = $this->db->exec($sql);
 		$this->vars['friend'] = $result[0];
 		
 		//get external sites
 		//$this->vars['profile'] = $User->loadProfile();
 		$this->vars['site'] = $User->loadExternal();
-		$this->vars['externalSites'] = $this->Render('user-external' );
-		
-		$this->json['profile'] = $this->Render('user-public' );	
+		$this->vars['externalSites'] = $this->Render('user-external');
+
+		$this->json['profile'] = $this->Render('user-public');
 		$this->json['adds'] = $User->loadAdds();
 		$this->json['comments'] = $User->loadComments();
 
 	}
 	
 	//load the users account to change their info
-	function accountAction(){
+	function accountAction()
+	{
 		$this->disableLayout();
-		
+
 		$user = new User($this->db);
 		$id = $user->getID();
-		
+
 		$sql = "SELECT * FROM eric_mile_users.user_list U 
 				LEFT JOIN eric_mile_users.user_prefs P
 				ON U.id = P.userid 
@@ -178,38 +187,39 @@ class userMVC extends Action{
 
 		$result[0]['maillist'] = $result[0]['maillist'] == 1 ? 'checked="true"' : "";
 		$result[0]['show_nudity'] = $result[0]['show_nudity'] == 1 ? 'checked="true"' : "";
-		
+
 		$this->vars['result'] = $result[0];
-		echo $this->Render('account' );
+		echo $this->Render('account');
 	}
 	
 	//update a users profile pic
-	function updatepicAction(){
-		require_once('php/class_Image.php' );	
-		
+	function updatepicAction()
+	{
+		require_once('php/class_Image.php');
+
 		$this->disableLayout();
 		/*
 		dbug($_FILES);
-		*/
+		 */
 		$path = $_FILES['profilePic']['tmp_name'];
-		
+
 		$pic = new Image($this->db);
 		$pic->load($path);
 		$newname = $pic->giveUniqueName();
 		$pic->userThumb();
-		
+
 		$user = new User($this->db);
 		$userid = $user->getID();
 		$info = $user->loadProfile();
 		$profile = $info['profile'];
-		
+
 		$sql = "REPLACE INTO user_profile 
 				(userid, profile, pic)
 				VALUES 
 				('$userid', '$profile', '$newname')";
-				
+
 		$this->db->execute($sql);
-		
+
 		echo "<script>
 			par = window.parent.document;
 			pic = par.getElementById('currentUserPic' );
@@ -218,94 +228,95 @@ class userMVC extends Action{
 			inp.value = '';
 			window.parent.toggleProfile(1);
 			</script>";
-		
+
 	}
 	
 	//update a users account
-	function updateAction(){
+	function updateAction()
+	{
 		$this->disableLayout();
-		
+
 		$success = array();
 		$errors = array();
-		
+
 		$user = new User($this->db);
 		$userid = $user->getID();
-		
+
 		$argsU = array();
 		$argsP = array();
 		
 		//change username?
-		if( isset($_POST['username']) && trim($_POST['username']) ){
+		if (isset($_POST['username']) && trim($_POST['username'])) {
 			$user = trim($_POST['username']);
 			
 			//make sure user is not taken
 			$sql = "SELECT * FROM user_list 
 					WHERE `user` = '$user' LIMIT 1";
-					
+
 			$result = $this->db->exec($sql);
-			
-			if (!count($result)){
+
+			if (!count($result)) {
 				//let user change their name
 				array_push($argsU, " `user` = '$user' ");
-				array_push($success, 'You changed your user name to '.$user.'. ' );
-			} else if ($result[0]['id'] == $userid){
+				array_push($success, 'You changed your user name to ' . $user . '. ');
+			} else if ($result[0]['id'] == $userid) {
 				//do nothing. same user same user name
 			} else {
 				//someone already has this name
-				array_push($errors, 'That user name is already taken. ' );
+				array_push($errors, 'That user name is already taken. ');
 			}
-			
+
 		} else {
-			
+
 		}
 		
 		//change email address?
-		if( isset($_POST['useremail']) && trim($_POST['useremail']) ){
-			array_push($argsU, " `email` = '".trim($_POST['useremail'])."' ");
+		if (isset($_POST['useremail']) && trim($_POST['useremail'])) {
+			array_push($argsU, " `email` = '" . trim($_POST['useremail']) . "' ");
 		} else {
-			
+
 		}
 		
 		//show nudity?
-		if( isset($_POST['show_nudity']) && $_POST['show_nudity'] == 'true' ){
+		if (isset($_POST['show_nudity']) && $_POST['show_nudity'] == 'true') {
 			array_push($argsP, " `show_nudity` = '1' ");
-			array_push($success, 'You will see images with nudity.' );
+			array_push($success, 'You will see images with nudity.');
 			$_SESSION['show_nudity'] = 1;
 		} else {
 			array_push($argsP, " `show_nudity` = '0' ");
-			array_push($success, 'You will not see images with nudity.' );
+			array_push($success, 'You will not see images with nudity.');
 			$_SESSION['show_nudity'] = 0;
 		}
 		
 		//email list? 
-		if( isset($_POST['emailrec']) && $_POST['emailrec'] == 'true' ){
+		if (isset($_POST['emailrec']) && $_POST['emailrec'] == 'true') {
 			array_push($argsP, " `maillist` = '1' ");
-			array_push($success, 'You are subscribed to receive occational updates' );
+			array_push($success, 'You are subscribed to receive occational updates');
 		} else {
 			array_push($argsP, " `maillist` = '0' ");
-			array_push($success, 'You will not receive email newsletters. ' );
+			array_push($success, 'You will not receive email newsletters. ');
 		}
 		
 		//change password?
-		if( isset($_POST['userpass1']) && isset($_POST['userpass2']) && $_POST['userpass1'] != 'd41d8cd98f00b204e9800998ecf8427e' && $_POST['userpass1'] == $_POST['userpass2'] ){
-			array_push($argsU, " `pass` = '".trim($_POST['userpass1'])."' ");
+		if (isset($_POST['userpass1']) && isset($_POST['userpass2']) && $_POST['userpass1'] != 'd41d8cd98f00b204e9800998ecf8427e' && $_POST['userpass1'] == $_POST['userpass2']) {
+			array_push($argsU, " `pass` = '" . trim($_POST['userpass1']) . "' ");
 			array_push($argsU, " `passTemp` = '' ");
-			
-			array_push($success, 'You have changed your password. ' );
+
+			array_push($success, 'You have changed your password. ');
 		} else {
-			
+
 		}
 		
 		//execute user_list
-		$xsql = implode(',' , $argsU);
-		
+		$xsql = implode(',', $argsU);
+
 		$sql = "UPDATE eric_mile_users.user_list SET $xsql
 				WHERE `id` = '$userid' LIMIT 1";
 		$this->db->execute($sql);
 		
 		//execute user_prefs
-		$xsql = implode(',' , $argsP);
-		
+		$xsql = implode(',', $argsP);
+
 		$sql = "UPDATE eric_mile_users.user_prefs SET $xsql
 				WHERE `userid` = '$userid' LIMIT 1";
 		$this->db->execute($sql);
@@ -314,103 +325,110 @@ class userMVC extends Action{
 		$this->json['success'] = $success;
 		$this->json['errors'] = $errors;
 	}
-	
-	function forgotAction(){
+
+	function forgotAction()
+	{
 		$start = microtime();
 		$this->disableLayout();
-		
+
 		$end = microtime();
-		
-		if($end-$start < 1){
+
+		if ($end - $start < 1) {
 			sleep(1);
 		}
 	}
-	
-	function loginAction(){
+
+	function loginAction()
+	{
 		$start = microtime();
 		$this->disableLayout();
-		
+
 		$success = false;
 		$user = new User($this->db);
-		
+
 		$user->setName($_POST['user']);
 		$user->setPass($_POST['pass']);
-		
-		if($user->doLogin()){
+
+		if ($user->doLogin()) {
 			$success = true;
-			$this->json['panelLeft'] = $this->Render('menu/menu-loggedin-left' );
-			$this->json['panelRight'] = $this->Render('menu/menu-loggedin-right' );
+			$this->json['panelLeft'] = $this->Render('menu/menu-loggedin-left');
+			$this->json['panelRight'] = $this->Render('menu/menu-loggedin-right');
 		} else {
 			$this->json['message'] = 'Please check your user name and password.';
 		}
-		
+
 		$this->json['success'] = $success;
 		$end = microtime();
-		
-		if($end-$start < 1){
+
+		if ($end - $start < 1) {
 			sleep(1);
 		}
 	}
-	
-	function logoutAction(){
+
+	function logoutAction()
+	{
 		$this->disableLayout();
-		
+
 		session_destroy();
-		
+
 		$this->json['success'] = true;
-		$this->json['panelLeft'] = $this->Render('menu/menu-loggedout-left' );
-		$this->json['panelRight'] = $this->Render('menu/menu-loggedout-right' );
+		$this->json['panelLeft'] = $this->Render('menu/menu-loggedout-left');
+		$this->json['panelRight'] = $this->Render('menu/menu-loggedout-right');
 	}
 	
 	//request access to alpha
-	function requestAction(){
+	function requestAction()
+	{
 		$start = microtime();
 		$this->disableLayout();
-		
+
 		$stamp = time();
 		$email = $_POST['email'];
-		
+
 		$sql = "SELECT * 
 				FROM info_request
 				WHERE email = '$email'";
-				
+
 		$result = $this->db->exec($sql);
-		
-		if (count($result)){
+
+		if (count($result)) {
 			$this->json['msg'] = "You have already requested information!";
 		} else {
 			$sql = "INSERT INTO info_request
 			(email, action, stamp)
 			VALUES
 			('$email', '1', $stamp)";
-			
+
 			$result = $this->db->execute($sql);
-			
+
 			$this->json['msg'] = "Thank you! We will send you an email soon!";
 		}
-		
+
 		$end = microtime();
-		if($end-$start < 1){
+		if ($end - $start < 1) {
 			sleep(1);
 		}
 	}
 	
 	//persistant tracking
-	function keepaliveAction(){
+	function keepaliveAction()
+	{
 		$this->disableLayout();
 		$User = new User($this->db);
 		$success = $User->setLoc($_POST['x'], $_POST['y']);
-		
+
 		$this->json['success'] = $success;
 	}
-	
-	function loadPanelAction(){
-		
+
+	function loadPanelAction()
+	{
+
 	}
-	 
-	function getpanelAction(){
+
+	function getpanelAction()
+	{
 		$this->disableLayout();
-		
+
 		$outputScript = '';
 		$outputHTML = '';
 		
@@ -423,47 +441,49 @@ class userMVC extends Action{
 		
 		
 		//build cpanel javascript functions
-		if ($auth & 1){
+		if ($auth & 1) {
 			
 			
 			//prefs
-			
+
 		}
-		
+
 		$outputScript .= 'cpanelControls.navs.push ("Search");';
 		$outputScript .= 'cpanelControls.navs.push ("onclick=\"hliteSub(this);openSearch();\"");';
-		
+
 		$outputHTML .= '<li><a id="menu_help" onclick="getControl(\'help\' );";>Help!</a></li>';
-	
+
 		$outputScript .= 'cpanelControls.help.push ("How To Use");';
 		$outputScript .= 'cpanelControls.help.push ("onclick=\"hliteSub(this);getHelp();\"");';
-		
+
 		$outputScript .= 'cpanelControls.help.push ("Feedback");';
 		$outputScript .= 'cpanelControls.help.push ("onclick=\"hliteSub(this);startFeedback();\"");';
-		
+
 		$outputScript .= 'cpanelControls.help.push ("Terms / Privacy");';
 		$outputScript .= 'cpanelControls.help.push ("onclick=\"hliteSub(this);getTerms();\"");';
-	
+
 		$outputScript .= 'cpanelControls.help.push ("About");';
 		$outputScript .= 'cpanelControls.help.push ("onclick=\"hliteSub(this);getAbout();\"");';
 		
 		//$outputScript .= 'cpanelControls.help.push ("API");';
 		//$outputScript .= 'cpanelControls.help.push ("onclick=\"hliteSub(this);getAPI();\"");';
-		
+
 		$this->json['script'] = $outputScript;
 		$this->json['html'] = $outputHTML;
 	}
 	
 	//content to go into ajax lightbox 
-	function feedbackAction(){
+	function feedbackAction()
+	{
 		$this->disableLayout();
-		$this->json['html'] = $this->Render('feedback' );
+		$this->json['html'] = $this->Render('feedback');
 	}
 	
 	//into ajax lightbox, invite a friend
-	function inviteAction(){
+	function inviteAction()
+	{
 		$this->disableLayout();
-		
+
 		$User = new User($this->db);
 		$id = $User->getID();
 		
@@ -471,7 +491,7 @@ class userMVC extends Action{
 		$sql = "SELECT `invites` FROM user_list 
 				WHERE `id`='$id' 
 				LIMIT 1";
-		
+
 		$res = $this->db->exec($sql);
 		$this->vars['invites'] = $res[0]['invites'];
 				
@@ -479,30 +499,32 @@ class userMVC extends Action{
 		$sql = "SELECT * FROM list_invite 
 				WHERE `friend` = '$id' 
 				ORDER BY `date` DESC";
-				
+
 		$this->vars['invited'] = $this->db->exec($sql);
-		
-		$this->json['html'] = $this->Render('invitation' );
+
+		$this->json['html'] = $this->Render('invitation');
 	}
 	
 	//get html to send invitation
-	function getinviteAction(){
+	function getinviteAction()
+	{
 		$this->disableLayout();
-		
-		$this->json['html'] = $this->render('invitation-form' );
+
+		$this->json['html'] = $this->render('invitation-form');
 	}
 	
 	//process sent invitation
-	function sendinviteAction(){
+	function sendinviteAction()
+	{
 		$this->disableLayout();
-		
+
 		$email = $_POST['email'];
 		//see if this person has already received an invitation
 		$sql = "SELECT * FROM list_invite 
 				WHERE `email` LIKE '$email' LIMIT 1";
 		$res = $this->db->exec($sql);
-		
-		if( count($res) ){
+
+		if (count($res)) {
 			$this->json['error'] = 'Sorry!  That person has already been invited!';
 			return;
 		}
@@ -511,92 +533,94 @@ class userMVC extends Action{
 		$sql = "SELECT * FROM user_list 
 				WHERE `email` LIKE '$email' LIMIT 1";
 		$res = $this->db->exec($sql);
-		
-		if( count($res) ){
+
+		if (count($res)) {
 			$this->json['error'] = 'Sorry!  That person is already on the mile!';
 			return;
 		}
 		
 		//put this person into the queue and fire an email
-		include_once('php/functions_redir.php' );
-		include_once('php/class_Email.php' );
-		
+		include_once('php/functions_redir.php');
+		include_once('php/class_Email.php');
+
 		$User = new User($this->db);
 		$id = $User->getID();
 		$now = time();
 		$custom = $_POST['custom'];
-		
+
 		$sql = "INSERT INTO list_invite 
 				(`email`, `friend`, `date`, `last_sent`, `custom_text`) 
 				VALUES 
 				('$email', '$id', '$now', '$now', '$custom')";
-		
+
 		$this->db->execute($sql);
 		
 		//get the email togehter
 		$sql = "SELECT `email` FROM user_list 
 				WHERE `id` = '$id' LIMIT 1";
 		$res = $this->db->exec($sql);
-		
+
 		$fUniq = base_base2base($id, 10, 59);
-		
-		$this->vars['link'] = HTTPROOT."ref/friend/id/".$fUniq."/email/".urlencode($email);
-		$this->vars['to'] = array('uniq' => $fUniq,
-								  'email' => $email);
+
+		$this->vars['link'] = HTTPROOT . "ref/friend/id/" . $fUniq . "/email/" . urlencode($email);
+		$this->vars['to'] = array(
+			'uniq' => $fUniq,
+			'email' => $email
+		);
 		$this->vars['friend'] = $res[0]['email'];
-		
-		$body = $this->render('email-friendinvite' );
-		
-		
+
+		$body = $this->render('email-friendinvite');
+
+
 		$oEmail = new Email();
 		$oEmail->addTo($email);
-		$oEmail->addBcc('eeaglstun@yahoo.com' );
-		$oEmail->setSubject('You have been invited to MILE.fm' );
+		$oEmail->addBcc('eeaglstun@yahoo.com');
+		$oEmail->setSubject('You have been invited to MILE.fm');
 		$oEmail->setBody($body);
 		$oEmail->sendMail();
 		
 		//$this->json['html'] = $body;
 		$this->inviteAction();
 	}
-	
-	function signupAction(){
+
+	function signupAction()
+	{
 		$this->disableLayout();
-		
+
 		$errors = array();
 		$success = false;
-		
+
 		$email = trim($_POST['email']);
 		$pass = trim($_POST['pass']);
 		$user = trim($_POST['user']);
 		//strip double spaces
-		$user = trim(ereg_replace( ' +', ' ', $user));
-		
+		$user = trim(ereg_replace(' +', ' ', $user));
+
 		$ref = isset($_SESSION['ref']) ? $_SESSION['ref'] : '';
-		
+
 		$User = new User($this->db);
-		
+
 		$User->setName($user);
 		$User->setEmail($email);
-		$User->setPass($pass );
+		$User->setPass($pass);
 		$User->setRefer($ref);
-		
-		if($User->findUserName()){
-			array_push($errors, 'That user name is already taken!' );
+
+		if ($User->findUserName()) {
+			array_push($errors, 'That user name is already taken!');
 		} else {
-		
+
 		}
-		
-		if(count($errors) < 1){
+
+		if (count($errors) < 1) {
 			//all good
 			$User->createNew();
-			
+
 			$success = true;
-			$this->json['panelLeft'] = $this->Render('menu/menu-loggedin-left' );
-			$this->json['panelRight'] = $this->Render('menu/menu-loggedin-right' );
+			$this->json['panelLeft'] = $this->Render('menu/menu-loggedin-left');
+			$this->json['panelRight'] = $this->Render('menu/menu-loggedin-right');
 		}
-		
+
 		$this->json['errors'] = $errors;
 		$this->json['success'] = $success;
 	}
 }
-?>

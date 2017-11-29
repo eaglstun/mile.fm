@@ -9,17 +9,17 @@
 <form action="admin/users/dosend" method="post">
 	<div class="inputContainer">
 		<label for="to">to:</label>
-		<input type="text" id="to" name="to" value="<?php echo $to['email']; ?>" class="stdInput"/>
+		<input type="text" id="to" name="to" value="<?= $to['email']; ?>" class="stdInput"/>
 	</div>
 	
 	<div class="inputContainer">
 		<label for="subject">subject:</label>
-		<input type="text" id="subject" name="subject" value="<?php echo $email['subject'];?>" class="stdInput"/>
+		<input type="text" id="subject" name="subject" value="<?= $email['subject'];?>" class="stdInput"/>
 	</div>
 	
 	<div class="inputContainer">
 		<label for="body">body:</label>
-		<textarea name="body" id="body" class="stdText"><?php echo $email['message'];?></textarea>
+		<textarea name="body" id="body" class="stdText"><?= $email['message'];?></textarea>
 	</div>
 	
 	<div class="buttonContainer">

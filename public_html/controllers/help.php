@@ -1,92 +1,100 @@
 <?
-class helpMVC extends Action{
+class helpMVC extends Action
+{
 
-	function init(){
-		if($this->isAjax() ){
+	function init()
+	{
+		if ($this->isAjax()) {
 			$this->disableLayout();
 		}
 	}
-	
-	function indexAction(){
-		$this->Redirect('help/main' );
+
+	function indexAction()
+	{
+		$this->Redirect('help/main');
 	}
 	
 	//main help launch pad 
-	function mainAction(){
-	
-		$lightboxContent = $this->Render('help' );
-		
-		if( $this->isAjax() ){
+	function mainAction()
+	{
+
+		$lightboxContent = $this->Render('help');
+
+		if ($this->isAjax()) {
 			$this->json['html'] = $lightboxContent;
 		} else {
 			$this->vars['lightboxContent'] = $lightboxContent;
 			$this->vars['lightboxTitle'] = 'Help!';
-			
-			$this->parseURL('index' );
+
+			$this->parseURL('index');
 		}
-		
+
 	}
 	
 	//terms / privacvy
-	function termsAction(){
-		
-		$lightboxContent = $this->Render('help/terms' );
-		
-		if($this->isAjax() ){
+	function termsAction()
+	{
+
+		$lightboxContent = $this->Render('help/terms');
+
+		if ($this->isAjax()) {
 			$this->json['html'] = $lightboxContent;
 		} else {
 			$this->vars['lightboxContent'] = $lightboxContent;
 			$this->vars['lightboxTitle'] = 'Terms and Conditions / Privacy Policy';
-			
-			$this->parseURL('index' );
+
+			$this->parseURL('index');
 		}
 	}
 	
 	//about
-	function aboutAction(){
-	
-		$lightboxContent = $this->Render('help/about' );
-		
-		if($this->isAjax() ){
+	function aboutAction()
+	{
+
+		$lightboxContent = $this->Render('help/about');
+
+		if ($this->isAjax()) {
 			$this->json['html'] = $lightboxContent;
 		} else {
 			$this->vars['lightboxContent'] = $lightboxContent;
 			$this->vars['lightboxTitle'] = 'About MILE.fm';
-			
-			$this->parseURL('index' );
+
+			$this->parseURL('index');
 		}
 	}
 	
 	//about
-	function APIAction(){
-	
-		$lightboxContent = $this->Render('help/API' );
-		
-		if($this->isAjax() ){
+	function APIAction()
+	{
+
+		$lightboxContent = $this->Render('help/API');
+
+		if ($this->isAjax()) {
 			$this->json['html'] = $lightboxContent;
 		} else {
 			$this->vars['lightboxContent'] = $lightboxContent;
 			$this->vars['lightboxTitle'] = 'API for Developers';
-			
-			$this->parseURL('index' );
+
+			$this->parseURL('index');
 		}
 	}
 	
 	
 	//content to go into ajax lightbox 
-	function feedbackAction(){
-	
-		$lightboxContent = $this->Render('help/feedback' );
-		
-		if($this->isAjax() ){
+	function feedbackAction()
+	{
+
+		$lightboxContent = $this->Render('help/feedback');
+
+		if ($this->isAjax()) {
 			$this->json['html'] = $lightboxContent;
 		} else {
 			$this->vars['lightboxContent'] = $lightboxContent;
 			$this->vars['lightboxTitle'] = 'Send Feedback';
-			
-			$this->parseURL('index' );
+
+			$this->parseURL('index');
 		}
-		
+
 	}
 	/*
 	//process feedback
@@ -108,6 +116,5 @@ class helpMVC extends Action{
 		$this->json['success'] = true;
 		$this->json['html'] = 'Thanks for the feedback!  We look over all responses, and may be in contact with you.';
 	}
-	*/
+	 */
 }
-?>

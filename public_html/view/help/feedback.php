@@ -1,4 +1,4 @@
-<?php /*
+<? /*
 <h2>Send us a bug report / feedback / anything!</h2>
 
 <div class="min">
@@ -7,12 +7,12 @@
 	<form id="formFeedback" name="formFeedback">
 		<div class="inputContainer">
 			<label>Your user name:</label>
-			<input type="text" name="username" value="<?php echo isset( $_SESSION['username'] ) ? $_SESSION['username'] : ''; ?>" class="stdInput"/>
+			<input type="text" name="username" value="<? echo isset( $_SESSION['username'] ) ? $_SESSION['username'] : ''; ?>" class="stdInput"/>
 		</div>
 		
 		<div class="inputContainer">
 			<label>Your web browser / OS:</label>
-			<input type="text" name="browser" value="<?php echo $_SERVER['HTTP_USER_AGENT']; ?>" class="stdInput"/>
+			<input type="text" name="browser" value="<? echo $_SERVER['HTTP_USER_AGENT']; ?>" class="stdInput"/>
 		</div>
 		
 		<div class="inputContainer">

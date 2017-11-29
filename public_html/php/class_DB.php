@@ -1,7 +1,6 @@
 <?
-class DB
-{
-
+class DB{
+	
 	var $host = "localhost";
 	var $username = DBUSER;
 	var $password = DBPASS;
@@ -10,13 +9,12 @@ class DB
 	var $lastid;
 	var $connection;
 	var $c; //boolean is db connected
-
-	function __construct()
-	{
-
-		$this->connection = mysql_connect($this->host, $this->username, $this->password);
-
-		if ($this->connection) {
+	
+	function __construct(){
+		
+		$this->connection = mysql_connect( $this->host , $this->username, $this->password);
+		
+		if($this->connection){
 			mysql_select_db($this->dbName, $this->connection);
 			$this->c = true;
 			return true;
@@ -26,37 +24,36 @@ class DB
 			return false;
 		}
 	}
-
-	function exec($sql, $index = '')
-	{
-
+	
+	function exec($sql, $index = ''){
+	
 		$return = array();
-
+		
 		$result = mysql_query($sql, $this->connection);
-
-		if ($index == '') {
-			while ($row = mysql_fetch_assoc($result)) {
+		
+		if($index == ''){
+			while ($row = mysql_fetch_assoc($result)){
 				$return[] = $row;
 			}
 		} else {
-			while ($row = mysql_fetch_assoc($result)) {
+			while ($row = mysql_fetch_assoc($result)){
 				$return[$row[$index]] = $row;
 			}
 		}
-
-
-		return ($return);
+		
+		
+		return($return);
 	}
-
-	function execute($sql)
-	{
-
+	
+	function execute($sql){
+	
 		$return = array();
-
+		
 		$result = mysql_query($sql, $this->connection);
 
 		$this->lastid = mysql_insert_id();
-
-		return (true);
+		
+		return( true );
 	}
 }
+?>

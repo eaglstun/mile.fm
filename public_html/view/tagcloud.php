@@ -1,5 +1,5 @@
-<?php if (count($tags)): ?>
-	<?php 
+<? if (count($tags)): ?>
+	<? 
 		$maxcount = max(array_values($tags));
 		$mincount = min(array_values($tags));
 		$maxFont = 50;
@@ -14,8 +14,8 @@
 		}
 	?>
 	
-	<?php foreach( $tags as $k=>$v ): ?>
-		<?php 
+	<? foreach( $tags as $k=>$v ): ?>
+		<? 
 			$size = ((($v / $maxcount) * $spread) + $minFont) * $adj;
 			
 			if ($size < 12) {
@@ -24,16 +24,16 @@
 			
 			$pad = $size / 4;
 		?>
-		<span class="tag" onclick="sendSearchParms('<?php echo $k; ?>')" style="font-size:<?php echo $size?>px;padding:0px <?php echo$pad ?>px"><?php echo $k; ?></span>
-	<?php endforeach ?>
-<?php else : ?>
-	<div class="defaultBal" onclick="addTag(<?php echo $objectid; ?>)">No tags yet!<br/>Add yours!</div>
-<?php endif ?>
+		<span class="tag" onclick="sendSearchParms('<?= $k; ?>')" style="font-size:<?= $size?>px;padding:0px <?=$pad ?>px"><?= $k; ?></span>
+	<? endforeach ?>
+<? else : ?>
+	<div class="defaultBal" onclick="addTag(<?= $objectid; ?>)">No tags yet!<br/>Add yours!</div>
+<? endif ?>
 
 <!--
-<?php if (count($tags)): ?>
-	<?php echo '<br/>max'.$maxcount.'<br>' ?>
-	<?php echo 'min'.$mincount.'<br>' ?>
-	<?php echo 'adj'.$adj.'<br>' ?>
-<?php endif ?>
+<? if (count($tags)): ?>
+	<?= '<br/>max'.$maxcount.'<br>' ?>
+	<?= 'min'.$mincount.'<br>' ?>
+	<?= 'adj'.$adj.'<br>' ?>
+<? endif ?>
 -->

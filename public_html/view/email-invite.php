@@ -1,10 +1,10 @@
 <p>
-	Hello <?php echo $to['email'] ?>!  A while back you signed up for the private beta to MILE.fm (formerly squaremileweb.com).
+	Hello <?= $to['email'] ?>!  A while back you signed up for the private beta to MILE.fm (formerly squaremileweb.com).
 	Today is your lucky day, here is your invitation!
 </p>
 
 <p>
-	Follow this link <a href="<?php echo HTTPROOT ?>ref/invite/i/<?php echo $uid; ?>/e/<?php echo urlencode($to['email']); ?>"><?php echo HTTPROOT ?>ref/invite/i/<?php echo $uid; ?>/e/<?php echo urlencode($to['email']); ?></a> to get started.
+	Follow this link <a href="<?= HTTPROOT ?>ref/invite/i/<?= $uid; ?>/e/<?= urlencode($to['email']); ?>"><?= HTTPROOT ?>ref/invite/i/<?= $uid; ?>/e/<?= urlencode($to['email']); ?></a> to get started.
 	You can start exploring right away, but you'll need to log in before you can add your own pictures.
 	Check out the Help! section in your Control Panel if you need a few pointers.
 </p>
@@ -23,5 +23,5 @@
 
 <p>
 	if this email was sent to you in error, you may remove yourself from our records from this link:
-	<a href="<?php echo HTTPROOT."unsub/u/".$to['uniq'].'/e/'.urlencode($to['email']); ?>"><?php echo HTTPROOT."unsub/u/".$to['uniq'].'/e/'.urlencode($to['email']); ?></a>
+	<a href="<?= HTTPROOT."unsub/u/".$to['uniq'].'/e/'.urlencode($to['email']); ?>"><?= HTTPROOT."unsub/u/".$to['uniq'].'/e/'.urlencode($to['email']); ?></a>
 </p>

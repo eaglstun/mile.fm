@@ -14,13 +14,13 @@
 		<td>on mailing list</td>
 	</tr>
 	
-	<?php foreach( $users as $k=>$v ): ?>
-		<tr class="<?php tableStripe();?>">
-			<td><?php echo $v['id']?></td>
-			<td><a href="/admin/users/view/id/<?php echo $v['id']?>"><?php echo $v['user']?></a></td>
-			<td><?php echo $v['email']?></td>
-			<td><?php echo $v['lastlogin'] > 0 ? date( "D M jS g:i:s a" , $v['lastlogin'] - 25200 ) : 'never'; ?></td>
-			<td><?php echo $v['maillist'] == '1' ? 'yes' : ''; ?></td>
+	<? foreach( $users as $k=>$v ): ?>
+		<tr class="<? tableStripe();?>">
+			<td><?= $v['id']?></td>
+			<td><a href="/admin/users/view/id/<?= $v['id']?>"><?= $v['user']?></a></td>
+			<td><?= $v['email']?></td>
+			<td><?= $v['lastlogin'] > 0 ? date( "D M jS g:i:s a" , $v['lastlogin'] - 25200 ) : 'never'; ?></td>
+			<td><?= $v['maillist'] == '1' ? 'yes' : ''; ?></td>
 		</tr>
-	<?php endforeach ?>
+	<? endforeach ?>
 </table>

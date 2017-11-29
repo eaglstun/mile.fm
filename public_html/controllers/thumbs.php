@@ -1,17 +1,20 @@
 <?
-class thumbsMVC extends Action{
-	
-	function init(){
-		require_once('php/class_User.php' );	
+class thumbsMVC extends Action
+{
+
+	function init()
+	{
+		require_once('php/class_User.php');
 	}
-	
-	function popularAction(){
-		
-		if( isset($_POST['start']) ){
+
+	function popularAction()
+	{
+
+		if (isset($_POST['start'])) {
 			//ajax request
 			$start = $_POST['start'];
 			$limit = 65;
-		} else if(isset($_REQUEST['start'])){
+		} else if (isset($_REQUEST['start'])) {
 			$start = $_REQUEST['start'];
 			$limit = 8;
 		} else {
@@ -37,147 +40,153 @@ class thumbsMVC extends Action{
 				GROUP BY object
 				ORDER BY total DESC, stamp DESC
 				LIMIT $start, $limit";
-						
+
 		$result = $this->db->exec($sql);
-		
+
 		$output = array();
 		$output['thumbs'] = array();
-		
-		foreach( $result as $k=>$v){
+
+		foreach ($result as $k => $v) {
 			$array = array();
-			
-			$array['locX'] = (($v['left'] + $v['right']) / 2) * 72;
-			$array['locY'] = (($v['top'] + $v['bottom']) / 2) * 72;
+
+			$array['locX'] = ( ($v['left'] + $v['right']) / 2) * 72;
+			$array['locY'] = ( ($v['top'] + $v['bottom']) / 2) * 72;
 			$array['thumb'] = $v['thumb'];
 			//$array['date'] = date("m/d/y",$v['stamp']);
-			$array['id'] = 'pic'.$v['id'];
-			$array['votes'] = $v['total']; 
-			
+			$array['id'] = 'pic' . $v['id'];
+			$array['votes'] = $v['total'];
+
 			array_push($output['thumbs'], $array);
 		}
-		
-		if( $this->isAjax() ){
+
+		if ($this->isAjax()) {
 			$this->disableLayout();
 			$this->json = count($output['thumbs']) ? $output : array(0);
 		} else {
 			$this->vars['thumbs'] = $output['thumbs'];
 			$this->vars['menu2'] = array();
-			
-			$this->vars['menu2']['title'] = 'Most Popular ( '.($start+1).' - '.($start+$limit).' )';
-			$this->vars['menu2']['content'] = $this->Render('navigation/thumbs' );
-			$this->vars['menu2']['next'] = '/thumbs/popular/start/'.($start+$limit);
-			$this->vars['menu2']['prev'] = '/thumbs/popular/'.($start - $limit > 0 ? 'start/'.($start - $limit) : '' );
-			
-			$this->parseURL('index' );
+
+			$this->vars['menu2']['title'] = 'Most Popular ( ' . ($start + 1) . ' - ' . ($start + $limit) . ' )';
+			$this->vars['menu2']['content'] = $this->Render('navigation/thumbs');
+			$this->vars['menu2']['next'] = '/thumbs/popular/start/' . ($start + $limit);
+			$this->vars['menu2']['prev'] = '/thumbs/popular/' . ($start - $limit > 0 ? 'start/' . ($start - $limit) : '');
+
+			$this->parseURL('index');
 		}
-		
+
 	}
 	
 	//delete a thumb from the waiting list
-	function deleteAction(){
+	function deleteAction()
+	{
 		$this->disableLayout();
 		$src = $_POST['src'];
 		$userid = $_SESSION['userid'];
-		
+
 		$sql = "DELETE FROM eric_mile_users.content_waiting
 				WHERE loc='$src'
 				AND userid='$userid'
 				LIMIT 1";
 		$this->db->execute($sql);
 	}
-	
-	function recentAction(){
-		
-		if( isset($_POST['start']) ){
+
+	function recentAction()
+	{
+
+		if (isset($_POST['start'])) {
 			//ajax request
 			$start = intval($_POST['start']);
 			$limit = 17;
-		} else if(isset($_REQUEST['start'])){
+		} else if (isset($_REQUEST['start'])) {
 			$start = intval($_REQUEST['start']);
 			$limit = 8;
 		} else {
 			$start = 0;
 			$limit = 8;
 		}
-		
+
 		$output = array();
 		$output['thumbs'] = array();
-		
-		if(isset($_POST['stamp'])){
+
+		if (isset($_POST['stamp'])) {
 			$stamp = intval($_POST['stamp']);
 			$xsql = "WHERE `stamp` <= '$stamp'";
 		} else {
 			$sql = "SELECT MAX(stamp) as max 
 					FROM eric_mile_users.content_history";
-			$result = $this->db->exec($sql);		
+			$result = $this->db->exec($sql);
 			$max = $result[0]['max'];
 			$output['stamp'] = $max;
-			
+
 			$xsql = '';
-		}	
-		
+		}
+
 		$sql = "SELECT `id`, `thumb`, `top`, `right`, `bottom`, `left` 
 				FROM eric_mile_users.content_history
 				$xsql
 				ORDER BY `stamp` DESC
 				LIMIT $start, $limit";
-				
+
 		$result = $this->db->exec($sql);
-		
-		foreach( $result as $k=>$v){
-			$locX = (($v['left'] + $v['right']) / 2) * 72;
-			$locY = (($v['top'] + $v['bottom']) / 2) * 72;
-			
-			$output['thumbs'][] = array('thumb' => $v['thumb'],
-										'locX' => $locX,
-										'locY' => $locY,
-										'id' => 'pic'.$v['id']);
+
+		foreach ($result as $k => $v) {
+			$locX = ( ($v['left'] + $v['right']) / 2) * 72;
+			$locY = ( ($v['top'] + $v['bottom']) / 2) * 72;
+
+			$output['thumbs'][] = array(
+				'thumb' => $v['thumb'],
+				'locX' => $locX,
+				'locY' => $locY,
+				'id' => 'pic' . $v['id']
+			);
 		}
-		
-		if( $this->isAjax() ){
+
+		if ($this->isAjax()) {
 			$this->disableLayout();
 			$this->json = count($output['thumbs']) ? $output : array(0);
 		} else {
 			$this->vars['thumbs'] = $output['thumbs'];
 			$this->vars['menu2'] = array();
-			
-			$this->vars['menu2']['title'] = 'Recently Added ( '.($start+1).' - '.($start+$limit).' )';
-			$this->vars['menu2']['content'] = $this->Render('navigation/thumbs' );
-			$this->vars['menu2']['next'] = '/thumbs/recent/start/'.($start+$limit);
-			$this->vars['menu2']['prev'] = '/thumbs/recent/'.($start - $limit > 0 ? 'start/'.($start - $limit) : '' );
-			
-			$this->parseURL('index' );
+
+			$this->vars['menu2']['title'] = 'Recently Added ( ' . ($start + 1) . ' - ' . ($start + $limit) . ' )';
+			$this->vars['menu2']['content'] = $this->Render('navigation/thumbs');
+			$this->vars['menu2']['next'] = '/thumbs/recent/start/' . ($start + $limit);
+			$this->vars['menu2']['prev'] = '/thumbs/recent/' . ($start - $limit > 0 ? 'start/' . ($start - $limit) : '');
+
+			$this->parseURL('index');
 		}
-		
+
 		$this->json = count($output['thumbs']) ? $output : array(0);
 	}
-	
-	function waitingAction(){
+
+	function waitingAction()
+	{
 		$this->disableLayout();
-		
+
 		$output = array();
 		$output['thumbs'] = array();
-		
+
 		$userid = $_SESSION['userid'];
 		$start = isset($_POST['start']) ? intval($_POST['start']) : 0;
-		
+
 		$sql = "SELECT `id`, `loc`, `loc` as `thumb`, `width`, `height` FROM eric_mile_users.content_waiting
 				WHERE `userid` = '$userid'
 				ORDER BY `stamp` DESC
 				LIMIT $start, 25";
-				
+
 		$output['thumbs'] = $this->db->exec($sql);
-		
+
 		$this->json = count($output['thumbs']) ? $output : array(0);
 	}
 	
 	//your thumbs ups
-	function favoritesAction(){
+	function favoritesAction()
+	{
 		$this->disableLayout();
-		
+
 		$id = $_SESSION['userid'];
 		$start = intval($_POST['start']) ? intval($_POST['start']) : 0;
-		
+
 		$sql = "SELECT V.id,thumb,`left`,`right`,`top`,`bottom` FROM content_votes V
 				LEFT JOIN content_history H
 				ON V.object = H.id
@@ -185,34 +194,37 @@ class thumbsMVC extends Action{
 				ORDER BY V.stamp DESC 
 				LIMIT $start, 17";
 		$result = $this->db->exec($sql);
-		
+
 		$output = array();
 		$output['thumbs'] = array();
-		
-		foreach( $result as $k=>$v){
-			$locX = ($v['left'] + (($v['right'] - $v['left']) / 2)) * 72;
-			$locY = ($v['top'] + (($v['bottom'] - $v['top']) / 2)) * 72;
-			
-			$output['thumbs'][] = array('thumb' => $v['thumb'],
-										'id' => $v['id'],
-										'locX' => $locX,
-										'locY' => $locY);
+
+		foreach ($result as $k => $v) {
+			$locX = ($v['left'] + ( ($v['right'] - $v['left']) / 2)) * 72;
+			$locY = ($v['top'] + ( ($v['bottom'] - $v['top']) / 2)) * 72;
+
+			$output['thumbs'][] = array(
+				'thumb' => $v['thumb'],
+				'id' => $v['id'],
+				'locX' => $locX,
+				'locY' => $locY
+			);
 		}
-		
+
 		$this->json = count($output['thumbs']) ? $output : array(0);
 	}
 	
 	//get a list of your friends for a thumbs menu 
-	function friendsAction(){
+	function friendsAction()
+	{
 		$this->disableLayout();
-		
+
 		$output = array();
 		$output['thumbs'] = array();
-		
+
 		$id = $_SESSION['userid'];
 		$start = intval($_POST['start']) ? intval($_POST['start']) : 0;
-		
-		if ($start == 0){
+
+		if ($start == 0) {
 			//recalc friends
 			
 			//see whose pictures i like, and who likes mine
@@ -234,14 +246,14 @@ class thumbsMVC extends Action{
 							GROUP BY voter) ) as A 
 					WHERE sum > 0 
 					GROUP BY adder ";
-					
+
 			$result = $this->db->exec($sql);
-			
-			foreach( $result as $k=>$v){
+
+			foreach ($result as $k => $v) {
 				$voter = $v['voter'];
 				$adder = $v['adder'];
 				$score = $v['sum'];
-				
+
 				$sql = "REPLACE INTO user_friends 
 						(`userid`, `friendid`, `score`) 
 						VALUES 
@@ -249,11 +261,11 @@ class thumbsMVC extends Action{
 				$this->db->execute($sql);
 			}
 		}
-		
+
 		$now = time();
 		$online = $now - 300;
-		
-		
+
+
 		$sql = "SELECT U.user,
 				       U.id AS userid,
 				       IF(P.pic = '' OR pic IS NULL, 'defaultFriend.gif' , P.pic) AS thumb
@@ -268,10 +280,10 @@ class thumbsMVC extends Action{
 				AND F.score > 0	
 				ORDER BY score DESC
 				LIMIT $start, 9";
-				
+
 		$result = $this->db->exec($sql);
-		
-		if(count($result)){
+
+		if (count($result)) {
 			$output['thumbs'] = $result;
 			$this->json = $output;
 		} else {
@@ -279,20 +291,21 @@ class thumbsMVC extends Action{
 			$this->json['success'] = 'false';
 			$this->json['html'] = "You don't have any friends yet!  <br/> Get friends by giving thumbs up to pictures, or when others like your pictures!";
 		}
-		
+
 	}
-	
-	function searchAction(){
+
+	function searchAction()
+	{
 		$this->disableLayout();
-		
+
 		$term = trim($_REQUEST['query']);
-		
+
 		$start = $_REQUEST['start'];
-		
+
 		$sql = "SELECT A.object, COUNT(object) as cnt, H.* FROM (
 		
 					(SELECT object, comment, COUNT(object) as cnt FROM content_comments C 
-					WHERE C.comment REGEXP '[^a-z]".$term."[^a-z]|^".$term."[[:punct:],\ ]|[ ]".$term."$|^".$term."$'
+					WHERE C.comment REGEXP '[^a-z]" . $term . "[^a-z]|^" . $term . "[[:punct:],\ ]|[ ]" . $term . "$|^" . $term . "$'
 					GROUP BY object
 					)
 					
@@ -313,29 +326,32 @@ class thumbsMVC extends Action{
 				GROUP BY object
 				ORDER BY cnt DESC, H.stamp DESC
 				LIMIT $start, 9";
-		
+
 		$result = $this->db->exec($sql);
-		
+
 		$output = array();
 		$output['thumbs'] = array();
-		
-		foreach( $result as $k=>$v){
-			$locX = ($v['left'] + (($v['right'] - $v['left']) / 2)) * 72;
-			$locY = ($v['top'] + (($v['bottom'] - $v['top']) / 2)) * 72;
-			
-			$output['thumbs'][] = array('thumb' => $v['thumb'],
-										'id' => $v['id'],
-									    'locX' => $locX,
-										'locY' => $locY);
+
+		foreach ($result as $k => $v) {
+			$locX = ($v['left'] + ( ($v['right'] - $v['left']) / 2)) * 72;
+			$locY = ($v['top'] + ( ($v['bottom'] - $v['top']) / 2)) * 72;
+
+			$output['thumbs'][] = array(
+				'thumb' => $v['thumb'],
+				'id' => $v['id'],
+				'locX' => $locX,
+				'locY' => $locY
+			);
 		}
-		
+
 		$this->json = count($output['thumbs']) ? $output : array(0);
 		//$this->json['sql'] = $sql;
 	}
-	
-	function recentAddsAction(){
+
+	function recentAddsAction()
+	{
 		$this->disableLayout();
-		
+
 		$output = array();
 		$output['thumbs'] = array();
 		
@@ -348,15 +364,16 @@ class thumbsMVC extends Action{
 		//intantiate user and set to who we are viewing
 		$User = new User($this->db);
 		$User->setID($userid);
-		
+
 		$output['thumbs'] = $User->loadAdds($start);
-		
+
 		$this->json = count($output['thumbs']) ? $output : array(0);
 	}
-	
-	function recentCommentsAction(){
+
+	function recentCommentsAction()
+	{
 		$this->disableLayout();
-		
+
 		$output = array();
 		$output['thumbs'] = array();
 		
@@ -369,10 +386,9 @@ class thumbsMVC extends Action{
 		//intantiate user and set to who we are viewing
 		$User = new User($this->db);
 		$User->setID($userid);
-		
+
 		$output['thumbs'] = $User->loadComments($start);
-		
+
 		$this->json = count($output['thumbs']) ? $output : array(0);
 	}
 }
-?>

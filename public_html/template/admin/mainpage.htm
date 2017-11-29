@@ -5,24 +5,24 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<title>MILE.fm admin</title>
 	
-	<link rel="stylesheet" href="/template/<?php echo $action->theme; ?>/css/style.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="/template/<? echo $action->theme; ?>/css/style.css" type="text/css" media="screen" />
 	
 	<script language="javascript" type="text/javascript" src="/js/jquery-1.2.6.js"></script>
 	
-	<?php echo $scripts; ?>
+	<?= $scripts; ?>
 	
 </head>
 
 <body>
 
 <div class="mainContent">
-	<?php echo $viewHtml; ?>
+	<?= $viewHtml; ?>
 	
 	<div class="push"></div>
 </div>
 
 <div id="footer">
-	&copy; <?php echo date('Y' ); ?> r: <?php echo $rendertime; ?> seconds
+	&copy; <? echo date('Y' ); ?> r: <? echo $rendertime; ?> seconds
 </div>
 
 </body>
