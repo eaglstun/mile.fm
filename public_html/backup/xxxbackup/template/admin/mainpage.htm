@@ -5,9 +5,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<title>MILE.fm</title>
 	
-	<base href="<? echo HTTPROOT; ?>"/>
+	<base href="<?php echo HTTPROOT; ?>"/>
 	
-	<link rel="stylesheet" href="template/<? echo $action->theme; ?>/css/style.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="template/<?php echo $action->theme; ?>/css/style.css" type="text/css" media="screen" />
 	
 	<script language="javascript" type="text/javascript" src="js/core.js"></script>
 	
@@ -16,14 +16,14 @@
 <body>
 
 <div class="mainContent">
-	<? echo $viewHtml; ?>
+	<?php echo $viewHtml; ?>
 	
-	<? echo $debug; ?>
+	<?php echo $debug; ?>
 	<div class="push"></div>
 </div>
 
 <div id="footer">
-	&copy; <? echo date('Y' ); ?> r: <? echo $rendertime; ?> seconds
+	&copy; <?php echo date('Y' ); ?> r: <?php echo $rendertime; ?> seconds
 </div>
 
 </body>

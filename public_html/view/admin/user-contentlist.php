@@ -6,14 +6,14 @@ content list
 		<td>comment</td>
 		<td>action</td>
 	</tr>
-	<? foreach( $images as $k=>$v ):?>
-		<tr class="<? tableStripe();?>">
-			<td><img src="/content/thumbs/<?= $v['thumb'];?>"/></td>
-			<td><?= $v['comment'];?></td>
-			<td><a href="/admin/content/det/id/<?= $v['id'];?>">details</a></td>
+	<?php foreach( $images as $k=>$v ):?>
+		<tr class="<?php tableStripe();?>">
+			<td><img src="/content/thumbs/<?php echo $v['thumb'];?>"/></td>
+			<td><?php echo $v['comment'];?></td>
+			<td><a href="/admin/content/det/id/<?php echo $v['id'];?>">details</a></td>
 		</tr>
-	<? endforeach; ?>
+	<?php endforeach; ?>
 </table>
 
-<? //dbug($sql);?>
-<? //dbug ($images); ?>
+<?php //dbug($sql);?>
+<?php //dbug ($images); ?>

@@ -1,4 +1,4 @@
-<img src="/static/<?= ($vote == 1) ? 'thumbshadow': 'blankthumb';?>.png" class="voteThumb <? 
+<img src="/static/<?php echo ($vote == 1) ? 'thumbshadow': 'blankthumb';?>.png" class="voteThumb <?php 
 
 if ($vote == -1 ){ 
 	echo 'up';
@@ -6,9 +6,9 @@ if ($vote == -1 ){
 	echo 'on';
 }
 
-?>" for="<?= $objectid; ?>" value="-1" alt="thumbs down" id="thDown"/>
+?>" for="<?php echo $objectid; ?>" value="-1" alt="thumbs down" id="thDown"/>
 	
-<img src="/static/<?= ($vote == -1) ? 'thumbshadow': 'blankthumb';?>.png" class="voteThumb <? 
+<img src="/static/<?php echo ($vote == -1) ? 'thumbshadow': 'blankthumb';?>.png" class="voteThumb <?php 
 
 if ($vote == 1 ){ 
 	echo 'up';
@@ -16,4 +16,4 @@ if ($vote == 1 ){
 	echo 'on';
 }
 
-?>" for="<?= $objectid; ?>" value="1" alt="thumbs up" id="thUp"/>
+?>" for="<?php echo $objectid; ?>" value="1" alt="thumbs up" id="thUp"/>

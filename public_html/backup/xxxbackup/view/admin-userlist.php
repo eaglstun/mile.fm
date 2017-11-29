@@ -13,12 +13,12 @@
 		<td>last login</td>
 	</tr>
 	
-	<? foreach( $users as $k=>$v): ?>
-		<tr class="<? tableStripe();?>">
-			<td><?= $v['id']?></td>
-			<td><?= $v['user']?></td>
-			<td><?= $v['email']?></td>
-			<td><?= $v['lastlogin'] > 0 ? date( "D M jS g:i:s a" , $v['lastlogin'] - 25200 ) : 'never'; ?></td>
+	<?php foreach( $users as $k=>$v): ?>
+		<tr class="<?php tableStripe();?>">
+			<td><?php echo $v['id']?></td>
+			<td><?php echo $v['user']?></td>
+			<td><?php echo $v['email']?></td>
+			<td><?php echo $v['lastlogin'] > 0 ? date( "D M jS g:i:s a" , $v['lastlogin'] - 25200 ) : 'never'; ?></td>
 		</tr>
-	<? endforeach ?>
+	<?php endforeach ?>
 </table>

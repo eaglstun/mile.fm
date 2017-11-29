@@ -5,9 +5,9 @@
 	but you can still use this to invite any friends who might find this interesting! 
 </p>
 
-<? if($invites > count($invited)): ?>
+<?php if($invites > count($invited)): ?>
 <h3><a href="" onclick="getInviteForm();return false">Send an invitation</a></h3>
-<? endif; ?>
+<?php endif; ?>
 
 <h3>Sent invitations:</h3>
 
@@ -18,29 +18,29 @@
 		<td>sent</td>
 		<td>action</td>
 	</tr>
-<? foreach( $invited as $k=>$v ): ?>
+<?php foreach( $invited as $k=>$v ): ?>
 	<tr>
-		<td><?= $v['email']; ?></td>
+		<td><?php echo $v['email']; ?></td>
 		
 		<td>
-			<? if($v['accept'] != 1): ?>
+			<?php if($v['accept'] != 1): ?>
 				no
-			<? else: ?>
-				<?= date("M j Y", $v['date_accept']); ?>
-			<? endif; ?>
+			<?php else: ?>
+				<?php echo date("M j Y", $v['date_accept']); ?>
+			<?php endif; ?>
 		</td>
 		
 		<td>
-			<?= date("M j Y", $v['last_sent']); ?>
+			<?php echo date("M j Y", $v['last_sent']); ?>
 		</td>
 		
 		<td>
-			<? if($v['accept'] != 1): ?>
-				<a href="" onclick="getInviteForm(<?= $v['id']; ?>);return false">resend</a>
-			<? else: ?>
+			<?php if($v['accept'] != 1): ?>
+				<a href="" onclick="getInviteForm(<?php echo $v['id']; ?>);return false">resend</a>
+			<?php else: ?>
 				-
-			<? endif; ?>
+			<?php endif; ?>
 		</td>
 	</tr>
-<? endforeach; ?>
+<?php endforeach; ?>
 </table>

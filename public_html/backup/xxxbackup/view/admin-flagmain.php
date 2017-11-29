@@ -11,10 +11,10 @@
 		<td>user id</td>
 	</tr>
 	
-	<? foreach( $flags as $k=>$v): ?>
-		<tr class="<? tableStripe();?>">
-			<td><?= $v['object']?></td>
-			<td><?= $v['userid']?></td>
+	<?php foreach( $flags as $k=>$v): ?>
+		<tr class="<?php tableStripe();?>">
+			<td><?php echo $v['object']?></td>
+			<td><?php echo $v['userid']?></td>
 		</tr>
-	<? endforeach ?>
+	<?php endforeach ?>
 </table>

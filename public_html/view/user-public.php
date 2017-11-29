@@ -1,18 +1,18 @@
-<? if (trim($friend['pic'])): ?>
-	<img src="/content/profile/<?= $friend['pic'];?>" class="friendPic"/>
-<? else: ?>
+<?php if (trim($friend['pic'])): ?>
+	<img src="/content/profile/<?php echo $friend['pic'];?>" class="friendPic"/>
+<?php else: ?>
 	<img src="/content/thumbs/defaultFriend.gif" class="friendPic"/>
-<? endif; ?>
+<?php endif; ?>
 
 
 <div class="friendProfile">
-	<? if (trim($friend['profile'])): ?>
-		<?= $friend['profile']; ?>
-	<? else : ?>
-		<?= $friend['user']; ?> has not created a profile yet!
-	<? endif; ?>
+	<?php if (trim($friend['profile'])): ?>
+		<?php echo $friend['profile']; ?>
+	<?php else : ?>
+		<?php echo $friend['user']; ?> has not created a profile yet!
+	<?php endif; ?>
 </div>
 
 <div class="friendExternalSites">
-	<?= $externalSites; ?>
+	<?php echo $externalSites; ?>
 </div>

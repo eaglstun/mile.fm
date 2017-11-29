@@ -1,18 +1,18 @@
 <div id="commentTabs">
-	<div onclick="showComment('1')" id="commentTab1" class="commentTab <?= trim($display[1]) ? 'deSelected' : '' ?>">Comments</div>
-	<div onclick="showComment('2')" id="commentTab2" class="commentTab <?= trim($display[2]) ? 'deSelected' : '' ?>">Tags</div>
+	<div onclick="showComment('1')" id="commentTab1" class="commentTab <?php echo trim($display[1]) ? 'deSelected' : '' ?>">Comments</div>
+	<div onclick="showComment('2')" id="commentTab2" class="commentTab <?php echo trim($display[2]) ? 'deSelected' : '' ?>">Tags</div>
 	<div id="voteBlock">
-		<?= $voteblock; ?>
+		<?php echo $voteblock; ?>
 	</div>
 </div>
-	<div onclick="showComment('5')" id="commentTab5" class="commentTab <?= trim($display[3]) ? 'deSelected' : '' ?>">More</div>
+	<div onclick="showComment('5')" id="commentTab5" class="commentTab <?php echo trim($display[3]) ? 'deSelected' : '' ?>">More</div>
 </div>
 
 
 
-<div id="commentSection1" class="commentSection" style="<?= $display[1]; ?>">
+<div id="commentSection1" class="commentSection" style="<?php echo $display[1]; ?>">
 	<div class="commentBlock noDrag" id="commentBlock" >
-		<? if (count($comment) > 0){
+		<?php if (count($comment) > 0){
 			foreach ($comment as $k=>$v){ 
 				//dbug($v, '$v' );
 				$userid = $v['userid'];
@@ -20,31 +20,31 @@
 				$comment = stripslashes($v['comment']); ?>
 				
 				<div class="comment" class="noDrag">
-					<a onclick="getFriendInfo('<? echo $userid; ?>', this)" user="<? echo $userName; ?>" class="commentUser"><? echo $userName; ?></a>
-					 : <? echo $comment; ?>
+					<a onclick="getFriendInfo('<?php echo $userid; ?>', this)" user="<?php echo $userName; ?>" class="commentUser"><?php echo $userName; ?></a>
+					 : <?php echo $comment; ?>
 				</div>
-		<? }
+		<?php }
 		} else { ?>
-			<div class="defaultBal" onclick="addComment(<?= $postId ?>);">No comments yet! Add yours!</div>
-		<? } ?>
+			<div class="defaultBal" onclick="addComment(<?php echo $postId ?>);">No comments yet! Add yours!</div>
+		<?php } ?>
 	</div>
 	
-	<? if (count($comment)): ?>
-		<a class="commentAction" onclick="addComment(<?= $postId ?>);">Add A Comment</a>
-	<? endif ?>
+	<?php if (count($comment)): ?>
+		<a class="commentAction" onclick="addComment(<?php echo $postId ?>);">Add A Comment</a>
+	<?php endif ?>
 </div>
 
-<div id="commentSection2" style="<?= $display[2]; ?>" class="commentSection">
+<div id="commentSection2" style="<?php echo $display[2]; ?>" class="commentSection">
 	<div class="commentBlock noDrag" id="tagBlock">
-		<?= $tagcloud ?>
+		<?php echo $tagcloud ?>
 	</div>
 	
-	<? if (count($tags)): ?>
-		<a class="commentAction" onclick="addTag(<?= $postId ?>);">Tag this image</a>
-	<? endif ?>
+	<?php if (count($tags)): ?>
+		<a class="commentAction" onclick="addTag(<?php echo $postId ?>);">Tag this image</a>
+	<?php endif ?>
 </div>
 
-<div id="commentSection3" style="<?= $display[3]; ?>" class="commentSection">
+<div id="commentSection3" style="<?php echo $display[3]; ?>" class="commentSection">
 	<div class="commentBlock noDrag" id="tagBlock">
 		Add a comment
 		<form name="commentForm" id="commentForm" onsubmit="submitComment();return false">
@@ -60,7 +60,7 @@
 	
 </div>
 
-<div id="commentSection4" style="<?= $display[4]; ?>" class="commentSection">
+<div id="commentSection4" style="<?php echo $display[4]; ?>" class="commentSection">
 	<div class="commentBlock noDrag" id="tagBlock">
 		Add tags (comma separated)
 		<form name="tagForm" id="tagForm" onsubmit="submitTag();return false">
@@ -76,17 +76,17 @@
 	
 </div>
 
-<div id="commentSection5" style="<?= $display[5]; ?>" class="commentSection">
+<div id="commentSection5" style="<?php echo $display[5]; ?>" class="commentSection">
 	<div class="commentBlock noDrag" id="tagBlock">
 		
 		<ul>
-			<li><a href="" onclick="move(<?= $postId ?>);return false">Move</a></li>
+			<li><a href="" onclick="move(<?php echo $postId ?>);return false">Move</a></li>
 		</ul>
 
 		<p>
-			this image is from <a href="<?= $orig_page ?>" target="_blank" ><?= $orig_page ?></a>
+			this image is from <a href="<?php echo $orig_page ?>" target="_blank" ><?php echo $orig_page ?></a>
 			<hr/>
-			it's original location is <a href="<?= $orig_loc ?>" target="_blank" ><?= $orig_loc ?></a>
+			it's original location is <a href="<?php echo $orig_loc ?>" target="_blank" ><?php echo $orig_loc ?></a>
 		</p>
 		
 	</div>
@@ -95,6 +95,6 @@
 	
 </div>
 
-<a href="" onclick="startReport('<? echo $postId; ?>' );return false;" class="reportBad">Report Bad Content?</a>
+<a href="" onclick="startReport('<?php echo $postId; ?>' );return false;" class="reportBad">Report Bad Content?</a>
 
-<input type="hidden" id="squareID" class="noDrag" value="<? echo $postId; ?>"/>
+<input type="hidden" id="squareID" class="noDrag" value="<?php echo $postId; ?>"/>

@@ -1,6 +1,6 @@
-<p>Hello <?= $user; ?>,</p>
+<p>Hello <?php echo $user; ?>,</p>
 
-<p>Your temporary password has been set to <?= $passTemp; ?></p>
+<p>Your temporary password has been set to <?php echo $passTemp; ?></p>
 
 <p>Be sure to change your password once you log in!</p>
 

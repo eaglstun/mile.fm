@@ -10,16 +10,16 @@
 	<div id="cpanelContent">
 		<div id="cpanelHolder">
 		
-			<? 
+			<?php 
 				$auth = isset($_SESSION['userauth']) ? $_SESSION['userauth'] : 0;
 				$which = $auth & 1 ? 'in' : 'out';
 			?>
 			<div id="control1" class="mainControl">
-				<?= $this->Render( 'menu/menu-logged'.$which.'-left' ); ?>
+				<?php echo $this->Render( 'menu/menu-logged'.$which.'-left' ); ?>
 			</div>
 			
 			<div id="control2" class="mainControl">
-				<?= $this->Render( 'menu/menu-logged'.$which.'-right' ); ?>
+				<?php echo $this->Render( 'menu/menu-logged'.$which.'-right' ); ?>
 			</div>
 			
 		</div>
@@ -45,7 +45,7 @@
 			<div id="m1err" class="cpanelErr"></div>
 		</div>
 		
-		<div id="m2" class="cpanelMessage" style="<?= isset($menu2) ? '' : 'display:none'; ?>">
+		<div id="m2" class="cpanelMessage" style="<?php echo isset($menu2) ? '' : 'display:none'; ?>">
 			
 			<div class="menuHead">
 				<a class="menuButton btnX" onclick="closeCpanel(2);">Close</a>
@@ -53,15 +53,15 @@
 				<a class="menuButton btnRSS">RSS Feed</a>
 				
 				<div class="menuNav">
-					<a id="m2prev" href="<?= isset($menu2) ? $menu2['prev'] : '' ;?>" onclick="return false;">Prev</a>
-					<a id="m2next" href="<?= isset($menu2) ? $menu2['next'] : '' ;?>" onclick="return false;">Next</a>
+					<a id="m2prev" href="<?php echo isset($menu2) ? $menu2['prev'] : '' ;?>" onclick="return false;">Prev</a>
+					<a id="m2next" href="<?php echo isset($menu2) ? $menu2['next'] : '' ;?>" onclick="return false;">Next</a>
 				</div>
 				
-				<span class="cTitle"><?= isset($menu2) ? $menu2['title'] : ''; ?></span>
+				<span class="cTitle"><?php echo isset($menu2) ? $menu2['title'] : ''; ?></span>
 			</div>
 			
 			<div id="m2main" class="menuMain">
-				<?= isset($menu2) ? $menu2['content'] : ''; ?>
+				<?php echo isset($menu2) ? $menu2['content'] : ''; ?>
 			</div>
 			
 			<div id="m2err" class="cpanelErr"></div>
@@ -85,39 +85,39 @@
 			<div id="m3err" class="cpanelErr"></div>
 		</div>
 		
-		<div id="m4" class="cpanelMessage" style="<?= isset($menu4) ? '' : 'display:none'; ?>">
+		<div id="m4" class="cpanelMessage" style="<?php echo isset($menu4) ? '' : 'display:none'; ?>">
 			
 			<h5>
 				<a class="menuButton btnX" onclick="closeCpanel(4);"></a>
 				<a class="menuButton btnMM" onclick="menuToggle(this);"></a>
 				
 				<div class="menuNav">
-					<a id="m4prev"><?= isset($menu4) ? $menu4['prev']['text'] : 'Prev' ;?></a>
-					<a id="m4next"><?= isset($menu4) ? $menu4['next']['text'] : 'Next' ;?></a>
+					<a id="m4prev"><?php echo isset($menu4) ? $menu4['prev']['text'] : 'Prev' ;?></a>
+					<a id="m4next"><?php echo isset($menu4) ? $menu4['next']['text'] : 'Next' ;?></a>
 				</div>
 				
-				<span class="cTitle"><?= isset($menu4) ? $menu4['title'] : ''; ?></span>
+				<span class="cTitle"><?php echo isset($menu4) ? $menu4['title'] : ''; ?></span>
 			</h5>
 			
 			<div id="m4main">
 				
 				<div id="friendProfile">
 					<div id="friendProfilemain">
-						<?= isset($menu4) ? $menu4['content'] : ''; ?>
+						<?php echo isset($menu4) ? $menu4['content'] : ''; ?>
 					</div>
 				</div>
 				
 				<div id="friendAdd" class="cpanelMessage">
 					<h5>
 						<div class="menuNav">
-							<a href="<?= isset($menu4) ? $menu4['friendAdds']['prev']['href'] : '/'; ?>" id="friendAddprev" onclick="return false;">Prev</a>
-							<a href="<?= isset($menu4) ? $menu4['friendAdds']['next']['href'] : '/'; ?>" id="friendAddnext" onclick="return false;">Next</a>
+							<a href="<?php echo isset($menu4) ? $menu4['friendAdds']['prev']['href'] : '/'; ?>" id="friendAddprev" onclick="return false;">Prev</a>
+							<a href="<?php echo isset($menu4) ? $menu4['friendAdds']['next']['href'] : '/'; ?>" id="friendAddnext" onclick="return false;">Next</a>
 						</div>
-						<span id="friendAddtitle" class="cTitle"><?= isset($menu4) ? $menu4['friendAdds']['title'] : ''; ?></span>
+						<span id="friendAddtitle" class="cTitle"><?php echo isset($menu4) ? $menu4['friendAdds']['title'] : ''; ?></span>
 					</h5>
 					
 					<div id="friendAddmain">
-						<?= isset($menu4) ? $menu4['friendAdds']['content'] : ''; ?>
+						<?php echo isset($menu4) ? $menu4['friendAdds']['content'] : ''; ?>
 					</div>
 					
 					<div id="friendAdderr" class="cpanelErr"></div>
@@ -129,14 +129,14 @@
 				<div id="friendComment" class="cpanelMessage">
 					<h5>
 						<div class="menuNav">
-							<a href="<?= isset($menu4) ? $menu4['friendComments']['prev']['href'] : '/'; ?>" id="friendCommentprev" onclick="return false;">Prev</a>
-							<a href="<?= isset($menu4) ? $menu4['friendComments']['next']['href'] : '/'; ?>"  id="friendCommentnext" onclick="return false;">Next</a>
+							<a href="<?php echo isset($menu4) ? $menu4['friendComments']['prev']['href'] : '/'; ?>" id="friendCommentprev" onclick="return false;">Prev</a>
+							<a href="<?php echo isset($menu4) ? $menu4['friendComments']['next']['href'] : '/'; ?>"  id="friendCommentnext" onclick="return false;">Next</a>
 						</div>
-						<span id="friendCommenttitle"  class="cTitle"><?= isset($menu4) ? $menu4['friendComments']['title'] : ''; ?></span>
+						<span id="friendCommenttitle"  class="cTitle"><?php echo isset($menu4) ? $menu4['friendComments']['title'] : ''; ?></span>
 					</h5>
 					
 					<div id="friendCommentmain">
-						<?= isset($menu4) ? $menu4['friendComments']['content'] : ''; ?>
+						<?php echo isset($menu4) ? $menu4['friendComments']['content'] : ''; ?>
 					</div>
 					
 					<div id="friendCommenterr" class="cpanelErr"> </div>
@@ -148,7 +148,7 @@
 			
 		</div>
 		
-		<div id="m5" class="cpanelMessage logIn" <?= isset( $_SESSION['userid'] ) || isset($hideLogin) ? 'style="display:none"' : ''; ?>>
+		<div id="m5" class="cpanelMessage logIn" <?php echo isset( $_SESSION['userid'] ) || isset($hideLogin) ? 'style="display:none"' : ''; ?>>
 			
 			<h5>
 				<a class="menuButton btnX" onclick="closeCpanel(5);"></a>
@@ -197,7 +197,7 @@
 			</div>
 		</div>
 		
-		<div id="m6" class="cpanelMessage logIn" style="<?= isset($_SESSION['userid']) || isset($hideLogin) ? 'display:none' : '' ?>">
+		<div id="m6" class="cpanelMessage logIn" style="<?php echo isset($_SESSION['userid']) || isset($hideLogin) ? 'display:none' : '' ?>">
 			<h5>
 				<a class="menuButton btnX" onclick="closeCpanel(6);">Close Signup</a>
 				<a class="menuButton btnMM" onclick="menuToggle(this);">Minimize Signup</a>

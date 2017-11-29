@@ -5,9 +5,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<title>MILE.fm</title>
 	
-	<base href="<? echo HTTPROOT; ?>"/>
+	<base href="<?php echo HTTPROOT; ?>"/>
 	
-	<link rel="stylesheet" href="template/<? echo THEME; ?>/css/style.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="template/<?php echo THEME; ?>/css/style.css" type="text/css" media="screen" />
 	<link rel="shortcut icon" href="favicon.ico" />
       
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -29,16 +29,16 @@
 <body>
 
 <div class="mainContent">
-	<? echo $viewHtml; ?>
+	<?php echo $viewHtml; ?>
 	
-	<? echo $debug; ?>
+	<?php echo $debug; ?>
 	<div class="push"></div>
 </div>
 
 <div id="footer">
-	&copy; <? echo date('Y' ); ?> 
+	&copy; <?php echo date('Y' ); ?> 
 	<a href="http://www.ellak.gr/fonts/mgopen/index.en.html">MILE.fm looks best with MgOpen Moderna installed</a>  
-	<? /*<a href="http://colonrightparen.com" class="smiley">: )</a> page rendered in $rendertime; seconds */ ?>
+	<?php /*<a href="http://colonrightparen.com" class="smiley">: )</a> page rendered in $rendertime; seconds */ ?>
 	site by<a href="http://ericeaglstun.com">eric</a>
 </div>
 

@@ -1,11 +1,11 @@
 <div style="clear:both;">
-<? foreach( $thumbs as $k=>$v ): ?>
-	<? //dbug($v); ?>
+<?php foreach( $thumbs as $k=>$v ): ?>
+	<?php //dbug($v); ?>
 	<div class="panelThumbs" id="" coords="">
-		<img class="panelThumb" src="/static/72spacer.gif" style="background-image: url(/content/thumbs/<?= $v['thumb']; ?>);"/>
-		<? if ( isset($v['votes']) ): ?>
-		<span class="addedDate"><?= plural($v['votes'], 'vote' ); ?></span>
-		<? endif ?>
+		<img class="panelThumb" src="/static/72spacer.gif" style="background-image: url(/content/thumbs/<?php echo $v['thumb']; ?>);"/>
+		<?php if ( isset($v['votes']) ): ?>
+		<span class="addedDate"><?php echo plural($v['votes'], 'vote' ); ?></span>
+		<?php endif ?>
 	</div>
-<? endforeach; ?>
+<?php endforeach; ?>
 </div>

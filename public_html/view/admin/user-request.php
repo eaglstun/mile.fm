@@ -15,15 +15,15 @@
 		<td>action</td>
 	</tr>
 	
-	<? foreach( $info as $k=>$v ): ?>
-		<tr class="<? tableStripe();?>">
-			<td><?= $v['id']?></td>
-			<td><?= $v['email']?></td>
-			<td><?= date( "D M jS Y g:i:s a" , $v['date'] - 25200 ); ?></td>
-			<td><?= $v['last_sent'] > 0 ? date( "D M jS Y g:i:s a" , $v['last_sent'] - 25200 ) : ''; ?></td>
-			<td><?= $v['accept'] == 1 ? "yes" : ""; ?></td>
-			<td><a href="admin/users/sendinvite/to/<?= $v['id']; ?>">send invite</a> | <a onclick="inviteRemove(<? $v['id']; ?>);">remove</a></td>
+	<?php foreach( $info as $k=>$v ): ?>
+		<tr class="<?php tableStripe();?>">
+			<td><?php echo $v['id']?></td>
+			<td><?php echo $v['email']?></td>
+			<td><?php echo date( "D M jS Y g:i:s a" , $v['date'] - 25200 ); ?></td>
+			<td><?php echo $v['last_sent'] > 0 ? date( "D M jS Y g:i:s a" , $v['last_sent'] - 25200 ) : ''; ?></td>
+			<td><?php echo $v['accept'] == 1 ? "yes" : ""; ?></td>
+			<td><a href="admin/users/sendinvite/to/<?php echo $v['id']; ?>">send invite</a> | <a onclick="inviteRemove(<?php $v['id']; ?>);">remove</a></td>
 		</tr>
-	<? endforeach ?>
+	<?php endforeach ?>
 </table>
 

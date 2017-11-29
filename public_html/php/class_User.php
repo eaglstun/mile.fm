@@ -1,67 +1,74 @@
 <?
 
-class User{
+class User
+{
 	var $name; //login name
 	var $pass; //login password in md5 format
 	var $id; //the primary key of this user
 	var $email; //the email address of the user
 	var $maillist; //1 if the user recieves updates
 	var $refer; // the referrer who let this jerk in 
-	
+
 	var $db; //database object
-	
-	function User($db){
+
+	function User($db)
+	{
 		$this->db = $db;
 	}
 	
 	//set in the login username
-	function setName($name){
+	function setName($name)
+	{
 		$this->name = trim(str_replace("  ", " ", $name));
 	}
 	
 	//set the login password (pass in md5 value)
-	function setPass($pass){
-		$this->pass = trim($pass );
+	function setPass($pass)
+	{
+		$this->pass = trim($pass);
 	}
 	
 	//set the email address
-	function setEmail($email){
+	function setEmail($email)
+	{
 		$this->email = trim($email);
 	}
 	
 	//set the referrer of this user 
-	function setRefer($refer){
+	function setRefer($refer)
+	{
 		$this->refer = trim($refer);
 	}
 	
 	//make temp password
-	public function resetPass(){
-	
+	public function resetPass()
+	{
+
 		$email = $this->email;
-		
-		if (!trim($email)){
+
+		if (!trim($email)) {
 			return false;
 		}
-		
+
 		$sql = "SELECT * FROM eric_mile_users.user_list 
 				WHERE email LIKE '$email' 
 				LIMIT 1";
-				
+
 		$res = $this->db->exec($sql);
-		
-		if( !count($res) ){
+
+		if (!count($res)) {
 			return false;
 		}
-		
+
 		$id = $res[0]['id'];
 		$user = $res[0]['user'];
-		
+
 		$sql = "SELECT * FROM randomwords ORDER BY RAND() LIMIT 2";
 		$res = $this->db->exec($sql);
-		
-		$passTemp = ($res[0]['word'].$res[1]['word']);
+
+		$passTemp = ($res[0]['word'] . $res[1]['word']);
 		$md5Temp = md5($passTemp);
-		
+
 		$sql = "UPDATE eric_mile_users.user_list 
 				SET `passTemp` = '$md5Temp'
 				WHERE `id` = '$id' LIMIT 1";
@@ -71,62 +78,65 @@ class User{
 		global $action;
 		$action->vars['user'] = $user;
 		$action->vars['passTemp'] = $passTemp;
-		
-		$body = $action->Render('email/password-reset' );
-		
-		include('php/class_Email.php' );
+
+		$body = $action->Render('email/password-reset');
+
+		include('php/class_Email.php');
 		$Email = new Email();
 		$Email->addTo($email);
-		$Email->setSubject('Password Reset for MILE.fm' );
+		$Email->setSubject('Password Reset for MILE.fm');
 		$Email->setBody($body);
 		$Email->sendMail();
-		
+
 		return true;
 	}
 	
 	//commit the password to the database
-	function updatePassword(){
+	function updatePassword()
+	{
 		$pass = $this->pass;
 		$id = $this->getID();
-		
+
 		$sql = "UPDATE eric_mile_users.user_list
 				SET 
 				pass='$pass',
 				passTemp = ''
 				WHERE id = '$id'
 				LIMIT 1";
-				
+
 		$this->db->execute($sql);
 	}
 	
 	//set if they receive newsletters/updates
 	//1 if yes
-	function setEmailList($val){
-		if ($val == 'off' || $val == 0 || $val == false){
+	function setEmailList($val)
+	{
+		if ($val == 'off' || $val == 0 || $val == false) {
 			$val = 0;
 		} else {
 			$val = 1;
 		}
-		
+
 		$this->maillist = $val;
 	}
 	
 	//perform a login
-	function doLogin(){
+	function doLogin()
+	{
 		$name = $this->name;
 		$pass = $this->pass;
-		
+
 		$sql = "SELECT `user`, `pass`, `id`, `priv` , `show_nudity`
 				FROM eric_mile_users.user_list U
 				LEFT JOIN eric_mile_users.user_prefs P
 				ON U.id = P.userid
 				WHERE `user` = '$name' 
 				AND (`pass` = '$pass' OR `passTemp` = '$pass')";
-				
-		$result = $this->db->exec( $sql );
+
+		$result = $this->db->exec($sql);
 		
 		//if there is not exactly 1 reusult, something went wrong
-		if (count($result) != 1){
+		if (count($result) != 1) {
 			session_destroy();
 			return false;
 		}
@@ -152,34 +162,37 @@ class User{
 		
 		//show nudity or not
 		$_SESSION['show_nudity'] = $result[0]['show_nudity'];
-		
+
 		$_SESSION['pngs'] = 1;
-		
+
 		return true;
 	}
 	
 	//finds a user by their username
 	//returns 1 if found and 0 if not found
-	function findUserName(){
+	function findUserName()
+	{
 		$name = $this->name;
-		
+
 		$sql = "SELECT * FROM eric_mile_users.user_list
 				WHERE user LIKE '$name'
 				LIMIT 1";
-		
+
 		$result = $this->db->exec($sql);
 		return count($result);
 	}
 	
 	//log the user out
-	function doLogout(){
+	function doLogout()
+	{
 		unset($_SESSION['userauth']);
 		unset($_SESSION['userid']);
 		unset($_SESSION['ref']);
 	}
 	
 	//create a new user with variables of object
-	function createNew(){
+	function createNew()
+	{
 		$user = $this->name;
 		$pass = $this->pass;
 		$email = $this->email;
@@ -193,22 +206,22 @@ class User{
 				(user, pass, email, lastlogin, priv, invites, ref, browser)
 				VALUES
 				('$user', '$pass', '$email', '$now', '1', '5', '$refer', '$browser')";
-				
+
 		$this->db->execute($sql);
 		
 		//set session vars 
 		//user id
 		$id = $this->db->lastid;
 		$this->setID($id);
-		
+
 		$_SESSION['userid'] = $id;
 		
 		//if from refer, increment count 
-		if(isset($_SESSION['ref'])){
+		if (isset($_SESSION['ref'])) {
 			$sql = "UPDATE eric_mile_users.ref 
 					SET `count` = (`count` + 1) 
 					WHERE `ref` = '$refer' LIMIT 1";
-					
+
 			$this->db->execute($sql);
 			
 			//if they are reffered, unset that
@@ -229,7 +242,7 @@ class User{
 				date_accept='$now'
 				WHERE email LIKE '$refer'
 				OR email LIKE '$email'";
-		
+
 		$this->db->execute($sql);
 		
 		//create profile record
@@ -238,80 +251,89 @@ class User{
 				VALUES 
 				('$id', '', '')
 				ON DUPLICATE KEY UPDATE userid = '$id'";
-		
+
 		$this->db->execute($sql);
-		
+
 	}
 	
 	//sets the userauth session amount.
 	//1 is standard user
-	function setAuth($privlevel){
+	function setAuth($privlevel)
+	{
 		$_SESSION['userauth'] = $privlevel;
 	}
 	//returns the user priv level
-	function getAuth(){
+	function getAuth()
+	{
 		return $_SESSION['userauth'];
 	}
 	
 	
 	//sets the userid value
-	function setID($id){
+	function setID($id)
+	{
 		$this->id = $id;
 	}
 	
 	//returns the userid value
-	function getID(){
+	function getID()
+	{
 		$this->id = isset($_SESSION['userid']) ? $_SESSION['userid'] : false;
 		return $this->id;
 	}
 	
 	//sets the username value
-	function setNameSession($user){
+	function setNameSession($user)
+	{
 		$_SESSION['username'] = $user;
 	}
 	//returns username value
-	function getName(){
+	function getName()
+	{
 		return $_SESSION['username'];
 	}
 	
 	//sets the last login timestamp, browser info, etc
-	function updateLogin(){
+	function updateLogin()
+	{
 		$browser = $_SERVER['HTTP_USER_AGENT'];
 		$id = $_SESSION['userid'];
 		$now = time();
-		
+
 		$sql = "UPDATE eric_mile_users.user_list
 				SET 
 				lastlogin = '$now',
 				browser = '$browser'
 				WHERE id = '$id'
 				LIMIT 1";
-					
+
 		$result = $this->db->execute($sql);
 	}
 	
 	
 	
 	//changes the users name
-	function changeNameTo($name){
+	function changeNameTo($name)
+	{
 		$this->setNameSession($name);
-		
+
 		$id = $this->getID();
-		
+
 		$sql = "UPDATE eric_mile_users.user_list
 				SET user = '$name'
 				WHERE id = '$id'
 				LIMIT 1";
-				
+
 		$this->db->execute($sql);
 	}
 	
 	//update the users email status
-	function updateEmailRec(){
+	function updateEmailRec()
+	{
 		$maillist = $this->maillist;
-		
+
 		$id = $this->getID();
-		
+
 		$sql = "UPDATE eric_mile_users.user_list
 				SET maillist = '$maillist'
 				WHERE id = '$id'
@@ -319,26 +341,29 @@ class User{
 		//echo $sql;	
 		$this->db->execute($sql);
 	}
-	
-	function searchForUserName($name){
+
+	function searchForUserName($name)
+	{
 		$sql = "SELECT id,user,email 
 				FROM eric_mile_users.user_list
 				WHERE user = '$info'";
-				
+
 		$result = $this->db->exec($sql);
-		
-		if (count($result) !=1 ){
+
+		if (count($result) != 1) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
-	function searchForUserEmail(){
-	
+
+	function searchForUserEmail()
+	{
+
 	}
-	
-	function loadProfile(){
+
+	function loadProfile()
+	{
 		$sql = "SELECT U.user, P.profile, IF(P.pic, P.pic, P.pic) as pic
 				FROM user_list U
 				LEFT JOIN 
@@ -346,14 +371,15 @@ class User{
 				ON U.id = P.userid
 				WHERE U.id = '{$this->id}'
 				LIMIT 1";
-				
+
 		$result = $this->db->exec($sql);
-		
+
 		return $result[0];
 	}
 	
 	//return list of external logins for user 
-	function loadExternal(){
+	function loadExternal()
+	{
 		$sql = "SELECT * 
 				FROM external_sites E 
 				LEFT JOIN user_external U 
@@ -362,50 +388,54 @@ class User{
 				AND E.active = '1'
 				AND U.username != '' 
 				ORDER BY site ASC";
-				
+
 		$result = $this->db->exec($sql);
-		
-		foreach( $result as $k=>$v){
-			$link = str_replace('%uname%', $v['username'], $v['url']) ;
-			$link = str_replace('%uid%', $v['uid'], $link) ;
-			
+
+		foreach ($result as $k => $v) {
+			$link = str_replace('%uname%', $v['username'], $v['url']);
+			$link = str_replace('%uid%', $v['uid'], $link);
+
 			$result[$k]['url'] = $link;
 		}
-		
+
 		return $result;
 	}
 	
 	//loadAdds
-	function loadAdds($start = 0, $limit = 17){
-	
+	function loadAdds($start = 0, $limit = 17)
+	{
+
 		$output = array();
-		
+
 		$sql = "SELECT * FROM content_history H 
 				WHERE `userid` = '{$this->id}'
 				ORDER BY `stamp` DESC
 				LIMIT $start, $limit";
-		
+
 		$result = $this->db->exec($sql);
-		
-		foreach( $result as $k=>$v){
-			
-			$locX = ($v['left'] + (($v['right'] - $v['left']) / 2)) * 72;
-			$locY = ($v['top'] + (($v['bottom'] - $v['top']) / 2)) * 72;
-			
-			array_push($output, array('thumb' => $v['thumb'],
-									  'locX' => $locX, 
-									  'locY' => $locY,
-									  'id' => 'pic'.$v['id']));
+
+		foreach ($result as $k => $v) {
+
+			$locX = ($v['left'] + ( ($v['right'] - $v['left']) / 2)) * 72;
+			$locY = ($v['top'] + ( ($v['bottom'] - $v['top']) / 2)) * 72;
+
+			array_push($output, array(
+				'thumb' => $v['thumb'],
+				'locX' => $locX,
+				'locY' => $locY,
+				'id' => 'pic' . $v['id']
+			));
 		}
-				
+
 		return $output;
 	}
 	
 	//loadComments
-	function loadComments($start = 0, $limit = 17){
-	
+	function loadComments($start = 0, $limit = 17)
+	{
+
 		$output = array();
-		
+
 		$sql = "SELECT H.* FROM content_comments C 
 				LEFT JOIN 
 				content_history H 
@@ -413,39 +443,41 @@ class User{
 				WHERE C.userid = '{$this->id}'
 				ORDER BY C.stamp DESC
 				LIMIT $start, $limit";
-			
+
 		$result = $this->db->exec($sql);
-		
-		foreach( $result as $k=>$v){
-			
-			$locX = ($v['left'] + (($v['right'] - $v['left']) / 2)) * 72;
-			$locY = ($v['top'] + (($v['bottom'] - $v['top']) / 2)) * 72;
-			
-			array_push($output, array('thumb' => $v['thumb'],
-									  'locX' => $locX, 
-									  'locY' => $locY,
-									  'id' => 'pic'.$v['id']));
+
+		foreach ($result as $k => $v) {
+
+			$locX = ($v['left'] + ( ($v['right'] - $v['left']) / 2)) * 72;
+			$locY = ($v['top'] + ( ($v['bottom'] - $v['top']) / 2)) * 72;
+
+			array_push($output, array(
+				'thumb' => $v['thumb'],
+				'locX' => $locX,
+				'locY' => $locY,
+				'id' => 'pic' . $v['id']
+			));
 		}
-			
-		return $output;		
+
+		return $output;
 	}
-	
-	function setLoc($x, $y){
+
+	function setLoc($x, $y)
+	{
 		$userid = $this->getID();
-		
-		if(!intval($userid)){
+
+		if (!intval($userid)) {
 			return false;
 		}
-		
+
 		$now = time();
-		
+
 		$sql = "REPLACE INTO user_currentActive
 				(userid, user_x, user_y, stamp)
 				VALUES
 				('$userid', '$x', '$y', '$now')";
-				
+
 		$this->db->execute($sql);
 		return true;
 	}
 }
-?>

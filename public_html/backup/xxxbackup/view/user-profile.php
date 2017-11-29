@@ -6,14 +6,14 @@
 </ul>
 
 <div id="profile1" class="profileTab">
-	<img src="content/profile/<? echo $profile['pic']; ?>" class="profilePic"/>
+	<img src="content/profile/<?php echo $profile['pic']; ?>" class="profilePic"/>
 	
-	<h2 class="username"><? echo $profile['user']; ?></h2>
+	<h2 class="username"><?php echo $profile['user']; ?></h2>
 	
-	<div id="profileHTML" class="noDrag"><? echo $profile['profile']; ?></div>  
+	<div id="profileHTML" class="noDrag"><?php echo $profile['profile']; ?></div>  
 	
 	<div id="userExternal">
-	<?= $externalSites; ?>
+	<?php echo $externalSites; ?>
 	</div>
 	
 	<br style="clear:both"/>
@@ -22,7 +22,7 @@
 <div id="profile2" style="display:none" class="profileTab">
 	<p class="helperText">You can put in a little bit that people will see.  Keep it short!</p>
 	<form name="cp_prof" action="" method="POST">
-		<textarea class="noDrag" name="profile" id="profileEdit"><? echo $profile['profile']; ?></textarea>
+		<textarea class="noDrag" name="profile" id="profileEdit"><?php echo $profile['profile']; ?></textarea>
 		
 		<a class="fakeButton" onclick="sendProfile();return false">Submit</a>
 	</form>
@@ -48,9 +48,9 @@
 	<form name="cp_ext" action="" method="POST">
 		<select class="noDrag" id="profileNewLink" onchange="updateExt()" name="extid">
 			<option value="">select</option>
-			<? foreach( $allsites as $k=>$v): ?>
-				<option value="<?= $v['id'] ?>" url="<?= $v['url'] ?>" username="<?= $v['username'] ?>" uid="<?= $v['uid'] ?>"><?= $v['site'] ?></option>
-			<? endforeach ?>
+			<?php foreach( $allsites as $k=>$v): ?>
+				<option value="<?php echo $v['id'] ?>" url="<?php echo $v['url'] ?>" username="<?php echo $v['username'] ?>" uid="<?php echo $v['uid'] ?>"><?php echo $v['site'] ?></option>
+			<?php endforeach ?>
 		</select>
 		
 		<div class="inputContainer">

@@ -13,12 +13,12 @@
 		<td>action</td>
 	</tr>
 	
-	<? foreach( $info as $k=>$v): ?>
-		<tr class="<? tableStripe();?>">
-			<td><?= $v['id']?></td>
-			<td><?= $v['email']?></td>
-			<td><?= date( "D M jS Y g:i:s a" , $v['stamp'] - 25200 ); ?></td>
+	<?php foreach( $info as $k=>$v): ?>
+		<tr class="<?php tableStripe();?>">
+			<td><?php echo $v['id']?></td>
+			<td><?php echo $v['email']?></td>
+			<td><?php echo date( "D M jS Y g:i:s a" , $v['stamp'] - 25200 ); ?></td>
 			<td><a href="">send invite</a> | <a href="">remove</a></td>
 		</tr>
-	<? endforeach ?>
+	<?php endforeach ?>
 </table>

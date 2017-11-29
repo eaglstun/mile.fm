@@ -13,15 +13,15 @@
 		<td>action</td>
 	</tr>
 	
-	<? foreach( $flags as $k=>$v ): ?>
-		<tr class="<? tableStripe();?>">
-			<td><?= $v['object']?></td>
-			<td><img src="/content/thumbs/<?= $v['thumb'];?>"/></td>
-			<td><?= $v['count']?></td>
+	<?php foreach( $flags as $k=>$v ): ?>
+		<tr class="<?php tableStripe();?>">
+			<td><?php echo $v['object']?></td>
+			<td><img src="/content/thumbs/<?php echo $v['thumb'];?>"/></td>
+			<td><?php echo $v['count']?></td>
 			<td>
-				<a href="/admin/content/det/id/<?= $v['object']?>">details</a>
-				<a class="remove" href="/admin/content/remove/id/<?= $v['object']?>">remove</a>
+				<a href="/admin/content/det/id/<?php echo $v['object']?>">details</a>
+				<a class="remove" href="/admin/content/remove/id/<?php echo $v['object']?>">remove</a>
 			</td>
 		</tr>
-	<? endforeach ?>
+	<?php endforeach ?>
 </table>

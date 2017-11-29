@@ -1,23 +1,23 @@
 <div id="container">
 	
 	<div id="squaremile">
-		<div id="snarky">the fm stands for <?= $fm ?></div>
+		<div id="snarky">the fm stands for <?php echo $fm ?></div>
 		<div id="offsetLeft"></div>
 		<div id="offsetTop"></div>
 		
 		
-		<? if( isset($mileContent) ): ?>
+		<?php if( isset($mileContent) ): ?>
 			
-			<? foreach( $mileContent as $k=>$v ): ?>
-				<? $zIndex = (5280-$v['mileY']) + (5280-$v['mileX']); ?>
+			<?php foreach( $mileContent as $k=>$v ): ?>
+				<?php $zIndex = (5280-$v['mileY']) + (5280-$v['mileX']); ?>
 				
-				<div miley="<?= $v['mileY']; ?>" milex="<?= $v['mileX']; ?>" style="left: <?= ($v['mileX'] % 4) * 432; ?>px; top: <?= ($v['mileY'] % 4) * 432; ?>px; z-index: <?= $zIndex; ?>; background-image: none; background-color: #fff;" forcereload="0" class="footBlock <?= $k; ?>" id="c<?= $v['mileX'] % 4; ?>r<?= $v['mileY'] % 4; ?>"><?= $v['img']; ?></div>
-			<? endforeach; ?>
-		<? endif; ?>
+				<div miley="<?php echo $v['mileY']; ?>" milex="<?php echo $v['mileX']; ?>" style="left: <?php echo ($v['mileX'] % 4) * 432; ?>px; top: <?php echo ($v['mileY'] % 4) * 432; ?>px; z-index: <?php echo $zIndex; ?>; background-image: none; background-color: #fff;" forcereload="0" class="footBlock <?php echo $k; ?>" id="c<?php echo $v['mileX'] % 4; ?>r<?php echo $v['mileY'] % 4; ?>"><?php echo $v['img']; ?></div>
+			<?php endforeach; ?>
+		<?php endif; ?>
 	</div>
 	
 	<!--Control Panel-->
-	<?= $cpanel;?>
+	<?php echo $cpanel;?>
 	<!--End Control Panel-->
 	
 	<!-- the zoom -->
@@ -37,23 +37,23 @@
 	</div>
 	<!--end scaled map -->
 	
-	<? if( isset($lightboxContent)): ?>
+	<?php if( isset($lightboxContent)): ?>
 		<div id="lightboxbk">
 			<img class="lbshadow" src="/static/shadow.png">
 			<div id="lightboxlight">
-				<span class="lightboxTitle"><?= $lightboxTitle; ?></span>
+				<span class="lightboxTitle"><?php echo $lightboxTitle; ?></span>
 				<div style="" id="lightboxcontent" class="">
-					<?= ($lightboxContent);?>
+					<?php echo ($lightboxContent);?>
 				</div>
 			</div>
 			
 			<a id="closeLB" href="/" onclick="closeLB();"></a>
 		</div>
-	<? endif; ?>
+	<?php endif; ?>
 </div>
 
 
-<? /*
+<?php /*
 <!--[if IE]>
 <script type='text/javascript'  src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
 <![endif]-->
