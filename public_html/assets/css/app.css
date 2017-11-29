@@ -1,0 +1,125 @@
+#cpanel { position: absolute; top: -5px; left: -10px; margin: auto; padding: 0px; width: 336px; z-index: 50001; }
+
+#cpanel a { cursor: pointer; }
+
+#cpaneltop { background-image: url(../../../static/cpanel_top.png); background-repeat: no-repeat; margin: auto; padding: 10px 15px 0px 15px; }
+
+#cpanelContent { height: auto; background-image: url(../../../static/cpanel_mid.png); background-repeat: repeat-y; margin: auto; padding: 0px 15px; width: 306px; }
+
+#cpanelbottom { background-image: url(../../../static/cpanel_bottom.png); background-repeat: no-repeat; height: 20px; }
+
+#cpanel div.menuHead, #cpanel h5 { background-color: #D16A38; color: #fff; font-family: "MGOpen Moderna", HelveticaNeue-Light, "Helvetica Neue Light", "Helvetica Neue", helvetica, arial, sans-serif; font-size: .6em; line-height: 16px; margin: 0px; padding: 0px 0px 0px 5px; text-align: left; }
+
+a.menuButton { cursor: pointer; display: block; float: right; height: 15px; margin: 0px; padding: 0px; text-indent: 16px; overflow: hidden; width: 16px; }
+
+.btnX { background-image: url(../../../static/btnX.png); }
+
+.btnMM { background-image: url(../../../static/btnMM.png); background-position: center top; }
+
+.btnRSS { background-image: url(../../../static/btnRSS.png); }
+
+.menuNav { float: right; margin-right: 1em; }
+
+.menuNav a { color: #fff; cursor: pointer; float: left; height: 14px; line-height: 16px; margin: 1px 0 0 0; -moz-border-radius: 4px; padding: 0 6px; text-decoration: none; }
+
+.menuNav a:hover { background-color: #fff; color: #D16A38; }
+
+.menuNav span.inactive, .menuNav span.inactive:hover { color: #ddd; cursor: default; text-decoration: none; }
+
+.cpanelMessage { clear: both; margin: auto; padding: 0px; text-align: center; width: 306px; }
+
+.feedbackMessage { clear: both; font-size: .8em; }
+
+#cpanel h4 { margin: 0px 0px 0px 1em; padding: 0px; font-size: .8em; text-align: left; }
+
+.cpanelErr { clear: both; color: #c00; font-size: .8em; }
+
+#cpanelHolder { clear: both; display: table; height: auto; padding: 0px; margin: 0px; position: relative; width: 306px; }
+
+.mainControl { width: 153px; padding: 0px; display: block; margin: auto; }
+
+.mainControl ul { list-style-type: none; margin: 0px; padding: 0px; width: 153px; }
+
+.mainControl ul li a { display: block; font-size: .8em; line-height: 21px; padding: 0 0 0 5px; width: 148px; }
+
+div#control1 { float: left; left: 0px; }
+
+div#control2 { float: right; right: 0px; }
+
+div#control2 ul.submenu { display: none; }
+
+div#control1 ul li a { background-image: url(../../../static/menubkoff.png); background-position: right center; background-repeat: repeat-y; }
+
+div#control1 ul li a:hover { background-image: url(../../../static/menubkon.png); }
+
+ul#controlPanel li ul { display: none; }
+
+div.mainControl li a { text-decoration: none; }
+
+div.mainControl li a:hover, div.mainControl li a.selected { background-color: #D16A38; color: #fff; }
+
+div#control1 li a.selected, div#control1 li a.selected:hover { background-color: #D16A38; background-image: url(../../../static/menuarrow.png); background-position: right center; background-repeat: no-repeat; color: #fff; }
+
+div#control2.mainControl li a.special:hover, div#control2.mainControl li a.special.selected { background-color: #D16A38; background-image: url(../../../static/menuarrow-on.png); background-position: left center; background-repeat: no-repeat; color: #fff; position: relative; left: -22px; padding-left: 27px; }
+
+.menuMain { padding-top: 4px; }
+
+a#loginHelp { color: #D16A38; font-size: .6em; }
+
+#resetMessage { display: none; }
+
+.panelThumbs { border: 0px; cursor: pointer; display: inline; float: left; margin: 0px 2px 0px 2px; min-height: 80px; width: 72px; }
+
+img.panelThumb { width: 72px; height: 72px; }
+
+.deletePic { left: 28px; margin-bottom: -12px; position: relative; top: -12px; }
+
+.addedDate { color: #666; font-size: .6em; }
+
+#smallAdd { cursor: move; display: block; left: 190px; position: absolute; top: 10px; }
+
+.dragHelp { height: 120px; position: relative; width: 180px; }
+
+#userExternal, div.friendExternalSites { clear: both; display: table; font-size: .6em; line-height: 18px; margin: 2px 4px; text-align: center; width: 290px; }
+
+#userExternal a, div.friendExternalSites a { font-size: 1em; }
+
+#userExternal img, div.friendExternalSites img { border-width: 0px; opacity: .5; padding: 4px; vertical-align: text-top; }
+
+#userExternal img:hover, div.friendExternalSites img:hover { background-image: url(../../../static/ex_button.png); opacity: 1; }
+
+.profileTab { display: table; margin: auto; width: 300px; }
+
+#profileEdit { border: 1px solid #D63; display: block; font-family: sans-serif; height: 4.8em; line-height: 1.2em; margin: 0 auto 10px auto; overflow: auto; padding: 0 0px 10px 5px; width: 280px; }
+
+ul.profileEdit { border-bottom: 1px solid #D16A38; display: block; margin: 0px auto; padding: 0px; text-align: center; }
+
+ul.profileEdit li { display: inline; font-size: .6em; line-height: 1.2em; margin: 0px; padding: 0px; }
+
+ul.profileEdit li a { background-color: #fff; border: 1px solid #D16A38; border-bottom-width: 0px; cursor: pointer; font-size: 1em; margin: 0; padding: 0px 10px; -moz-border-radius-topleft: 3px; -moz-border-radius-topright: 3px; -webkit-border-top-left-radius: 3px; -webkit-border-top-right-radius: 3px; white-space: nowrap; }
+
+ul.profileEdit li a:hover { background-color: #D16A38; color: #fff; white-space: nowrap; }
+
+#externalSites { margin: auto; text-align: center; width: 300px; }
+
+img.profilePic { float: right; margin: 2px 2px 4px 4px; }
+
+#profileHTML { font-size: .8em; padding: 2px; text-align: left; width: 270px; }
+
+img.friendPic { float: right; margin: 4px 4px 4px 8px; }
+
+div.friendProfile { font-size: .8em; margin: 0 4px 4px 4px; text-align: justify; }
+
+iframe#uploadTarget { height: 1px; width: 1px; display: none; }
+
+#loginForgot { display: none; }
+
+.helperText { font-size: .8em; clear: both; }
+
+.helperText a { font-size: 1em; }
+
+.loginHelperText { clear: both; color: #D16A38; display: none; font-size: .8em; margin: 0; padding: 0 0 1em 0; }
+
+.footBlock { height: 432px; width: 432px; position: absolute; border: 0px solid #ddf; color: #666; font-weight: bold; background-position: center center; background-repeat: no-repeat; overflow: visible; }
+
+#center { width: 9px; height: 9px; position: fixed; left: 50%; top: 50%; margin: -4px 0px 0px -4px; background-image: url(../../../static/center.gif); }
