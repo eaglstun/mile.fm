@@ -9,7 +9,7 @@ class mileMVC extends Action
 	//check overlap to see if we can add picture here 
 	function addAction()
 	{
-		$start = microtime();
+		$start = microtime(true);
 		$stamp = time();
 
 		$this->disableLayout();
@@ -208,7 +208,7 @@ class mileMVC extends Action
 
 		$tables = array_unique($tables);
 
-		$end = microtime();
+		$end = microtime(true);
 
 		if ($end - $start < 1) {
 			sleep(1);

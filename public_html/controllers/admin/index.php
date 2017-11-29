@@ -20,8 +20,6 @@ class indexMVC extends Action
 
 	function dologinAction()
 	{
-		include_once('php/class_User.php');
-
 		$User = new User($this->db);
 
 		$User->setName($_POST['name']);

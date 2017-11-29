@@ -323,10 +323,10 @@ class userMVC extends Action
 
 	function forgotAction()
 	{
-		$start = microtime();
+		$start = microtime(true);
 		$this->disableLayout();
 
-		$end = microtime();
+		$end = microtime(true);
 
 		if ($end - $start < 1) {
 			sleep(1);
@@ -335,7 +335,7 @@ class userMVC extends Action
 
 	function loginAction()
 	{
-		$start = microtime();
+		$start = microtime(true);
 		$this->disableLayout();
 
 		$success = false;
@@ -353,7 +353,7 @@ class userMVC extends Action
 		}
 
 		$this->json['success'] = $success;
-		$end = microtime();
+		$end = microtime(true);
 
 		if ($end - $start < 1) {
 			sleep(1);
@@ -374,7 +374,7 @@ class userMVC extends Action
 	//request access to alpha
 	function requestAction()
 	{
-		$start = microtime();
+		$start = microtime(true);
 		$this->disableLayout();
 
 		$stamp = time();
@@ -399,7 +399,7 @@ class userMVC extends Action
 			$this->json['msg'] = "Thank you! We will send you an email soon!";
 		}
 
-		$end = microtime();
+		$end = microtime(true);
 		if ($end - $start < 1) {
 			sleep(1);
 		}

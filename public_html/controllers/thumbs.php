@@ -1,15 +1,9 @@
-<?
+<?php
+
 class thumbsMVC extends Action
 {
-
-	function init()
+	public function popularAction()
 	{
-		require_once('php/class_User.php');
-	}
-
-	function popularAction()
-	{
-
 		if (isset($_POST['start'])) {
 			//ajax request
 			$start = $_POST['start'];

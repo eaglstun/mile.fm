@@ -3,7 +3,6 @@ class badMVC extends Action
 {
 	function init()
 	{
-		include('php/class_Browser.php');
 		$this->br = new browser();
 		$this->template = 'static';
 	}
