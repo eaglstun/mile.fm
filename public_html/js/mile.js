@@ -1,402 +1,402 @@
 /*
 *
 */
-function zoom( num ){
-	
-	if ( num == 'in' ){
+function zoom(num) {
+
+	if (num == 'in') {
 		num = mySize.scale * 2;
-	} else if ( num == 'out' ) {
+	} else if (num == 'out') {
 		num = mySize.scale / 2;
 	};
-	
-	if (num > 72){
+
+	if (num > 72) {
 		num = 72;
-	} else if( num < .0087){
+	} else if (num < .0087) {
 		num = .0087890625;
-	};	
-	
-	if(num == mySize.scale){
+	};
+
+	if (num == mySize.scale) {
 		return;
 	};
-	
-	if(m = $j('#mags')){
-		
+
+	if (m = $j('#mags')) {
+
 		s = (72 / num);
 		n = Math.log(s) / Math.log(2);
-		
+
 		left = 126 - (n * 9);
-		
-		m.css({ left : left + "px" });
+
+		m.css({ left: left + "px" });
 	};
-	
+
 	//get the css style sheet 
-	if(document.styleSheets[0].cssRules){
+	if (document.styleSheets[0].cssRules) {
 		//correct
 		footBlock = document.styleSheets[0].cssRules[0].style;
-	} else if(document.styleSheets[0].rules){
+	} else if (document.styleSheets[0].rules) {
 		//ie
 		footBlock = document.styleSheets[0].rules[0].style;
 	} else {
 		//who knows
 		return false;
 	};
-	
-	if (num < 18){
-		mySize.mag = (18/num);
+
+	if (num < 18) {
+		mySize.mag = (18 / num);
 
 	} else {
 		mySize.mag = 1;
 	};
-	
+
 	mySize.scale = num;
-	
+
 	width = (num * 12 * mySize.mag) + "px";
 	footBlock.height = width;
 	footBlock.width = width;
-	
-	for (var x=0; x<mySize.numCols; x ++){
-		for (var y=0; y<mySize.numRows; y ++){
-			
-			if ($j("#c"+x+"r"+y)){
-				
-				$j("#c"+x+"r"+y).attr('forcereload', 1).html('' );
+
+	for (var x = 0; x < mySize.numCols; x++) {
+		for (var y = 0; y < mySize.numRows; y++) {
+
+			if ($j("#c" + x + "r" + y)) {
+
+				$j("#c" + x + "r" + y).attr('forcereload', 1).html('');
 			};
 		};
 	};
-	
+
 	//need to reverse the equation, to set the mag x based on the zoom facotr
 	leftX = (1 / num) * 72;
-	
+
 	setScreenClass();
 };
 
-function findTarget(e){
-	
-	try{
+function findTarget(e) {
+
+	try {
 		//teh fahx
 		t = e.target.id;
 	} catch (err) {
 		//teh sucx
 		t = e.srcElement.id;
 	};
-	
-	if(t.match(/pic/)){
+
+	if (t.match(/pic/)) {
 		doSelect(t);
 	};
 };
 
 //initialize feet divs
-function buildScreen(){
-	
+function buildScreen() {
+
 	//get rid of any divs due to scale or screen size 
-	if( mySize.oldCols > mySize.numCols){
-		for(var x=mySize.oldCols; x >= mySize.numCols; x --){
-			for(var y=mySize.oldRows; y >= 0; y --){
-			
-				if(x >= mySize.numCols || y >= mySize.numRows){
-					$j("#c"+x+"r"+y).remove();
+	if (mySize.oldCols > mySize.numCols) {
+		for (var x = mySize.oldCols; x >= mySize.numCols; x--) {
+			for (var y = mySize.oldRows; y >= 0; y--) {
+
+				if (x >= mySize.numCols || y >= mySize.numRows) {
+					$j("#c" + x + "r" + y).remove();
 				};
-				
+
 			};
 		};
 	};
-	
-	if( mySize.oldRows > mySize.numRows){
-		for(var y = mySize.oldRows; y >= mySize.numRows; y --){
-			for(var x = mySize.oldCols; x >= 0; x --){
-				$j("#c"+x+"r"+y).remove();
+
+	if (mySize.oldRows > mySize.numRows) {
+		for (var y = mySize.oldRows; y >= mySize.numRows; y--) {
+			for (var x = mySize.oldCols; x >= 0; x--) {
+				$j("#c" + x + "r" + y).remove();
 			};
 		};
 	};
-	
-	for (var x=0; x<mySize.numCols; x ++){
-		for (var y=0; y<mySize.numRows; y ++){
-			
-			if ( $j("#c"+x+"r"+y).length == 0 ){
-				
-				var newdiv = document.createElement('div' );
-			
-				newdiv.setAttribute('id', "c"+x+"r"+y);
+
+	for (var x = 0; x < mySize.numCols; x++) {
+		for (var y = 0; y < mySize.numRows; y++) {
+
+			if ($j("#c" + x + "r" + y).length == 0) {
+
+				var newdiv = document.createElement('div');
+
+				newdiv.setAttribute('id', "c" + x + "r" + y);
 				newdiv.className = "footBlock";
-				
+
 				$j('#squaremile').append(newdiv);
-				
-				$j("#c"+x+"r"+y).attr('forcereload', 1);
+
+				$j("#c" + x + "r" + y).attr('forcereload', 1);
 			};
 		};
 	};
-	
+
 	moveScreen();
-	
+
 	endMile();
 };
 
 //delay loading image into mile div
-function loadImage(cls, image){
-	x = "doLoad('"+cls+"','"+image+"')";
+function loadImage(cls, image) {
+	x = "doLoad('" + cls + "','" + image + "')";
 	setTimeout(x, 500);
 };
 
 //load a scaled image into the foot
-function doLoad(cls, image){
-	
+function doLoad(cls, image) {
+
 	var obj;
-	
-	if( obj = $j('.'+cls)){
-		
+
+	if (obj = $j('.' + cls)) {
+
 		pic = new Image();
-		
-		pic.onload = function(){
-			obj.html('<img src="'+image+'"/>' );
+
+		pic.onload = function () {
+			obj.html('<img src="' + image + '"/>');
 			obj.css({
 				backgroundImage: 'none',
 				backgroundColor: '#D16A38'
 			});
 		};
-		
+
 		pic.obj = obj;
 		pic.src = image;
-		
+
 	};
 };
 
 //handles positioning the foot divs
-function moveScreen(){
+function moveScreen() {
 	scale = mySize.scale / 72;
-	
+
 	xdiff = Math.floor(((mySize.myX) / mySize.totalWidth) * scale) * mySize.numCols * mySize.mag;
-	xdiff = xdiff<0 ? 0: xdiff;
-	
+	xdiff = xdiff < 0 ? 0 : xdiff;
+
 	ydiff = Math.floor(((mySize.myY) / mySize.totalHeight) * scale) * mySize.numRows * mySize.mag;
-	ydiff = ydiff<0 ? 0: ydiff;
-	
+	ydiff = ydiff < 0 ? 0 : ydiff;
+
 	adjX = mySize.myX / (scale);
-	
+
 	//position target on map
 	posMap();
-	
-	widthDiff = (mySize.totalWidth-mySize.width) / 2;
-	heightDiff= (mySize.totalHeight-mySize.height) / 2;
-	
-	var offsetLeftpx = Math.floor(((mySize.myX * scale) * -1) % (mySize.totalWidth)) + (mySize.width / 2) ;
+
+	widthDiff = (mySize.totalWidth - mySize.width) / 2;
+	heightDiff = (mySize.totalHeight - mySize.height) / 2;
+
+	var offsetLeftpx = Math.floor(((mySize.myX * scale) * -1) % (mySize.totalWidth)) + (mySize.width / 2);
 	var offsetToppx = Math.floor(((mySize.myY * scale) * -1) % (mySize.totalHeight)) + (mySize.height / 2);
 	//offset Left goes from half the screen width(720) down to this minus width of all feet drawn ~ (-2735) 
-	
-	if( mySize.myX < -1){
+
+	if (mySize.myX < -1) {
 		var offsetLeftpx = ((mySize.myX * -1) * scale) + (mySize.width / 2);
 	};
-	
-	if( mySize.myY < -1){
+
+	if (mySize.myY < -1) {
 		var offsetToppx = ((mySize.myY * -1) * scale) + (mySize.height / 2);
 	};
-	
+
 	offsetLeftpx = isNaN(offsetLeftpx) ? 0 : offsetLeftpx;
 	offsetToppx = isNaN(offsetToppx) ? 0 : offsetToppx;
-	
-	$j('#offsetLeft').css({ left : offsetLeftpx+"px" });
-	$j('#offsetTop').css({ top : offsetToppx+"px" });
-	
+
+	$j('#offsetLeft').css({ left: offsetLeftpx + "px" });
+	$j('#offsetTop').css({ top: offsetToppx + "px" });
+
 	mySize.offsetLeft = offsetLeftpx;
 	mySize.offsetTop = offsetToppx;
-	
+
 	//the limits of left and top value on screen before shifting
 	minL = (0 - (widthDiff));
-	maxL = (mySize.width + (widthDiff/2));
-	
-	minT = (0- (heightDiff/2));
-	maxT = (mySize.height + (heightDiff/2));
-	
+	maxL = (mySize.width + (widthDiff / 2));
+
+	minT = (0 - (heightDiff / 2));
+	maxT = (mySize.height + (heightDiff / 2));
+
 	//$j('squaremile').style.backgroundPosition = offsetLeftpx+"px "+offsetToppx+"px";
-	
-	for (var x=0; x<mySize.numCols; x ++){
-		for (var y=0; y<mySize.numRows; y ++){
-			
+
+	for (var x = 0; x < mySize.numCols; x++) {
+		for (var y = 0; y < mySize.numRows; y++) {
+
 			//new left is the offset + pixel feet * column we are on
-			newLeft = ((offsetLeftpx) + (x * mySize.oneFoot * mySize.mag)) ;
-			newTop = ((offsetToppx) + (y * mySize.oneFoot  * mySize.mag));
-			
+			newLeft = ((offsetLeftpx) + (x * mySize.oneFoot * mySize.mag));
+			newTop = ((offsetToppx) + (y * mySize.oneFoot * mySize.mag));
+
 			//this logic takes care of moving divs from left to right, up to down, etc
-			
-			if(newLeft > maxL){
+
+			if (newLeft > maxL) {
 				newLeft -= (mySize.totalWidth);
-			} else if (newLeft < minL ){
+			} else if (newLeft < minL) {
 				newLeft += (mySize.totalWidth);
 			};
-			
-			if(newTop > maxT){
+
+			if (newTop > maxT) {
 				newTop -= (mySize.totalHeight);
-			} else if (newTop < (0 - heightDiff) * mySize.mag){
+			} else if (newTop < (0 - heightDiff) * mySize.mag) {
 				newTop += (mySize.totalHeight);
 			};
 			//end that logic block
-			
+
 			//figure out which foot we are actually looking at	
 			var mileX = ((newLeft - offsetLeftpx) / ((scale) * 864)) + 1 + xdiff;
 			var mileY = ((newTop - offsetToppx) / ((scale) * 864)) + 1 + ydiff;
-			
-			var object = $j("#c"+x+"r"+y);
-			
-			
+
+			var object = $j("#c" + x + "r" + y);
+
+
 			object.css({
-				left : newLeft + "px",
-				top : newTop + "px"
+				left: newLeft + "px",
+				top: newTop + "px"
 			});
-			
+
 			//reset z index if not selected
-			if(object.attr('selected') != 'true'){
+			if (object.attr('selected') != 'true') {
 				object.css({
 					//zIndex: (5280-(mileY))+(5280-(mileX))
 					zIndex: defaultZIndex(mileY, mileX)
 				});
 			};
-			
-			object.get(0).className = "footBlock "+mileX+""+mileY;
-			
-			if (counter == 9 && object.html() == ""){	
+
+			object.get(0).className = "footBlock " + mileX + "" + mileY;
+
+			if (counter == 9 && object.html() == "") {
 				object.attr({
-					forcereload : 1
+					forcereload: 1
 				});
 			};
-			
-			if ((object.attr('milex') != mileX) || (object.attr('miley') != mileY) || mySize.travelling == 99){
+
+			if ((object.attr('milex') != mileX) || (object.attr('miley') != mileY) || mySize.travelling == 99) {
 				object.attr({
-					forcereload : 1,
+					forcereload: 1,
 					milex: mileX,
 					miley: mileY
 				});
-				
-				object.html('' );
+
+				object.html('');
 			};
-			
+
 		};
 	};
-	
+
 };
 
 //do the ajax call to load mile content
-function makeMapCall(loc){
-	if( mySize.scale > 9){
+function makeMapCall(loc) {
+	if (mySize.scale > 9) {
 		var arr = loc ? loc : loadArray;
-		
-		if(arr.length > 0 || loc){
+
+		if (arr.length > 0 || loc) {
 			postArray = js_array_to_php_array(arr);
 		} else {
 			return;
 		};
-		
+
 		loadFile = "array=" + escape(postArray);
 		loadFile += "&scale=" + mySize.scale;
-		
+
 		$j.ajax({
 			url: '/map/get',
 			type: 'POST',
 			data: loadFile,
 			success: insertIntoFoot
 		});
-		
+
 	};
 };
 
-function insertIntoFoot(json){
-	
-	if(init == false){
+function insertIntoFoot(json) {
+
+	if (init == false) {
 		init = true;
-		
+
 		$j('#squaremile').css({
 			backgroundColor: '#fff'
 		});
 	};
-	
-	eval ('result = ' + json);
 
-	for (var i in result.feet){
+	eval('result = ' + json);
 
-		foot = $j('.'+i);
-		
-		if(foot.get(0)){
-			
+	for (var i in result.feet) {
+
+		foot = $j('.' + i);
+
+		if (foot.get(0)) {
+
 			content = result.feet[i];
 			foot.html(content);
 			loadImages(i);
-			
-			foot.css({ backgroundImage:'none' });
+
+			foot.css({ backgroundImage: 'none' });
 		} else {
 
 		};
 	};
-	
-	for (var i in result.empty){
-		
-		foot = $j('.'+i);
-		if(foot){
-			foot.html('<!-- -->' ); //blank will cause reload
+
+	for (var i in result.empty) {
+
+		foot = $j('.' + i);
+		if (foot) {
+			foot.html('<!-- -->'); //blank will cause reload
 			//foot.css({ backgroundImage:'url(static/white.jpg)' });
 		};
 	};
-	
-	if(selectedElement.toSelect){
+
+	if (selectedElement.toSelect) {
 		doSelect(selectedElement.toSelect);
 	};
 };
 
 //called to load images from map
-function loadImages(footClass){
-	
+function loadImages(footClass) {
+
 	//console.log(footClass, 'footClass' ); //1143
 	// all the images inside of foot
-	images =  $j('div.'+footClass+' a img' );
-	
+	images = $j('div.' + footClass + ' a img');
+
 	//replace the low res version w full
 	//fix this - not preloading
-	images.each(function(){
+	images.each(function () {
 		src = this.src.replace("/thumbs", "/original");
 		this.src = src;
 	});
-	
+
 	//prevent tiny earl
-	foot.click(function(){
+	foot.click(function () {
 		return false;
 	});
-	
+
 };
 
-function js_array_to_php_array (a){
-    var a_php = "";
-    var total = 0;
-    for (var key in a){
-        total++;
-        a_php = a_php + "s:" +
-                String(key).length + ":\"" + String(key) + "\";s:" +
-                String(a[key]).length + ":\"" + String(a[key]) + "\";";
-    };
-    a_php = "a:" + total + ":{" + a_php + "}";
-    return a_php;
+function js_array_to_php_array(a) {
+	var a_php = "";
+	var total = 0;
+	for (var key in a) {
+		total++;
+		a_php = a_php + "s:" +
+			String(key).length + ":\"" + String(key) + "\";s:" +
+			String(a[key]).length + ":\"" + String(a[key]) + "\";";
+	};
+	a_php = "a:" + total + ":{" + a_php + "}";
+	return a_php;
 };
 
 //make a shadow - elelment is on screen
-function makeshadow(picID){
-	
+function makeshadow(picID) {
+
 	selectedElement.isSelected = picID;
 	selectedElement.toSelect = null;
-	
+
 	//image selected
-	obj = $j('#'+picID);
-	obj.css({ zIndex : 50 });
-	
+	obj = $j('#' + picID);
+	obj.css({ zIndex: 50 });
+
 	//the foot image is in
-	p = obj.parents('div.footBlock' );
-	p.css({ 
-		zIndex : 50000, 
+	p = obj.parents('div.footBlock');
+	p.css({
+		zIndex: 50000,
 		//backgroundColor: '#f00' 
-	}).attr({selected: 'true'});
-	
+	}).attr({ selected: 'true' });
+
 	//create in DOM
-	shadow = document.createElement('img' );
-	
+	shadow = document.createElement('img');
+
 	$j(shadow).attr({
 		src: '/static/shadow.png',
-		width: (obj.width() * 1.25) ,
-		height: (obj.height() * 1.25) ,
+		width: (obj.width() * 1.25),
+		height: (obj.height() * 1.25),
 		id: 'contentShadow'
 	}).css({
 		left: (parseFloat(obj.css('left')) - ((obj.width() * 1.25) - obj.width()) / 2) + 'px',
@@ -405,250 +405,250 @@ function makeshadow(picID){
 	});
 
 	obj.after(shadow);
-	
+
 	//the scale as relative to 72dpi
 	scale = (mySize.scale / 72);
-	pixelFoot = scale * 864;  
-	
+	pixelFoot = scale * 864;
+
 	//offset left & top
-	lft = ( (parseInt(obj.css('left')) ) + (parseInt(obj.width()) / 2) ) / scale;
-	tp = (( parseInt(obj.css('top')) ) + (parseInt(obj.height()) / 2)) / scale;
-	
+	lft = ((parseInt(obj.css('left'))) + (parseInt(obj.width()) / 2)) / scale;
+	tp = ((parseInt(obj.css('top'))) + (parseInt(obj.height()) / 2)) / scale;
+
 	var goToCoords = {
 		x: mySize.myX,
 		y: mySize.myY,
 		move: false
 	};
-	
+
 	imgpos = obj.offset();
 	imgwid = parseInt(obj.width());
 	imghei = parseInt(obj.height());
-	
-	if(imgpos){
-		if(imgpos.left < 0 || (imgpos.left + imgwid) > mySize.width){
+
+	if (imgpos) {
+		if (imgpos.left < 0 || (imgpos.left + imgwid) > mySize.width) {
 			goToCoords.x = ((p.attr('mileX') - 1) * 864) + lft;
 			goToCoords.move = true;
 		}
-		
-		if(imgpos.top < 0 || (imgpos.top + imghei) > mySize.height){
+
+		if (imgpos.top < 0 || (imgpos.top + imghei) > mySize.height) {
 			goToCoords.y = ((p.attr('mileY') - 1) * 864) + tp;
 			goToCoords.move = true;
 		}
 	};
-	
+
 	//fix if off bottom of screen
 	offsetY = parseInt(obj.height());
 	offsetX = parseInt(obj.width());
-	
+
 	//adjst for map overlap
-	if(offsetY > mySize.height){
+	if (offsetY > mySize.height) {
 		diffY = (offsetY - mySize.height) / 2;
 		goToCoords['y'] += diffY;
 	} else {
 		diffY = 0;
 	};
-	
-	fig = (mySize.width - offsetX) / 2 ;
-	
-	if( fig < 600){
+
+	fig = (mySize.width - offsetX) / 2;
+
+	if (fig < 600) {
 		diffX = (500 - fig);
 		goToCoords['x'] += diffX;
 	} else {
 		diffX = 0;
 	};
-	
-	if(goToCoords.move == true){
+
+	if (goToCoords.move == true) {
 		//move to prevent overlap w map
 		goToLoc(goToCoords);
 	} else {
 		//in the right spot
 	};
-	
+
 	//show the word balloon
-	var comments = document.createElement('div' );
-	
+	var comments = document.createElement('div');
+
 	$j(comments).css({
-		left : parseInt(obj.css('left')) + parseInt(obj.width()) - (40 * scale) + "px",
-		top : parseInt(obj.css('top')) + parseInt(obj.height()) - 322 + "px"
+		left: parseInt(obj.css('left')) + parseInt(obj.width()) - (40 * scale) + "px",
+		top: parseInt(obj.css('top')) + parseInt(obj.height()) - 322 + "px"
 	}).attr({
-		id : 'wordBalloon'
+		id: 'wordBalloon'
 	}).html(
-		'<div id="closeBalloon" onclick="doSelect(\''+picID+'\' );"></div><div id="balloonContent"></div>'
-	);
-	
+		'<div id="closeBalloon" onclick="doSelect(\'' + picID + '\' );"></div><div id="balloonContent"></div>'
+		);
+
 	p.append(comments);
-		
+
 	getComments(picID);
-	
+
 	return true;
 };
 
-function defaultZIndex(row, col){
-	return (5280-row) + (5280-col);	
+function defaultZIndex(row, col) {
+	return (5280 - row) + (5280 - col);
 };
 
 //doubleclick on content function
-function doSelect(picID){
-	
+function doSelect(picID) {
+
 	selectedElement.toSelect = null;
-	
+
 	//something is selected? deselct it
-	if( o = selectedElement.isSelected ){
-		
+	if (o = selectedElement.isSelected) {
+
 		//the selected image
-		$j('#'+o).css({ 
-			zIndex : '1' 
+		$j('#' + o).css({
+			zIndex: '1'
 		});
-		
+
 		$j('#contentShadow').remove();
-		$j('#wordBalloon').remove();	
-		
+		$j('#wordBalloon').remove();
+
 		//the foot the image is in
-		p = $j('#'+o).parents('div.footBlock' );
-		p.css({ 
+		p = $j('#' + o).parents('div.footBlock');
+		p.css({
 			backgroundColor: 'transparent',
-			zIndex : defaultZIndex(p.attr('mileY') , p.attr('mileX'))
+			zIndex: defaultZIndex(p.attr('mileY'), p.attr('mileX'))
 		});
-		
-		if(selectedElement.isSelected == picID){
+
+		if (selectedElement.isSelected == picID) {
 			selectedElement.isSelected = null;
 			return false;
 		};
 	};
 
 	selectedElement.isSelected = picID;
-	
-	if($j('#'+picID)){
+
+	if ($j('#' + picID)) {
 		makeshadow(picID);
 	};
-	
+
 	return true;
 };
 
 //automatic travelling - goes in 10 steps
 //called on map double click
-function goToLoc(coords){
+function goToLoc(coords) {
 	//coords - array - required:
 	//x: x loc in 72 dpi pixels
 	//y: y loc in 72 dpi pixels
-	
+
 	//coords optional
 	//id: element to select once travel is complete
-	
+
 	//cancel any existing travels
-	if (intInterval){
-		intInterval=window.clearInterval(intInterval);
+	if (intInterval) {
+		intInterval = window.clearInterval(intInterval);
 	};
-	
+
 	//select something once we get there
-	if (coords['id']){
-		if( coords['id'].indexOf( 'pic') == -1 ){
-			coords['id'] = 'pic'+coords['id'];
+	if (coords['id']) {
+		if (coords['id'].indexOf('pic') == -1) {
+			coords['id'] = 'pic' + coords['id'];
 		};
 		selectedElement.toSelect = coords['id'];
 	};
-	
+
 	mySize.travelling = 1;
-	
+
 	//55 is 10+9+8..etc
-	travelX = Math.floor(mySize.myX - coords['x'])/55;
-	travelY = Math.floor(mySize.myY - coords['y'])/55;
-	
-	if(!isNaN(travelX) && !isNaN(travelY)){
+	travelX = Math.floor(mySize.myX - coords['x']) / 55;
+	travelY = Math.floor(mySize.myY - coords['y']) / 55;
+
+	if (!isNaN(travelX) && !isNaN(travelY)) {
 		intInterval = window.setInterval("doTravel(travelX, travelY, 10)", 50);
 	} else {
 		//dbug('error in goToLoc' );
 	};
-	
+
 };
 
 // automatically postitions the map, with parameters set in goToLoc()
-function doTravel(travelX, travelY, count){
-	
+function doTravel(travelX, travelY, count) {
+
 	counter++;
-	
+
 	mySize.myX -= (travelX * counter);
 	mySize.myY -= (travelY * counter);
-	
+
 	moveScreen();
-	
-	if (counter >= count){
+
+	if (counter >= count) {
 		intInterval = window.clearInterval(intInterval);
 		counter = 0;
 		mySize.travelling = 0;
-		
+
 		endMile();
 	};
 };
 
 //get all comments for a selected id
-function getComments(div){
-	
-	$j('#balloonContent').html('<img src="/static/ajax-loader.gif" class="balloonLoader"/>' );
-	
-	id = div.replace(/pic/, '' );
-	
+function getComments(div) {
+
+	$j('#balloonContent').html('<img src="/static/ajax-loader.gif" class="balloonLoader"/>');
+
+	id = div.replace(/pic/, '');
+
 	$j.ajax({
 		url: '/map/get-comments',
 		type: 'POST',
-		data:{
+		data: {
 			id: id
 		},
 		success: returnComments
 	});
-	
+
 };
 
-function returnComments(html){
+function returnComments(html) {
 	$j('#balloonContent').html(html);
-	
+
 	//activate comment submit
-	$j('form#commentForm').click(function(){
+	$j('form#commentForm').click(function () {
 		submitComment();
 	});
-	
+
 	activeVote();
 };
 
-function showComment(id){
-	$j('div.commentSection').each(function(){
-		$j(this).css({display:'none'});
+function showComment(id) {
+	$j('div.commentSection').each(function () {
+		$j(this).css({ display: 'none' });
 	});
-	
-	$j('#commentSection'+id).css({display:'block'});
-	
-	$j('div#commentTabs div.commentTab').each(function(){
-		$j(this).addClass('deSelected' );
+
+	$j('#commentSection' + id).css({ display: 'block' });
+
+	$j('div#commentTabs div.commentTab').each(function () {
+		$j(this).addClass('deSelected');
 	});
-	
-	$j('#commentTab'+id).removeClass('deSelected' );
+
+	$j('#commentTab' + id).removeClass('deSelected');
 };
 
 //activate the voting block
-function activeVote(){
+function activeVote() {
 	//attach listeners to voting block
 	$j('#thDown').click(parseVote);
 	$j('#thUp').click(parseVote);
 };
 
 //get a vote
-function parseVote(){
-	
-	objid = this.getAttribute('for' );
-	val = this.getAttribute('value' );
-	
+function parseVote() {
+
+	objid = this.getAttribute('for');
+	val = this.getAttribute('value');
+
 	//dont do ajax if the is current vote
-	if ( !$j(this).hasClass('up') ){
+	if (!$j(this).hasClass('up')) {
 		vote(objid, val);
 	};
 };
 
 //send a vote in
-function vote(objectid, direction){
+function vote(objectid, direction) {
 	//direction -1= down, 1 = up
-	
-	$j('#voteBlock').html('<img src="/static/thumbs-loading.png" title="loading..."/>' );
-	
+
+	$j('#voteBlock').html('<img src="/static/thumbs-loading.png" title="loading..."/>');
+
 	$j.ajax({
 		url: '/content/vote',
 		type: 'POST',
@@ -660,55 +660,55 @@ function vote(objectid, direction){
 	});
 };
 
-function receiveVote(json){
+function receiveVote(json) {
 
 	eval('result = ' + json);
-	
-	if(result.success == true){
+
+	if (result.success == true) {
 		$j('#voteBlock').html(result.vote);
 		activeVote();
 	} else {
-		
+
 	};
 };
 
 
 
 
-function getThumb(vote, id){
+function getThumb(vote, id) {
 	var voteBlock = "";
-	
-	if (vote == 1){
-		voteBlock += '<img src="/static/tup.gif" onclick="vote('+id+',-1)"/>';
-	} else if (vote == -1){
-		voteBlock += '<img src="/static/tdown.gif" onclick="vote('+id+',1)"/>';
+
+	if (vote == 1) {
+		voteBlock += '<img src="/static/tup.gif" onclick="vote(' + id + ',-1)"/>';
+	} else if (vote == -1) {
+		voteBlock += '<img src="/static/tdown.gif" onclick="vote(' + id + ',1)"/>';
 	} else {
-		voteBlock += '<img src="/static/tdown.gif" onclick="vote('+id+',-1)"/>';
-		voteBlock += '<img src="/static/tup.gif" onclick="vote('+id+',1)"/>';
+		voteBlock += '<img src="/static/tdown.gif" onclick="vote(' + id + ',-1)"/>';
+		voteBlock += '<img src="/static/tup.gif" onclick="vote(' + id + ',1)"/>';
 	};
-	
+
 	return voteBlock;
 };
 
 //add a comment to a a section
-function addComment(){
-	showComment('3' );
+function addComment() {
+	showComment('3');
 	$j('#squareComment').focus();
 };
 
-function addTag(){
-	showComment('4' );
+function addTag() {
+	showComment('4');
 	$j('#squareTag').focus();
 };
 
 //submit a comment, put into comment record
-function submitComment(){
-	
+function submitComment() {
+
 	var id = $j('#squareID').val();
 	var comment = $j('#squareComment').val();
-	
-	$j('#commentBlock').html('<img src="/static/ajax-loader.gif"/>' );
-	
+
+	$j('#commentBlock').html('<img src="/static/ajax-loader.gif"/>');
+
 	$j.ajax({
 		url: '/map/comment',
 		type: 'POST',
@@ -718,18 +718,18 @@ function submitComment(){
 			comment: comment
 		},
 		success: returnComments
-	});                           
-	
+	});
+
 };
 
 //submit a tag, put into comment record
-function submitTag(){
-	
+function submitTag() {
+
 	var id = $j('#squareID').val();
 	var tag = $j('#squareTag').val();
-	
-	showComment('2' );
-	
+
+	showComment('2');
+
 	$j.ajax({
 		url: '/map/tag',
 		type: 'POST',
@@ -739,11 +739,11 @@ function submitTag(){
 		},
 		success: returnComments
 	});
-	    
+
 };
 
 //flag content as innaprropriate
-function doFlag(id, reason){
+function doFlag(id, reason) {
 	$j.ajax({
 		url: '/map/flag',
 		type: 'POST',
@@ -755,10 +755,10 @@ function doFlag(id, reason){
 	});
 };
 
-function receiveFlag(json){
-	eval('result = '+json);
-	
-	if(result.msg){
+function receiveFlag(json) {
+	eval('result = ' + json);
+
+	if (result.msg) {
 		$j('#lightboxcontent').html(result.msg);
 	} else {
 		closeLB();
@@ -766,7 +766,7 @@ function receiveFlag(json){
 };
 
 //do this when pic is missing
-function autoFlag(id){
+function autoFlag(id) {
 	$j.ajax({
 		url: '/map/flag',
 		type: 'POST',
@@ -778,8 +778,8 @@ function autoFlag(id){
 	});
 };
 
-function receiveautoFlag(json){
-	
+function receiveautoFlag(json) {
+
 };
 
 
@@ -787,80 +787,80 @@ function receiveautoFlag(json){
 
 
 //random number for goToLoc
-function goToRandom(){
+function goToRandom() {
 
 	coords = {
 		x: Math.random() * 4561920,
 		y: Math.random() * 4561920
 	};
-	
+
 	goToLoc(coords);
 };
 
 //posMap positions the cursor to the appropriate location on the map
-function posMap(){
-	scale = (mySize.scale / 72); 
+function posMap() {
+	scale = (mySize.scale / 72);
 
-	$j('#marker').css({ left: (mySize.myX / 24000) + "px"});
-	$j('#marker').css({ top: (mySize.myY/24000) + "px"});
-	
-	
+	$j('#marker').css({ left: (mySize.myX / 24000) + "px" });
+	$j('#marker').css({ top: (mySize.myY / 24000) + "px" });
+
+
 };
 
 //moves the mile when the map target is dragged
-function posMile(objectX, objectY){
+function posMile(objectX, objectY) {
 	scale = (mySize.scale / 72);
-	
-	mySize.myX = Math.floor(objectX * 24010.105 );
-	mySize.myY = Math.floor(objectY * 24010.105 );
-	
+
+	mySize.myX = Math.floor(objectX * 24010.105);
+	mySize.myY = Math.floor(objectY * 24010.105);
+
 	moveScreen();
 };
 
 
 
 
-function getCoordinates(e){
-	
+function getCoordinates(e) {
+
 	//get mouse properties
-	var e=new MouseEvent(e);
-	
+	var e = new MouseEvent(e);
+
 	//relX=(e.x-12)-myX-(mySize.width/2);
 	//relY=(e.y-12)-myY-(mySize.height/2);
-	
+
 	//the location of the mouse relative to the top left corner
 	//top left (0,0)
 	//bottom right (4561919,4561919)
-	relX=(mySize.myX) + (e.clientX) - (mySize.width/2);
-	relY=(mySize.myY) + (e.clientY) - (mySize.height/2);
-	
+	relX = (mySize.myX) + (e.clientX) - (mySize.width / 2);
+	relY = (mySize.myY) + (e.clientY) - (mySize.height / 2);
+
 	//the inch that the mouse is in.
 	//top left(1,1)
 	//bottom right(63360,63360)
-	squareX = Math.ceil(relX/72);
-	squareY = Math.ceil(relY/72);
-	
+	squareX = Math.ceil(relX / 72);
+	squareY = Math.ceil(relY / 72);
+
 	//footX and footY refer to square foot sized areas - 1 thru 5280 
-	footX = Math.ceil(squareX/12);
-	footY = Math.ceil(squareY/12);
-	
+	footX = Math.ceil(squareX / 12);
+	footY = Math.ceil(squareY / 12);
+
 	//the c0r0 div type
-	colType = ((footX-1)%(mySize.numCols));
-	rowType = ((footY-1)%(mySize.numRows));
-	
-	msgText  = "relX: "+relX+"\n";
-	msgText += "relY: "+relY+"\n";
-	msgText += "squareX: "+squareX+"\n";
-	msgText += "squareY: "+squareY+"\n";
-	msgText += "footX: "+footX+"\n";
-	msgText += "footY: "+footY+"\n";
-	msgText += "colType: "+colType+"\n";
-	msgText += "rowType: "+rowType+"\n";
-	
+	colType = ((footX - 1) % (mySize.numCols));
+	rowType = ((footY - 1) % (mySize.numRows));
+
+	msgText = "relX: " + relX + "\n";
+	msgText += "relY: " + relY + "\n";
+	msgText += "squareX: " + squareX + "\n";
+	msgText += "squareY: " + squareY + "\n";
+	msgText += "footX: " + footX + "\n";
+	msgText += "footY: " + footY + "\n";
+	msgText += "colType: " + colType + "\n";
+	msgText += "rowType: " + rowType + "\n";
+
 };
 
 //activate the add picture, link or upload - not waiting list
-function dragActivate(){
+function dragActivate() {
 	$j('#smallAdd').draggable({
 		start: activateSmallAdd,
 		drag: smallAddDrag,
@@ -868,70 +868,70 @@ function dragActivate(){
 	});
 };
 
-function activateSmallAdd(){
+function activateSmallAdd() {
 
 	//remove the base url
 	thumbsrc = (addPic.source);
-	
-	posImg = document.createElement('img' );
-	
+
+	posImg = document.createElement('img');
+
 	$j(posImg).attr({
 		id: 'posImg',
 		src: thumbsrc,
-		width : (addPic.width * mySize.scale),
+		width: (addPic.width * mySize.scale),
 		height: (addPic.height * mySize.scale)
 	}).css({
-		left : '100px',
-		top : '100px'
+		left: '100px',
+		top: '100px'
 	});
-	
+
 	$j('#squaremile').append(posImg);
-	
-	$j("#posImg").animate({ 
-        opacity: .5
-    });
+
+	$j("#posImg").animate({
+		opacity: .5
+	});
 
 };
 
-function smallAddDrag(e){
-	posImg = $j('#posImg' );
-	
+function smallAddDrag(e) {
+	posImg = $j('#posImg');
+
 	picWidth = addPic.width * mySize.scale;
 	picHeight = addPic.height * mySize.scale;
-	
+
 	smX = e.clientX - (picWidth / 2);
 	smY = e.clientY - (picHeight / 2);
-	
+
 	//the actual x and y coorinates, in inches, from the top left
 	mLeft = Math.floor(((mySize.myX + ((e.clientX - (mySize.width / 2)) * (72 / mySize.scale))) / 72) - (addPic.width / 2));
-	mTop = Math.floor(((mySize.myY + ((e.clientY - (mySize.height / 2)) * (72 / mySize.scale))) / 72) - (addPic.height / 2)); 
-	
+	mTop = Math.floor(((mySize.myY + ((e.clientY - (mySize.height / 2)) * (72 / mySize.scale))) / 72) - (addPic.height / 2));
+
 	addPic.inchX = mLeft;
 	addPic.inchY = mTop;
-	
+
 	//snap to grid / scale
-	adjX = (((mySize.myX * (mySize.scale / 72)) + e.clientX - (mySize.width / 2) - (picWidth / 2)) % mySize.scale) ;
-	adjY = ((mySize.myY * (mySize.scale / 72)) + e.clientY - (mySize.height / 2) - (picHeight / 2)) % mySize.scale ;
-	
-	if(adjX < 0){
-		adjX+= mySize.scale;
+	adjX = (((mySize.myX * (mySize.scale / 72)) + e.clientX - (mySize.width / 2) - (picWidth / 2)) % mySize.scale);
+	adjY = ((mySize.myY * (mySize.scale / 72)) + e.clientY - (mySize.height / 2) - (picHeight / 2)) % mySize.scale;
+
+	if (adjX < 0) {
+		adjX += mySize.scale;
 	};
-	
-	if(adjY < 0){
-		adjY+= mySize.scale;
+
+	if (adjY < 0) {
+		adjY += mySize.scale;
 	};
-	
+
 	smX -= (adjX);
 	smY -= (adjY);
-	
-	posImg.css({ left: smX + "px", top: smY + "px"});
+
+	posImg.css({ left: smX + "px", top: smY + "px" });
 };
 
 //check to see if dragged picture overlaps others on mouse up
-function checkSmallAdd(){
-	
+function checkSmallAdd() {
+
 	postVars = activateCpanelPlacer();
-   
+
 	$j.ajax({
 		data: postVars,
 		success: checkOverlap,
@@ -941,66 +941,66 @@ function checkSmallAdd(){
 };
 
 //response from ajax, to see if pic was inserted or overlaps
-function checkOverlap(json){
+function checkOverlap(json) {
 	//not from waiting list
-	eval('result = '+json);
-		
-	if (result.success == true){
-		
-		p = $j('#'+selectedElement.isSelected).parent();
-		
+	eval('result = ' + json);
+
+	if (result.success == true) {
+
+		p = $j('#' + selectedElement.isSelected).parent();
+
 		p.css({
 			//zIndex: defaultZIndex(5280-(p.attr('mileY')))+(5280-(p.attr('mileX')))
 			zIndex: defaultZIndex(p.attr('mileY'), p.attr('mileX'))
 		});
-		
+
 		imageAdded();
-		
+
 	} else {
-		removePlacer();		
+		removePlacer();
 	};
 };
 
 
 //move an image that is already placed on the mile
-function move(id){
-	
+function move(id) {
+
 	//remove the shadow
 	$j('#contentShadow').remove();
-	
+
 	//remove the word balloon
 	$j('#wordBalloon').remove();
-	
+
 	//set up the positioning div		
-	id = 'pic'+id;
-	milepic = $j('#'+id);
-	
+	id = 'pic' + id;
+	milepic = $j('#' + id);
+
 	milepic.css({
-		backgroundColor : '#D16A38',
-		border : "2px solid #D16A38",
-		opacity : .5,
-		paddingBottom : "20px"
+		backgroundColor: '#D16A38',
+		border: "2px solid #D16A38",
+		opacity: .5,
+		paddingBottom: "20px"
 	});
-	
+
 	//set up the scaled thumb
 	$j('#smallAdd').remove();
-	
+
 	//set up varialbes in global identifier
 	addPic = {
-		height : Math.ceil(milepic.attr('height') / mySize.scale),
-		width : Math.ceil(milepic.attr('width') / mySize.scale),
-		source : milepic.attr('src'),
-		move : {
+		height: Math.ceil(milepic.attr('height') / mySize.scale),
+		width: Math.ceil(milepic.attr('width') / mySize.scale),
+		source: milepic.attr('src'),
+		move: {
 			x: milepic.css('left'),
 			y: milepic.css('top'),
 			id: id
 		}
 	};
-	
-	var smallAdd = document.createElement('img' );
-	
-	src = milepic.attr('src' );
-	
+
+	var smallAdd = document.createElement('img');
+
+	src = milepic.attr('src');
+
 	$j(smallAdd).attr({
 		id: 'smallAdd',
 		src: src,
@@ -1011,56 +1011,56 @@ function move(id){
 		top: milepic.css('top'),
 		zIndex: 5000
 	});
-	
+
 	milepic.parent().append(smallAdd);
-	
+
 	//activate the add picture
 	dragActivate();
 };
-	
+
 //set browser hash to current location
-function setBrowserHash(){
-	
+function setBrowserHash() {
+
 	scale = mySize.scale / 72;
-	
-	newHash = "x="+ Math.floor(mySize.myX) +"&y="+ Math.floor(mySize.myY);
-	newHash += "&s="+mySize.scale;
-	
+
+	newHash = "x=" + Math.floor(mySize.myX) + "&y=" + Math.floor(mySize.myY);
+	newHash += "&s=" + mySize.scale;
+
 	oldHash = mySize.hash;
-	
-	if ( (newHash != oldHash) && (!isNaN(Math.floor(mySize.myX))) ){
-		mySize.hash = "#"+newHash;
+
+	if ((newHash != oldHash) && (!isNaN(Math.floor(mySize.myX)))) {
+		mySize.hash = "#" + newHash;
 		window.location.hash = newHash;
 	};
 };
 
 //flag an offensive, copyight image etc
-function startReport(id){
+function startReport(id) {
 	content = "<h2>What do you want to report?<h2>";
-	
-	image = $j('#pic'+id).attr('src' );
-	
+
+	image = $j('#pic' + id).attr('src');
+
 	var pic = new Image();
 	pic.src = image;
 	width = pic.width;
 	height = pic.height;
-	
-	if (addPic.height > addPic.width){
+
+	if (addPic.height > addPic.width) {
 		var smallH = 200;
-		var smallW = (width/height) * 200;
+		var smallW = (width / height) * 200;
 	} else {
 		var smallW = 200;
-		var smallH = (height/width) * 200;
+		var smallH = (height / width) * 200;
 	};
-	
-	content += '<img src="'+image+'" style="float:right" width="'+smallW+'" height="'+smallH+'"/>';
-	
-	content += '<li><a onclick="doFlag('+id+',\'copyright\' );">Copyrighted Image</a></li>';
-	content += '<li><a onclick="doFlag('+id+',\'image\' );">Inappropriate Image</a></li>';
-	content += '<li><a onclick="doFlag('+id+',\'comment\' );">Offensive Comment / Spam</a></li>';
-	
+
+	content += '<img src="' + image + '" style="float:right" width="' + smallW + '" height="' + smallH + '"/>';
+
+	content += '<li><a onclick="doFlag(' + id + ',\'copyright\' );">Copyrighted Image</a></li>';
+	content += '<li><a onclick="doFlag(' + id + ',\'image\' );">Inappropriate Image</a></li>';
+	content += '<li><a onclick="doFlag(' + id + ',\'comment\' );">Offensive Comment / Spam</a></li>';
+
 	content += '<li><a onclick="closeLB();">Never Mind</a></li>';
-	
+
 	//new Lightbox(content, true);
 	new Lightbox({
 		close: true,
@@ -1073,40 +1073,40 @@ function startReport(id){
 ///cpanel below
 
 //item from control1 is clicked, load submenu
-function getControl(which){
-	
+function getControl(which) {
+
 	//remove selected from others 
-	$j('#control1 a').each(function(index){
-		$j(this).removeClass('selected' );
-		if(this.id == 'menu_'+which){
+	$j('#control1 a').each(function (index) {
+		$j(this).removeClass('selected');
+		if (this.id == 'menu_' + which) {
 			arrowIndex = index;
 		};
 	});
-	
+
 	//add selected state 
-	$j('#menu_'+which).addClass('selected' );
-	
+	$j('#menu_' + which).addClass('selected');
+
 	var msgText = '<ul>';
-	
-	for (var i = 0; i < cpanelControls[which].length; i+=2){
+
+	for (var i = 0; i < cpanelControls[which].length; i += 2) {
 		msgText += '<li>';
-		msgText += '<a class="'+(arrowIndex == (i/2) ? 'special' : '')+'" '+cpanelControls[which][i+1]+'>'+cpanelControls[which][i];
+		msgText += '<a class="' + (arrowIndex == (i / 2) ? 'special' : '') + '" ' + cpanelControls[which][i + 1] + '>' + cpanelControls[which][i];
 		msgText += '</a></li>';
 	};
-	
-	$j('#control2').html(msgText + '</ul>' );	
+
+	$j('#control2').html(msgText + '</ul>');
 };
 
 //get information about a friend
-function getFriendInfo(id, obj){
+function getFriendInfo(id, obj) {
 
-	$j('#friendProfilemain').html('Loading...' );
-	$j('#friendAddmain').html('Loading...' );
-	$j('#friendCommentmain').html('Loading...' );
+	$j('#friendProfilemain').html('Loading...');
+	$j('#friendAddmain').html('Loading...');
+	$j('#friendCommentmain').html('Loading...');
 	$j('#m4').slideDown();
-	
-	setTitle( 'm4' , obj.getAttribute('user'));
-	setNav( 'm4' , 'off' );
+
+	setTitle('m4', obj.getAttribute('user'));
+	setNav('m4', 'off');
 
 	$j.ajax({
 		url: '/profile/public',
@@ -1114,78 +1114,78 @@ function getFriendInfo(id, obj){
 		data: {
 			userid: id
 		},
-		success: function(data){
+		success: function (data) {
 			receiveFriendProfile(data, id);
 		}
 	});
 };
 
-function receiveFriendProfile(json, id){
+function receiveFriendProfile(json, id) {
 
 	eval('result = ' + json);
 	profile = result.profile;
-	
+
 	$j('#friendProfilemain').html(profile);
-	
+
 	//set up thumbs menu for friend recent adds
 	friendRecent = new thumbsMenu({
-			action: '/thumbs/recentAdds',
-			title: 'Recently Added', 
-			container: 'friendAdd', 
-			limit: 4,
-			listThumbs: result.adds,
-			rss: '/rss',
-			vars: {userid: id}
-		});
-		
+		action: '/thumbs/recentAdds',
+		title: 'Recently Added',
+		container: 'friendAdd',
+		limit: 4,
+		listThumbs: result.adds,
+		rss: '/rss',
+		vars: { userid: id }
+	});
+
 	//set up thumbs menu for friend recent comments
 	friendComents = new thumbsMenu({
-			action: '/thumbs/recentComments',
-			title: 'Recent Comments', 
-			container: 'friendComment', 
-			limit: 4,
-			listThumbs: result.comments,
-			vars: {userid: id}
-		});
-		
+		action: '/thumbs/recentComments',
+		title: 'Recent Comments',
+		container: 'friendComment',
+		limit: 4,
+		listThumbs: result.comments,
+		vars: { userid: id }
+	});
+
 	$j('#m4').slideDown();
 };
 
 //get friends of logged in user
-function getFriends(){
+function getFriends() {
 	userFriends = new thumbsMenu({
 		action: '/thumbs/friends',
-		title: 'Your Friends', 
+		title: 'Your Friends',
 		container: 'm2',
 		rss: '/rss/friends/userid/93'
 	});
-	
+
 	$j('#m2').slideDown();
 };
 
 //get favorites of logged in user
-function getFaves(){
+function getFaves() {
 	userFaves = new thumbsMenu({
 		action: '/thumbs/favorites',
-		title: 'Your Favorites', 
+		title: 'Your Favorites',
 		container: 'm2'
 	});
-	
+
 	$j('#m2').slideDown();
 };
 
- 
-//retrieve user information
-function getAccount(){
 
-	$j('#m2main').html('Loading Your Account Info...<br/><img src="/static/ajax-loader.gif"/>' );
-	$j('#m2err').html('' );
-	
-	setTitle( 'm2' , 'Your Account Info' );
-	setNav( 'm2' , 'off' );
-	
+//retrieve user information
+function getAccount() {
+
+	$j('#m2main').html('Loading Your Account Info...<br/><img src="/static/ajax-loader.gif"/>');
+	$j('#m2err').html('');
+
+	setTitle('m2', 'Your Account Info');
+	setNav('m2', 'off');
+
 	$j('#m2').slideDown();
-	
+
 	$j.ajax({
 		url: '/profile/account',
 		type: 'POST',
@@ -1194,45 +1194,45 @@ function getAccount(){
 };
 
 //received user profile info
-function receiveAccount(html){
-	
+function receiveAccount(html) {
+
 	//output to screen
 	$j('#m2main').html(html);
-	$j('#m2').slideDown();	
+	$j('#m2').slideDown();
 };
 
 //takes new profile info and sends back to server
-function UpdateProfile(){
+function UpdateProfile() {
 	query = prepArrayForAjax(getFormVars('userAccount'));
-	
+
 	$j.ajax({
 		url: '/profile/update-account',
 		type: 'POST',
 		data: query,
 		success: profileSuccess
 	});
-	
+
 };
 
 //called after user updates account information
-function profileSuccess(json){
-	
-	eval ('result = '+json);
-	
+function profileSuccess(json) {
+
+	eval('result = ' + json);
+
 	format = '';
-	
-	if (result.success.length > 0){
-		for(i in result.success){
+
+	if (result.success.length > 0) {
+		for (i in result.success) {
 			format += '<li>' + result.success[i] + '</li>';
 		};
 	};
-	
-	if (result.errors.length > 0){
-		for(i in result.success){
+
+	if (result.errors.length > 0) {
+		for (i in result.success) {
 			format += '<li>' + result.errors[i] + '</li>';
 		};
 	}
-	
+
 	$j('#m2main').html(format);
 	$j('#m2').slideDown();
 };
@@ -1241,20 +1241,20 @@ function profileSuccess(json){
 
 
 //hotlink to an image, step 1
-function addImage(){
-	
+function addImage() {
+
 	var msgText = '	<h4>Enter URL of image:</h4>';
-	
-	msgText += '	<form action="javascript:addImage2();" name ="addForm">';	
+
+	msgText += '	<form action="javascript:addImage2();" name ="addForm">';
 	msgText += '		<input type="text" class="stdInput" id="imgLoc" />';
 	msgText += '		<input type="submit" value="Link It!" class="stdButton leftMargin" />';
 	msgText += '	</form>';
-	
+
 	msgText += '	<span class="helperText">Enter full path to the image, <br/>eg http://www.server.com/pic.jpg</span>';
-	
-	setTitle( 'm1' , 'Hotlink to an image on the web' );
-	setNav( 'm1' , 'off' );
-	
+
+	setTitle('m1', 'Hotlink to an image on the web');
+	setNav('m1', 'off');
+
 	$j('#m1main').html(msgText);
 	$j('#m1err').html();
 	$j('#m1').slideDown();
@@ -1263,8 +1263,8 @@ function addImage(){
 //hotlink to an image, step 2
 function addImage2() {
 	contentInsert = $j('#imgLoc').val();
-	if (contentInsert){
-		$j('#imgLoc').val('' );
+	if (contentInsert) {
+		$j('#imgLoc').val('');
 		$j.ajax({
 			data: {
 				content: contentInsert
@@ -1273,37 +1273,37 @@ function addImage2() {
 			type: 'POST',
 			url: '/content/add',
 		});
-		
-		$j('#m1main').html('Please Wait' );
+
+		$j('#m1main').html('Please Wait');
 	} else {
-		$j('#m1err').html('Try linking to an image file' );
+		$j('#m1err').html('Try linking to an image file');
 	};
 };
 
-function uploadComplete(json){
-	eval ('result = ' + json);
+function uploadComplete(json) {
+	eval('result = ' + json);
 
-	if(result.success == true){
-		readyToAdd('/content/original/'+result.name, result.dims.width, result.dims.height);
-		
+	if (result.success == true) {
+		readyToAdd('/content/original/' + result.name, result.dims.width, result.dims.height);
+
 		//activate the add picture
 		dragActivate();
 	} else {
-		$j('#m1main').html('There was an error loading the file.  Please check the address and try again.' );
+		$j('#m1main').html('There was an error loading the file.  Please check the address and try again.');
 	};
 };
 
 //upload from your cpu
-function startUpload(){
-	
-	setTitle( 'm1' , 'Upload an image from your computer' );
-	setNav( 'm1' , 'off' );
-	
+function startUpload() {
+
+	setTitle('m1', 'Upload an image from your computer');
+	setNav('m1', 'off');
+
 	msgText = "The uploader is not quite working yet!  You can link an image on the web for now.";
-	
+
 	$j('#m1main').html(msgText);
-	$j('#m1err').html('' );
-	
+	$j('#m1err').html('');
+
 	$j('#m1').slideDown();
 };
 
@@ -1311,353 +1311,353 @@ function startUpload(){
 //from plugin or email
 var getWaiting;
 
-function getWaitingList(start){
+function getWaitingList(start) {
 	getWaiting = new thumbsMenu({
 		action: '/thumbs/waiting',
-		title: 'Your Waiting List', 
+		title: 'Your Waiting List',
 		container: 'm2'
 	});
-	
+
 	$j('#m2').slideDown();
 };
 
-function getPopular(start){
+function getPopular(start) {
 
-	$j('#m2main').html('Loading popular...' );
+	$j('#m2main').html('Loading popular...');
 	$j('#m2').slideDown();
-	
+
 	popularThumbs = new thumbsMenu({
 		action: '/thumbs/popular',
-		title: 'Most Popular', 
+		title: 'Most Popular',
 		container: 'm2'
 	});
 };
 
 
-function getRecent(start){
+function getRecent(start) {
 	recentThumbs = new thumbsMenu({
 		action: '/thumbs/recent',
-		title: 'Recently Added', 
+		title: 'Recently Added',
 		container: 'm2'
 	});
-	
+
 	$j('#m2').slideDown();
 };
 
 //get the coordinates from the coords="" attribute of an elemnt, go there
-function findCoords(){
-	text = "coords = " + $j(this).attr('coords' );
+function findCoords() {
+	text = "coords = " + $j(this).attr('coords');
 	eval(text);
-	
+
 	goToLoc(coords);
 };
 
 
-function recDel(json){
+function recDel(json) {
 
 };
 
 //object to handle building next / prev menu items
-function thumbsMenu(vars, customQuery){
-	
+function thumbsMenu(vars, customQuery) {
+
 	var options = {
-		action:		'getRecent', //the function that does the ajax call
-		container:	'm2', //where it goes
-		index:		0, //where we are in our list
-		limit:		8, //how many thumbs do we show at once
-		listThumbs:	new Array(0), //holds the aray of thumbs /coordinates
-		rss: 		'', // url to RSS feed
-		selected: 	0, //which one we have clicked on
-		title: 		'Thumbs Menu', //the text to display in menu header
-		vars:		{} //any extra post varaibles that do not change, like {userid: 9}
+		action: 'getRecent', //the function that does the ajax call
+		container: 'm2', //where it goes
+		index: 0, //where we are in our list
+		limit: 8, //how many thumbs do we show at once
+		listThumbs: new Array(0), //holds the aray of thumbs /coordinates
+		rss: '', // url to RSS feed
+		selected: 0, //which one we have clicked on
+		title: 'Thumbs Menu', //the text to display in menu header
+		vars: {} //any extra post varaibles that do not change, like {userid: 9}
 	};
-	
+
 	//set variables passes in into the option
-	for (i in vars){
+	for (i in vars) {
 		options[i] = vars[i];
 	};
-	
+
 	//define other parts of the menu
-	options.titleId = $j('#'+options.container+" .cTitle").get(0);
-	options.nextId = options.container+"next";
-	options.prevId = options.container+"prev";
-	options.mainId = options.container+"main";
-	
-	$j('#'+options.prevId).css({display:'none'});
-	$j('#'+options.nextId).css({display:'none'});
-	
+	options.titleId = $j('#' + options.container + " .cTitle").get(0);
+	options.nextId = options.container + "next";
+	options.prevId = options.container + "prev";
+	options.mainId = options.container + "main";
+
+	$j('#' + options.prevId).css({ display: 'none' });
+	$j('#' + options.nextId).css({ display: 'none' });
+
 	//toggle rss feed
-	if (options.rss){
+	if (options.rss) {
 		disp = 'block';
 	} else {
 		disp = 'none';
 	};
-	
-	rssfeed = $j('#'+options.container+' a.btnRSS').css({display: disp});
-	
+
+	rssfeed = $j('#' + options.container + ' a.btnRSS').css({ display: disp });
+
 	rssfeed.attr('href', options.rss);
-	
-	var ajaxCall = function(){
+
+	var ajaxCall = function () {
 		//set the message title
 
-		options.titleId.innerHTML = "Loading "+options.title+"...";
-		$j('#'+options.mainId).html('<img src="/static/ajax-loader.gif"/>' );
-		
-		var query = "start="+(options.listThumbs.length) + "&" + prepForQuery(options.vars);
-		
+		options.titleId.innerHTML = "Loading " + options.title + "...";
+		$j('#' + options.mainId).html('<img src="/static/ajax-loader.gif"/>');
+
+		var query = "start=" + (options.listThumbs.length) + "&" + prepForQuery(options.vars);
+
 		$j.ajax({
 			data: query,
 			type: 'POST',
-			success: function(json){
-				eval ('result = ' + json);
-			
-				if(result.success == 'false'){
-					$j('#'+options.container+'main').html(result.html);
-					
+			success: function (json) {
+				eval('result = ' + json);
+
+				if (result.success == 'false') {
+					$j('#' + options.container + 'main').html(result.html);
+
 					options.titleId.innerHTML = options.title;
-					
+
 				} else {
 					concatTo(result);
-					
+
 				};
 			},
 			url: options.action
 		});
 	};
-	
-	
+
+
 	//add the new records we received via ajax to the array	
-	var concatTo = function (newThumbs){
-		if(newThumbs.thumbs){
+	var concatTo = function (newThumbs) {
+		if (newThumbs.thumbs) {
 			oldThumbs = options.listThumbs;
-			
+
 			x = oldThumbs.concat(newThumbs.thumbs);
-			
+
 			options.listThumbs = x;
 		} else {
-			
+
 		};
-		
-		if(newThumbs.stamp){
+
+		if (newThumbs.stamp) {
 			options.vars.stamp = newThumbs.stamp;
 		};
-			
+
 		setNav();
 		formatNav();
 		formatThumbs();
 		formatTitle();
 	};
-	
-	var formatTitle = function(title){
 
-		if (title){
+	var formatTitle = function (title) {
+
+		if (title) {
 			options.title = title;
 		};
-		
+
 		len = (options.index + options.limit) < options.listThumbs.length ? (options.index + options.limit) : options.listThumbs.length;
 
-		newtitle = options.title +" ( "+(options.index + 1)+" - "+len+" )";
-		
+		newtitle = options.title + " ( " + (options.index + 1) + " - " + len + " )";
+
 		options.titleId.innerHTML = newtitle;
 	};
-	
+
 	//decide if next and prev buttons are to show
-	var setNav = function(){
-		
-		if (options.listThumbs.length > (options.index + options.limit)){
-			$j('#'+options.nextId).css({visibility:'visible'});
-			$j('#'+options.nextId).css({display:'inline'});
+	var setNav = function () {
+
+		if (options.listThumbs.length > (options.index + options.limit)) {
+			$j('#' + options.nextId).css({ visibility: 'visible' });
+			$j('#' + options.nextId).css({ display: 'inline' });
 		} else {
-			$j('#'+options.nextId).css({visibility:'hidden'});
-			$j('#'+options.nextId).css({display:'inline'});
+			$j('#' + options.nextId).css({ visibility: 'hidden' });
+			$j('#' + options.nextId).css({ display: 'inline' });
 		};
-		
+
 	};
-	
+
 	//set action for the previous and next buttons
-	var formatNav = function(){
-		
+	var formatNav = function () {
+
 		//set the next button to go to the next set of thumbs
-		$j('#'+options.nextId).unbind('click').click(function(){
-			$j('#'+options.prevId).css({visibility:'visible'});
-			$j('#'+options.prevId).css({display:'inline'});
-			
+		$j('#' + options.nextId).unbind('click').click(function () {
+			$j('#' + options.prevId).css({ visibility: 'visible' });
+			$j('#' + options.prevId).css({ display: 'inline' });
+
 			options.index += options.limit;
 			formatTitle();
 			setNav();
 			//if we are past the limit, do another ajax call
-			if (options.index + options.limit >= (options.listThumbs.length)){
+			if (options.index + options.limit >= (options.listThumbs.length)) {
 				//disable the next button
-				$j('#'+options.nextId).css({visibility:'hidden'});
+				$j('#' + options.nextId).css({ visibility: 'hidden' });
 				ajaxCall();
 			} else {
 				formatThumbs();
 			};
-			
+
 			return false;
 		});
-		
-		
+
+
 		//set the prev button
-		$j('#'+options.prevId).unbind('click').click(function(){
+		$j('#' + options.prevId).unbind('click').click(function () {
 			options.index -= options.limit;
-			
+
 			formatTitle();
 			setNav();
-			
-			if (options.index >= 0){
+
+			if (options.index >= 0) {
 				formatThumbs();
 			} else {
 				options.index = 0;
 			};
-			
-			if (options.index == 0){
-				$j('#'+options.prevId).css({visibility:'hidden'});
+
+			if (options.index == 0) {
+				$j('#' + options.prevId).css({ visibility: 'hidden' });
 			};
 		});
 	};
-	
+
 	//build the html that goes into whatever div
-	var formatThumbs = function(){
-	
+	var formatThumbs = function () {
+
 		//where we are in the index, plus the number of how many we want to see
 		end = (options.index + options.limit) < options.listThumbs.length ? (options.index + options.limit) : options.listThumbs.length;
-		
+
 		//the html we insert into the appropriate menu
 		output = '<div>';
-		
+
 		//any scripts to eval afterwards
 		afterI = "";
-		
-		
-		
-		for ( i = options.index ; i < end ; i++ ){
-			if(options.listThumbs[i]){
-			
+
+
+
+		for (i = options.index; i < end; i++) {
+			if (options.listThumbs[i]) {
+
 				id = options.mainId + 'Thumb' + options.listThumbs[i]['id'];
-				
-				output += '<div class="panelThumbs" id="'+id+'" ';
+
+				output += '<div class="panelThumbs" id="' + id + '" ';
 				//add location if is in there - want to go to
-				if(options.listThumbs[i]['locX']){
-				
+				if (options.listThumbs[i]['locX']) {
+
 					coords = {
 						x: options.listThumbs[i]['locX'],
 						y: options.listThumbs[i]['locY'],
 						id: options.listThumbs[i]['id']
 					};
-					
-					output += 'coords=\''+serial(coords)+'\' ';
-					
+
+					output += 'coords=\'' + serial(coords) + '\' ';
+
 					//attach listener to for go to loc
-					afterI += "$j('#"+id+"').click(findCoords);";
-					
-				} else if (options.listThumbs[i]['loc']){
+					afterI += "$j('#" + id + "').click(findCoords);";
+
+				} else if (options.listThumbs[i]['loc']) {
 					//if this is their waiting list
-					afterI += "$j('#"+id+"').click(function(e){waitingList(e, options.listThumbs["+i+"], "+i+")});";
-				} else if (options.listThumbs[i]['userid']){
+					afterI += "$j('#" + id + "').click(function(e){waitingList(e, options.listThumbs[" + i + "], " + i + ")});";
+				} else if (options.listThumbs[i]['userid']) {
 					//this is their friends list
-					output += 'onclick="getFriendInfo(\''+options.listThumbs[i]['userid']+'\', this)" user=\''+options.listThumbs[i]['user']+'\' ';
+					output += 'onclick="getFriendInfo(\'' + options.listThumbs[i]['userid'] + '\', this)" user=\'' + options.listThumbs[i]['user'] + '\' ';
 				} else {
 					//other?
 					output += ' ';
 				};
-				
+
 				//close the <div class="panelThumbs"
 				output += '>';
-				
+
 				//the actual thumbnail image
-				if (options.listThumbs[i]['userid']){
+				if (options.listThumbs[i]['userid']) {
 					//user pic
 					dir = '/profile';
 				} else {
 					//anything else
 					dir = '/thumbs';
 				};
-				
-				output += '	<img class="panelThumb" src="/static/72spacer.gif" style="background-image:url(/content/'+dir+'/' + options.listThumbs[i]['thumb'] + ')"/>';
-				
+
+				output += '	<img class="panelThumb" src="/static/72spacer.gif" style="background-image:url(/content/' + dir + '/' + options.listThumbs[i]['thumb'] + ')"/>';
+
 				//add in vote count if there
-				if(options.listThumbs[i]['votes']){
+				if (options.listThumbs[i]['votes']) {
 					output += '	<span class="addedDate">' + plural(options.listThumbs[i]['votes'], 'vote') + '</span>';
 				};
-				
+
 				//add user name if there
-				if(options.listThumbs[i]['user']){
+				if (options.listThumbs[i]['user']) {
 					output += '	<span class="addedDate">' + options.listThumbs[i]['user'] + '</span>';
-				};	
-				
+				};
+
 				//add in date added if there
-				if(options.listThumbs[i]['date']){
+				if (options.listThumbs[i]['date']) {
 					output += '	<span class="addedDate">' + options.listThumbs[i]['date'] + '</span>';
 				}
-				
+
 				//add option to delete if this is waiting list 
-				if(options.listThumbs[i]['loc']){
-					output += '	<img class="deletePic" indx="'+i+'" del="'+options.listThumbs[i]['loc']+'" src="/static/deletePic.png" id="del'+options.listThumbs[i]['id']+'">';	
-					afterI += "$j('#del"+options.listThumbs[i]['id']+"').click(function(e){confirmDelete(e, options.listThumbs)});";
+				if (options.listThumbs[i]['loc']) {
+					output += '	<img class="deletePic" indx="' + i + '" del="' + options.listThumbs[i]['loc'] + '" src="/static/deletePic.png" id="del' + options.listThumbs[i]['id'] + '">';
+					afterI += "$j('#del" + options.listThumbs[i]['id'] + "').click(function(e){confirmDelete(e, options.listThumbs)});";
 				};
-				
+
 				output += '</div>';
 			} else {
-				end --;
-				
+				end--;
+
 			};
 		};
-		
-		output += '<br style="clear:both"/></div>';
-		
-		$j('#'+options.mainId).html(output);
 
-		eval(afterI);	
+		output += '<br style="clear:both"/></div>';
+
+		$j('#' + options.mainId).html(output);
+
+		eval(afterI);
 	};
-	
-	var waitingList = function(e, obj, i){
-		
-		$j('#m1main').html('Please Wait...' );
-		$j('#m1err').html('' );
-		setTitle( 'm1' , 'Add Your Picture' );
-		setNav( 'm1' , 'off' );
-		
+
+	var waitingList = function (e, obj, i) {
+
+		$j('#m1main').html('Please Wait...');
+		$j('#m1err').html('');
+		setTitle('m1', 'Add Your Picture');
+		setNav('m1', 'off');
+
 		options.selected = i;
-		
+
 		imgloc = '/content/original/' + obj.loc;
 		height = obj.height;
 		width = obj.width;
-		
+
 		var pic = new Image();
-		
-		pic.onerror = function(){
-			alert ('there was an error! sorry!\n'+imgloc);
+
+		pic.onerror = function () {
+			alert('there was an error! sorry!\n' + imgloc);
 		};
-		
-		pic.onload = function(){
-	
+
+		pic.onload = function () {
+
 			$j('#smallAdd').remove();
-			
-			if(addPic.move.id){
-				$j('#'+addPic.move.id).css({
-					borderWidth : '0px',
-					opacity : 1,
-					padding : '0px'
+
+			if (addPic.move.id) {
+				$j('#' + addPic.move.id).css({
+					borderWidth: '0px',
+					opacity: 1,
+					padding: '0px'
 				});
-				
-				addPic.move = { 
-					x:0,
-					y:0,
+
+				addPic.move = {
+					x: 0,
+					y: 0,
 					id: 0
 				};
 			};
-			
+
 			readyToAdd(imgloc, width, height);
 			dActivate();
 		};
-	
-		
+
+
 		pic.src = imgloc;
-		
+
 	};
-	
-	var dActivate = function(){
+
+	var dActivate = function () {
 		//activate the add picture for wiating list - not upload / link
 		$j('#smallAdd').draggable({
 			start: activateSmallAdd,
@@ -1665,65 +1665,65 @@ function thumbsMenu(vars, customQuery){
 			stop: cSmallAdd
 		});
 	};
-	
+
 	//check to see if dragged picture overlaps others on mouse up
-	var cSmallAdd = function(){
+	var cSmallAdd = function () {
 		//waiting list add
 		postVars = activateCpanelPlacer();
-		
+
 		$j.ajax({
 			data: postVars,
 			success: cOverlap,
 			type: 'POST',
 			url: '/mile/add/'
 		});
-		
+
 	};
-	
-	var cOverlap = function(json){
+
+	var cOverlap = function (json) {
 		//check overlaps on wiating list add
-		eval('result = '+json);
-		
-		if (result.success == true){
+		eval('result = ' + json);
+
+		if (result.success == true) {
 			//remove from waiting list
 			i = options.selected;
 			options.listThumbs.splice(i, 1);
-			
+
 			formatThumbs();
 			imageAdded();
 		} else {
 			removePlacer();
 		};
 	};
-	
-	var confirmDelete = function(e, obj){
-		if(e) {
+
+	var confirmDelete = function (e, obj) {
+		if (e) {
 			//moz
 			e.stopPropagation();
 		} else {
 			//IE
-			e = window.event; 
+			e = window.event;
 		};
-		
-		del = e.target.getAttribute('del' );
-		indx = e.target.getAttribute('indx' );
-		
-		uploadText = '<img src="/content/original/'+del+'" height="100" width="100" style="float:left;margin:10px"> Are you sure you want to delete this picture from your waiting list?<br/>';
-		
+
+		del = e.target.getAttribute('del');
+		indx = e.target.getAttribute('indx');
+
+		uploadText = '<img src="/content/original/' + del + '" height="100" width="100" style="float:left;margin:10px"> Are you sure you want to delete this picture from your waiting list?<br/>';
+
 		uploadText += '<a class="fakeButton" id="confirmDelete">Yes</a> <a class="fakeButton">No</a>';
 		$j('#m1main').html(uploadText);
-			
-		$j('#confirmDelete').click(function(){
+
+		$j('#confirmDelete').click(function () {
 			doDelete(del, obj, indx);
 		});
-		
-		setTitle( 'm1' , 'Confirm Delete' );
-		setNav( 'm1' , 'off' );
-		
+
+		setTitle('m1', 'Confirm Delete');
+		setNav('m1', 'off');
+
 		$j('#m1').slideDown();
 	};
 
-	var doDelete = function(src, obj, indx){
+	var doDelete = function (src, obj, indx) {
 		$j.ajax({
 			data: {
 				src: src
@@ -1732,20 +1732,20 @@ function thumbsMenu(vars, customQuery){
 			type: 'post',
 			url: '/thumbs/delete'
 		});
-		
+
 		obj.splice(indx, 1);
 		formatThumbs();
-		
-		if(options.listThumbs.length < (options.index + 8)){
+
+		if (options.listThumbs.length < (options.index + 8)) {
 			ajaxCall();
 		};
-		
-		$j('#m1main').html('' );
+
+		$j('#m1main').html('');
 		closeCpanel(1);
 	};
 
 	//load initial content
-	if(!options.listThumbs.length){
+	if (!options.listThumbs.length) {
 		ajaxCall();
 	} else {
 		setNav();
@@ -1756,85 +1756,85 @@ function thumbsMenu(vars, customQuery){
 };
 
 //sign up form, validate all form info
-function signUp(){
+function signUp() {
 
-	v = getFormVars('signup' );
-	
+	v = getFormVars('signup');
+
 	var errmsg = [];
-	
-	if (!v.user ||v.user.length < 2){
+
+	if (!v.user || v.user.length < 2) {
 		errmsg.push("Your user name must be at least 2 characters.");
 	};
-	
-	if(v.email && !emailValidate(v.email)){
+
+	if (v.email && !emailValidate(v.email)) {
 		errmsg.push("Your email address does not appear to be valid.");
 	};
-	
+
 	if (errmsg.length < 1) {
-		$j('#signupMsg').html('Processing..please wait...' );
+		$j('#signupMsg').html('Processing..please wait...');
 		$j('#signupbutton').hide();
-		
+
 		v = prepForQuery(v);
-		
+
 		$j.ajax({
 			url: '/profile/signup',
 			type: 'post',
 			data: v,
 			success: receiveSignup
 		});
-		
+
 	} else {
 		output = "Please fix the following errors: <br/>";
-		
-		for (i=0; i<errmsg.length; i++){
-			output += errmsg[i]+"<br/>";
+
+		for (i = 0; i < errmsg.length; i++) {
+			output += errmsg[i] + "<br/>";
 		};
-		
+
 		$j('#signupMsg').html(output);
 	};
-	
+
 };
 
-function receiveSignup(json){
-	eval('result = '+json);
-	
-	if (result.errors.length > 0){
+function receiveSignup(json) {
+	eval('result = ' + json);
+
+	if (result.errors.length > 0) {
 		$j('#signupbutton').show();
-		
+
 		output = "Please fix the following errors: <br/>";
-		
-		for (i=0; i < result.errors.length; i++){
-			output += result.errors[i]+"<br/>";
+
+		for (i = 0; i < result.errors.length; i++) {
+			output += result.errors[i] + "<br/>";
 		};
-		
+
 		$j('#signupMsg').html(output);
-		
-	} else if(result.success == true){
-		
+
+	} else if (result.success == true) {
+
 		$j('div#control1').html(result.panelLeft);
 		$j('div#control2').html(result.panelRight);
-		
+
 		closeCpanel(6);
 		closeCpanel(5);
-		
+
 		activateCpanel();
-		
+
 		//set up the tracking interval and do it once immediately
 		startTracking();
 	};
-	
+
 	delete result;
 };
 
 //get the users profile
-function getProfile(){
-	
-	$j('#m2main').html('Loading Your Profile...' );
-	$j('#m2').slideDown('normal' );
-	
-	setTitle( 'm2' , 'Loading Your Profile...' );
-	setNav( 'm2', 'off' );
-	
+function getProfile() {
+
+	$j('#m2main').html('Loading Your Profile...');
+	$j('#m2').slideDown('normal');
+
+	setTitle('m2', 'Loading Your Profile...');
+	setNav('m2', 'off');
+
 	$j.ajax({
 		url: '/profile/get',
 		type: 'POST',
@@ -1842,23 +1842,23 @@ function getProfile(){
 	});
 };
 
-function receiveProfile(html){
+function receiveProfile(html) {
 
 	$j('#m2main').html(html);
-	
-	setTitle( 'm2' , 'Your Profile' );
-	setNav( 'm2' , 'off' );
-	
+
+	setTitle('m2', 'Your Profile');
+	setNav('m2', 'off');
+
 	$j('#m2').slideDown();
-	
+
 	delete html;
 };
 
-function openSearch(){
-	
-	setTitle( 'm2' , 'Search For an Image' );
-	setNav( 'm2' , 'off' );
-	
+function openSearch() {
+
+	setTitle('m2', 'Search For an Image');
+	setNav('m2', 'off');
+
 	var msgText = '<form name="searchParams" id="searchParams" action="/search" method="post">';
 	msgText += '<input type="text" class="stdInput" name="searchTerm" id="searchTerm" />';
 	msgText += '<input type="button" value="Search" class="stdButton" onclick="sendSearchParms();" />';
@@ -1866,8 +1866,8 @@ function openSearch(){
 
 	$j('#m2main').html(msgText);
 	$j('#m2').slideDown();
-	
-	$j('form#searchParams').submit(function(){
+
+	$j('form#searchParams').submit(function () {
 		sendSearchParms();
 		return false;
 	});
@@ -1875,34 +1875,34 @@ function openSearch(){
 
 
 
-function sendSearchParms(term){
-	
+function sendSearchParms(term) {
+
 	search = term ? term : $j('#searchTerm').val();
 	search = encodeURIComponent(search);
-	
+
 	searchThumbs = new thumbsMenu({
 		action: '/thumbs/search/query/' + search,
-		title: 'Search Results', 
+		title: 'Search Results',
 		container: 'm2',
 		limit: 4
 	});
-	
-	$j('#m2main').html('' );
-	
-	setTitle( 'm2' , 'Searching... Please Wait' );
-	
+
+	$j('#m2main').html('');
+
+	setTitle('m2', 'Searching... Please Wait');
+
 	$j('#m2').slideDown();
 };
 
-function receiveSearch(xml){
-	$j('#m3title').html('Search Results' );
+function receiveSearch(xml) {
+	$j('#m3title').html('Search Results');
 	$j('#m3main').html(xml.responseText);
-	
+
 	$j('#m3').slideDown();
 };
 
 //get the how to screens
-function getHelp(){
+function getHelp() {
 	new Lightbox({
 		close: true,
 		url: '/help/main',
@@ -1911,7 +1911,7 @@ function getHelp(){
 };
 
 //get form to send in user feedback
-function startFeedback(){
+function startFeedback() {
 	new Lightbox({
 		close: true,
 		url: '/help/feedback',
@@ -1919,21 +1919,21 @@ function startFeedback(){
 	});
 };
 
-function sendFeedback(){
+function sendFeedback() {
 	vars = prepForQuery(getFormVars('formFeedback'))
 
 	var sendFeedback = new XHConn();
 	sendFeedback.connect("help/feedback", "POST", vars, returnFeedback);
-	
-	$j('#formFeedback').html('Please Wait...' );
+
+	$j('#formFeedback').html('Please Wait...');
 };
 
-function returnFeedback(json){
-	eval( 'result = ' + json.responseText);
+function returnFeedback(json) {
+	eval('result = ' + json.responseText);
 	$j('#lightboxcontent').html(result.html);
 };
-	
-function getTerms(){
+
+function getTerms() {
 	new Lightbox({
 		close: true,
 		url: '/help/terms',
@@ -1941,7 +1941,7 @@ function getTerms(){
 	});
 };
 
-function getAbout(){
+function getAbout() {
 	new Lightbox({
 		close: true,
 		url: '/help/about',
@@ -1949,7 +1949,7 @@ function getAbout(){
 	});
 };
 
-function getAPI(){
+function getAPI() {
 	new Lightbox({
 		close: true,
 		url: 'help/api',
@@ -1957,9 +1957,9 @@ function getAPI(){
 	});
 };
 
-function expandMethod(which){
+function expandMethod(which) {
 	next = getNext(which);
-	if(next.style.display == "block"){
+	if (next.style.display == "block") {
 		next.style.display = "none";
 	} else {
 		next.style.display = "block";
@@ -1967,43 +1967,43 @@ function expandMethod(which){
 };
 
 //linked an image, or from waiting list.
-function readyToAdd(imgloc, width, height){
+function readyToAdd(imgloc, width, height) {
 	//set up varialbes in global identifier
-	addPic.height = Math.ceil(height/72);
-	addPic.width = Math.ceil(width/72);
+	addPic.height = Math.ceil(height / 72);
+	addPic.width = Math.ceil(width / 72);
 	addPic.source = imgloc;
-			
+
 	//scale picture proportionally for thumbnail
-	if (height > width){
+	if (height > width) {
 		smallH = 100;
-		smallW = (width/height) * 100;
+		smallW = (width / height) * 100;
 	} else {
 		smallW = 100;
-		smallH = (height/width) * 100;
+		smallH = (height / width) * 100;
 	};
 
 	//format html 
 	uploadText = '<div class="dragHelp">';
-	uploadText += '	<img src="'+imgloc+'" id="smallAdd" style="width:'+smallW+'px; height:'+smallH+'px;" />';
+	uploadText += '	<img src="' + imgloc + '" id="smallAdd" style="width:' + smallW + 'px; height:' + smallH + 'px;" />';
 	uploadText += '	<img src="/static/moveicon.png"/><br/>';
 	uploadText += '	Drag it onto an empty space on the mile!';
 	uploadText += '</div>';
-	
-	
-	
+
+
+
 	$j('#m1main').html(uploadText);
-	$j('#m1').slideDown('normal' );
-	
+	$j('#m1').slideDown('normal');
+
 };
 
 //adding the image was unsuccessful.
-function removePlacer(){
+function removePlacer() {
 	$j('#posImg').remove();
-	
-	if(addPic.move.id){
+
+	if (addPic.move.id) {
 		$j('#smallAdd').css({
-			left : addPic.move.x,
-			top : addPic.move.y
+			left: addPic.move.x,
+			top: addPic.move.y
 		});
 	} else {
 		// or shoot back placer to cpanel
@@ -2012,40 +2012,40 @@ function removePlacer(){
 			top: '10px'
 		}, 1000);
 	};
-		
+
 	//there were overlaps. figure out where they are 
-	num = result.overlap.length;	
-	
-	overlapContainer = document.createElement('div' );
-	overlapContainer.setAttribute('id', 'overlapContainer' );
-	
+	num = result.overlap.length;
+
+	overlapContainer = document.createElement('div');
+	overlapContainer.setAttribute('id', 'overlapContainer');
+
 	overlapContainerTop = mySize.height;
 	overlapContainerLeft = mySize.width;
 	overlapContainerWidth = 0;
 	overlapContainerHeight = 0;
-	
+
 	$j('#squaremile').append(overlapContainer);
-	
+
 	overlapContainerWidth -= (overlapContainerLeft - mySize.scale);
 	overlapContainerHeight -= (overlapContainerTop - mySize.scale);
-	
-	for(o in result.overlap){
+
+	for (o in result.overlap) {
 		x = result.overlap[o]['x'];
 		y = result.overlap[o]['y'];
-		
-		div = document.createElement('div' );
-		
+
+		div = document.createElement('div');
+
 		left = ((x * 72) - mySize.myX) * (mySize.scale / 72) - mySize.scale + (mySize.width / 2);
 		top = ((y * 72) - mySize.myY) * (mySize.scale / 72) - mySize.scale + (mySize.height / 2);
-		
+
 		overlapContainerLeft = left < overlapContainerLeft ? left : overlapContainerLeft;
 		overlapContainerTop = top < overlapContainerTop ? top : overlapContainerTop;
 		overlapContainerWidth = left > overlapContainerWidth ? left : overlapContainerWidth;
 		overlapContainerHeight = top > overlapContainerHeight ? top : overlapContainerHeight;
-		
+
 		left -= overlapContainerLeft;
 		top -= overlapContainerTop;
-		
+
 		$j(div).css({
 			left: left + 'px',
 			top: top + 'px',
@@ -2054,129 +2054,129 @@ function removePlacer(){
 			height: (mySize.scale) + 'px',
 			position: 'absolute'
 		});
-		
+
 		$j('#overlapContainer').append(div);
-		
+
 	};
-			
+
 	$j('#overlapContainer').css({
 		left: overlapContainerLeft + "px",
 		top: overlapContainerTop + "px",
 		height: overlapContainerHeight + "px",
 		width: overlapContainerWidth + "px"
 	});
-	
+
 	setTimeout("$j('#overlapContainer').fadeOut('normal', function(){$j('#overlapContainer').remove()})", 500);
-		
+
 };
 
-function imageAdded(){
-	
+function imageAdded() {
+
 	$j('#posImg').remove();
 	$j('#smallAdd').remove();
-	
+
 	closeCpanel(1);
-	$j('#m1main').html('' );
-	
+	$j('#m1main').html('');
+
 	//dbug(result.foot);
 	//why do i have to eval this?  it doesnt like the result.foot.x part otherwise.
-	eval('makeMapCall({ ' + result.foot.x + ':' + result.foot.y + ' })' );
-	
-	if(addPic.move.id){
+	eval('makeMapCall({ ' + result.foot.x + ':' + result.foot.y + ' })');
+
+	if (addPic.move.id) {
 		//moved an image successfully
-		$j('#'+addPic.move.id).remove();
-		
-		addPic.move = {x:0, y:0, id: 0};
-	};		
+		$j('#' + addPic.move.id).remove();
+
+		addPic.move = { x: 0, y: 0, id: 0 };
+	};
 };
 
-function activateCpanelPlacer(){
-	
-	$j("#posImg").animate({ 
+function activateCpanelPlacer() {
+
+	$j("#posImg").animate({
 		opacity: 1
 	});
-	
-    postVars = "width="+(addPic.width);
-	postVars += "&height="+(addPic.height);
+
+	postVars = "width=" + (addPic.width);
+	postVars += "&height=" + (addPic.height);
 	postVars += "&inchX=" + (addPic.inchX);
 	postVars += "&inchY=" + (addPic.inchY);
 	postVars += "&fileLoc=" + (addPic.source);
-	
-	if(addPic.move.id){
+
+	if (addPic.move.id) {
 		postVars += "&id=" + (addPic.move.id);
 	};
-	
+
 	return postVars;
 };
 
 //close lightbox
-function closeLB(){
-	$j('#lightboxbk').fadeOut('normal', function(){
+function closeLB() {
+	$j('#lightboxbk').fadeOut('normal', function () {
 		$j('#lightboxbk').remove();
 	});
 };
 
-function Lightbox(options){
-	var newdiv = document.createElement('div' );
-			
-	newdiv.setAttribute('id', 'lightboxbk' );
-	
-	lightboxHtml = '<img class="lbshadow" src="/static/shadow.png"/><div id="lightboxlight"><span class="lightboxTitle">'+options.title+'</span>';
-	
+function Lightbox(options) {
+	var newdiv = document.createElement('div');
+
+	newdiv.setAttribute('id', 'lightboxbk');
+
+	lightboxHtml = '<img class="lbshadow" src="/static/shadow.png"/><div id="lightboxlight"><span class="lightboxTitle">' + options.title + '</span>';
+
 	//add initial content 
-	if(!options.content){
+	if (!options.content) {
 		options.content = 'Loading...';
-		
+
 		$j.ajax({
 			url: options.url,
 			type: 'post',
 			success: receiveLbPost
 		});
-		
+
 	};
-	
-	lightboxHtml += '<div id="lightboxcontent">'+options.content+'</div>';
+
+	lightboxHtml += '<div id="lightboxcontent">' + options.content + '</div>';
 	lightboxHtml += '</div>';
-	
+
 	newdiv.innerHTML = lightboxHtml;
-	
+
 	$j('#body').append(newdiv);
-	
+
 	//add the close x 
-	if (options.close){
-		$j('#lightboxlight').after('<div id="closeLB" onclick="closeLB();"></div>' );
+	if (options.close) {
+		$j('#lightboxlight').after('<div id="closeLB" onclick="closeLB();"></div>');
 	};
-	
+
 	//set the size of the lightbox content to match the container
 	sizeLB();
 };
 
-function receiveLbPost(json){
-	eval("result = "+json);
-	
+function receiveLbPost(json) {
+	eval("result = " + json);
+
 	$j('#lightboxcontent').html(result.html);
 };
 
-function sizeLB(){
+function sizeLB() {
 	containerHeight = $j('#lightboxlight').height();
-	$j('#lightboxcontent').css({ height : containerHeight - 25 + "px" });
+	$j('#lightboxcontent').css({ height: containerHeight - 25 + "px" });
 };
 
 //mapCoord is called when double click on scaled map - travels to that location.
-function mapCoord(e){
+function mapCoord(e) {
 	//var e=new MouseEvent(e);
-	
-	mapX=(e.clientX)-(mySize.width-190);
-	mapY=(e.clientY)-(mySize.height-190);			
-	
-	if (mapX<0){mapX=0;};
-	if (mapX>190){mapX=190;};
-	if (mapY>190){mapY=190;};
-		
+
+	mapX = (e.clientX) - (mySize.width - 190);
+	mapY = (e.clientY) - (mySize.height - 190);
+
+	if (mapX < 0) { mapX = 0; };
+	if (mapX > 190) { mapX = 190; };
+	if (mapY > 190) { mapY = 190; };
+
 	//goto variables to reflect changes in scale
-	gotoX=mapX*24000;
-	gotoY=mapY*24000;
+	gotoX = mapX * 24000;
+	gotoY = mapY * 24000;
 	//go to this location
-	goToLoc(gotoX,gotoY);
+	goToLoc(gotoX, gotoY);
 	return false;
 };

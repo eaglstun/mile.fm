@@ -6,6 +6,14 @@
             "email": "postpostmodern@gmail.com"
         }
     ],
+    "autoload": {
+        "files": [
+            "lib/helpers.php"
+        ],
+        "psr-4": {
+            "": "lib/"
+        }
+    },
     "require": {
         "symfony/filesystem": "^3.3",
         "larapack/dd": "^1.1",

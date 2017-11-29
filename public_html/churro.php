@@ -1,17 +1,20 @@
 <?php
+
 session_start();
 
-define( 'PATH_PUBLIC', __DIR__ );
-define( 'PATH_ROOT', dirname(__DIR__) );
+define('PATH_PUBLIC', __DIR__);
+define('PATH_ROOT', dirname(__DIR__));
 
-require PATH_ROOT.'/vendor/autoload.php';
+require PATH_ROOT . '/vendor/autoload.php';
+
+//dd($_SESSION);
 
 ini_set('include_path', './');
 ini_set('magic_quotes_gpc', 'off');
 ini_set('max_execution_time', 60);
 ini_set('memory_limit', '128M');
 ini_set('upload_max_filesize', '32M');
-ini_set('error_reporting', E_ALL | E_STRICT );
+ini_set('error_reporting', E_ALL | E_STRICT);
 
 $starttime = microtime(TRUE);
 
@@ -25,7 +28,6 @@ require 'config.php';
 
 //include all the classes we may need.  the controller will extend the generic action class.
 require 'php/class_Action.php';
-require 'php/class_DB.php';
 
 require 'php/functions_debug.php';
 require 'php/functions_filesystem.php';
@@ -140,7 +142,7 @@ foreach ($action->scripts as $k => $v) {
 
 $endtime = microtime(TRUE);
 
-$rendertime = round( $endtime - $starttime, 4);
+$rendertime = round($endtime - $starttime, 4);
 
 if ($action->useLayout) {
 	include('template/' . $action->theme . '/' . $template . '.phtml');

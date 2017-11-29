@@ -1,7 +1,7 @@
 RewriteEngine On
     
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ churro.php?cPath=$1 [L]
+RewriteRule ^(.*)$ churro.php?cPath=$1&%{QUERY_STRING} [L]
 
 ExpiresActive On
 <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">

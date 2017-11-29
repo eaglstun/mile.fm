@@ -41,7 +41,7 @@ class indexMVC extends Action
 			$userstamp = time();
 			$userpage = $_SERVER['REQUEST_URI'];
 			$userfrom = isset($_SERVER['HTTP_REFERER']) ? str_replace(HTTPROOT, '/', $_SERVER['HTTP_REFERER']) : '';
-			$sql = "INSERT INTO eric_mile_misc.tracking 
+			$sql = "INSERT INTO tracking 
 					(`ip`, `stamp`, `page`, `from`) 
 					VALUES 
 					( '$userip', '$userstamp', '$userpage', '$userfrom' )";

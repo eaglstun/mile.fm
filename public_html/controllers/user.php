@@ -1,19 +1,18 @@
-<?
+<?php
 class userMVC extends Action
 {
-
-	function init()
-	{
-		require_once('php/class_User.php');
-	}
-
-	function indexAction()
+	/**
+	 * 
+	 */
+	public function indexAction()
 	{
 		$this->disableLayout();
 	}
-	
-	//reset user's password
-	function resetAction()
+
+	/**
+	 * 	reset user's password
+	 */
+	public function resetAction()
 	{
 		$this->disableLayout();
 
@@ -31,7 +30,7 @@ class userMVC extends Action
 	}
 	
 	//get a user's profile
-	function profileAction()
+	public function profileAction()
 	{
 		$this->disableLayout();
 		$User = new User($this->db);
@@ -177,8 +176,8 @@ class userMVC extends Action
 		$user = new User($this->db);
 		$id = $user->getID();
 
-		$sql = "SELECT * FROM eric_mile_users.user_list U 
-				LEFT JOIN eric_mile_users.user_prefs P
+		$sql = "SELECT * FROM user_list U 
+				LEFT JOIN user_prefs P
 				ON U.id = P.userid 
 				WHERE U.id = '$id' 
 				LIMIT 1";
@@ -195,12 +194,8 @@ class userMVC extends Action
 	//update a users profile pic
 	function updatepicAction()
 	{
-		require_once('php/class_Image.php');
-
 		$this->disableLayout();
-		/*
-		dbug($_FILES);
-		 */
+
 		$path = $_FILES['profilePic']['tmp_name'];
 
 		$pic = new Image($this->db);
@@ -310,14 +305,14 @@ class userMVC extends Action
 		//execute user_list
 		$xsql = implode(',', $argsU);
 
-		$sql = "UPDATE eric_mile_users.user_list SET $xsql
+		$sql = "UPDATE user_list SET $xsql
 				WHERE `id` = '$userid' LIMIT 1";
 		$this->db->execute($sql);
 		
 		//execute user_prefs
 		$xsql = implode(',', $argsP);
 
-		$sql = "UPDATE eric_mile_users.user_prefs SET $xsql
+		$sql = "UPDATE user_prefs SET $xsql
 				WHERE `userid` = '$userid' LIMIT 1";
 		$this->db->execute($sql);
 		

@@ -2,10 +2,8 @@
 class profileMVC extends Action
 {
 
-	function init()
+	public function init()
 	{
-		require_once('php/class_User.php');
-
 		if ($this->isAjax()) {
 			$this->disableLayout();
 		} else {
@@ -13,12 +11,12 @@ class profileMVC extends Action
 		}
 	}
 
-	function indexAction()
+	public function indexAction()
 	{
 		if (isset($this->helper) || isset($_REQUEST['name'])) {
 			$username = isset($_REQUEST['name']) ? $_REQUEST['name'] : $this->helper;
 
-			$sql = "SELECT * FROM eric_mile_users.user_list 
+			$sql = "SELECT * FROM user_list 
 					WHERE `user` = '$username' 
 					LIMIT 1";
 
@@ -53,7 +51,7 @@ class profileMVC extends Action
 
 
 
-		$menu4 = array();
+		$menu4 = [];
 		$menu4['content'] = $this->Render('user-public');
 		$menu4['title'] = $username;
 		$menu4['prev']['text'] = '';
@@ -242,7 +240,7 @@ class profileMVC extends Action
 			return;
 		}
 
-		$sql = "REPLACE INTO eric_mile_users.user_external 
+		$sql = "REPLACE INTO user_external 
 				(userid, siteid, username) 
 				VALUES 
 				('$userid', '$extid', '$extusername')";
@@ -264,8 +262,8 @@ class profileMVC extends Action
 		$user = new User($this->db);
 		$id = $user->getID();
 
-		$sql = "SELECT * FROM eric_mile_users.user_list U 
-				LEFT JOIN eric_mile_users.user_prefs P
+		$sql = "SELECT * FROM user_list U 
+				LEFT JOIN user_prefs P
 				ON U.id = P.userid 
 				WHERE U.id = '$id' 
 				LIMIT 1";
@@ -287,8 +285,6 @@ class profileMVC extends Action
 	//update a users profile pic
 	function updatePicAction()
 	{
-		require_once('php/class_Image.php');
-
 		$this->disableLayout();
 
 		$path = $_FILES['profilePic']['tmp_name'];
@@ -326,14 +322,14 @@ class profileMVC extends Action
 	{
 		$this->disableLayout();
 
-		$success = array();
-		$errors = array();
+		$success = [];
+		$errors = [];
 
 		$user = new User($this->db);
 		$userid = $user->getID();
 
-		$argsU = array();
-		$argsP = array();
+		$argsU = [];
+		$argsP = [];
 		
 		//change username?
 		if (isset($_POST['username']) && trim($_POST['username'])) {
@@ -400,14 +396,14 @@ class profileMVC extends Action
 		//execute user_list
 		$xsql = implode(',', $argsU);
 
-		$sql = "UPDATE eric_mile_users.user_list SET $xsql
+		$sql = "UPDATE user_list SET $xsql
 				WHERE `id` = '$userid' LIMIT 1";
 		$this->db->execute($sql);
 		
 		//execute user_prefs
 		$xsql = implode(',', $argsP);
 
-		$sql = "UPDATE eric_mile_users.user_prefs SET $xsql
+		$sql = "UPDATE user_prefs SET $xsql
 				WHERE `userid` = '$userid' LIMIT 1";
 		$this->db->execute($sql);
 		
@@ -428,7 +424,10 @@ class profileMVC extends Action
 		}
 	}
 
-	function loginAction()
+	/**
+	 * POST profile/logout
+	 */
+	public function loginAction()
 	{
 		$start = microtime(true);
 
@@ -676,19 +675,22 @@ class profileMVC extends Action
 		$this->inviteAction();
 	}
 
-	function signupAction()
+	/**
+	 * 
+	 */
+	public function signupAction()
 	{
 		$this->disableLayout();
 
-		$errors = array();
+		$errors = [];
 		$success = false;
 
-		$email = trim($_POST['email']);
-		$pass = trim($_POST['pass']);
-		$user = trim($_POST['user']);
-		//strip double spaces
-		$user = trim(ereg_replace(' +', ' ', $user));
+		$email = filter_input(INPUT_POST, 'email');
+		$pass = filter_input(INPUT_POST, 'pass');
+		$user = filter_input(INPUT_POST, 'user');
 
+		//strip double spaces
+		$user = trim(preg_replace('/\s\s+/', ' ', $user));
 		$ref = isset($_SESSION['ref']) ? $_SESSION['ref'] : '';
 
 		$User = new User($this->db);
@@ -700,8 +702,6 @@ class profileMVC extends Action
 
 		if ($User->findUserName()) {
 			array_push($errors, 'That user name is already taken!');
-		} else {
-
 		}
 
 		if (count($errors) < 1) {

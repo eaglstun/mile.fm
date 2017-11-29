@@ -1,6 +1,6 @@
-<?
+<?php
 include('../config.php' );
-include('../php/class_DB.php' );
+
 include('../php/functions_debug.php' );
 
 $db = new DB();

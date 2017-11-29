@@ -301,7 +301,7 @@ class mileMVC extends Action
 
 			$this->db->execute($sql);
 
-			$insertid = $this->db->lastid;
+			$insertid = $this->db->getLastID();
 			
 			//update the mile records with the insert id
 			foreach ($tables as $k => $v) {

@@ -53,7 +53,7 @@ class usersMVC extends Action
 	function requestAction()
 	{
 		$sql = "SELECT I.id,  I.email, I.stamp FROM eric_mile_users.info_request I
-				LEFT JOIN eric_mile_users.user_list U ON I.email = U.email
+				LEFT JOIN user_list U ON I.email = U.email
 				WHERE U.email IS NULL
 				ORDER BY stamp DESC";
 
@@ -101,7 +101,7 @@ class usersMVC extends Action
 		include('php/functions_redir.php');
 		$to = $_REQUEST['to'];
 
-		$sql = "SELECT * FROM eric_mile_users.list_invite
+		$sql = "SELECT * FROM list_invite
 				WHERE `id` = '$to'
 				LIMIT 1";
 

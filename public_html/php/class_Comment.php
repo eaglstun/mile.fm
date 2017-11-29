@@ -40,7 +40,7 @@ class Comment{
 	
 	public function loadAllComments(){
 		$sql = "SELECT C.*, U.user AS userName
-				FROM eric_mile_users.content_comments C, eric_mile_users.user_list U
+				FROM eric_mile_users.content_comments C, user_list U
 				WHERE C.object = '{$this->id}'
 				AND U.id = C.userid
 				ORDER BY C.id DESC";

@@ -1,27 +1,24 @@
-<?
+<?php
 class contentMVC extends Action
 {
-
-	function init()
-	{
-		include('php/class_Image.php');
-	}
-
 	//called via ajax to insert content from external link 
 	function addAction()
 	{
 		$this->disableLayout();
 
-
 		$userid = isset($_SESSION['userid']) ? $_SESSION['userid'] : false;
+
 		if (!$userid) {
+			$this->json['errors'] = 'Not logged in';
 			$this->json['success'] = false;
 			return;
 		}
 
-		$content = str_replace(" ", "%20", $_POST['content']);
+		//$content = 'https://i.redditmedia.com/4-JXbH934HqjsT8gAIUPMcBaBV1emGDsY_b4Gv_pu14.jpg?w=640&s=edc8d3a6cc20c0bfb93a2be0d2cc3a1c';
+		$content = filter_input(INPUT_POST, 'content');
+		
 		//check for http://
-		if (stripos($content, 'http://') !== 0) {
+		if ( (stripos($content, 'http://') !== 0) && (stripos($content, 'https://') !== 0)) {
 			$content = 'http://' . $content;
 		}
 
@@ -50,7 +47,7 @@ class contentMVC extends Action
 	//voting on an image
 	function voteAction()
 	{
-		$start = microtime();
+		$start = microtime(TRUE);
 
 		$ok = true;
 
@@ -83,7 +80,7 @@ class contentMVC extends Action
 
 		$this->json['success'] = $ok;
 
-		if (microtime() - $start < .25) {
+		if (microtime(TRUE) - $start < .25) {
 			usleep(250000);
 		}
 	}
