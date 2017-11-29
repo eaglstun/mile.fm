@@ -36,11 +36,11 @@ class thumbsMVC extends Action
 
 		$result = $this->db->exec($sql);
 
-		$output = array();
-		$output['thumbs'] = array();
+		$output = [];
+		$output['thumbs'] = [];
 
 		foreach ($result as $k => $v) {
-			$array = array();
+			$array = [];
 
 			$array['locX'] = ( ($v['left'] + $v['right']) / 2) * 72;
 			$array['locY'] = ( ($v['top'] + $v['bottom']) / 2) * 72;
@@ -57,7 +57,7 @@ class thumbsMVC extends Action
 			$this->json = count($output['thumbs']) ? $output : array(0);
 		} else {
 			$this->vars['thumbs'] = $output['thumbs'];
-			$this->vars['menu2'] = array();
+			$this->vars['menu2'] = [];
 
 			$this->vars['menu2']['title'] = 'Most Popular ( ' . ($start + 1) . ' - ' . ($start + $limit) . ' )';
 			$this->vars['menu2']['content'] = $this->Render('navigation/thumbs');
@@ -98,8 +98,8 @@ class thumbsMVC extends Action
 			$limit = 8;
 		}
 
-		$output = array();
-		$output['thumbs'] = array();
+		$output = [];
+		$output['thumbs'] = [];
 
 		if (isset($_POST['stamp'])) {
 			$stamp = intval($_POST['stamp']);
@@ -139,7 +139,7 @@ class thumbsMVC extends Action
 			$this->json = count($output['thumbs']) ? $output : array(0);
 		} else {
 			$this->vars['thumbs'] = $output['thumbs'];
-			$this->vars['menu2'] = array();
+			$this->vars['menu2'] = [];
 
 			$this->vars['menu2']['title'] = 'Recently Added ( ' . ($start + 1) . ' - ' . ($start + $limit) . ' )';
 			$this->vars['menu2']['content'] = $this->Render('navigation/thumbs');
@@ -156,8 +156,8 @@ class thumbsMVC extends Action
 	{
 		$this->disableLayout();
 
-		$output = array();
-		$output['thumbs'] = array();
+		$output = [];
+		$output['thumbs'] = [];
 
 		$userid = $_SESSION['userid'];
 		$start = isset($_POST['start']) ? intval($_POST['start']) : 0;
@@ -188,8 +188,8 @@ class thumbsMVC extends Action
 				LIMIT $start, 17";
 		$result = $this->db->exec($sql);
 
-		$output = array();
-		$output['thumbs'] = array();
+		$output = [];
+		$output['thumbs'] = [];
 
 		foreach ($result as $k => $v) {
 			$locX = ($v['left'] + ( ($v['right'] - $v['left']) / 2)) * 72;
@@ -211,8 +211,8 @@ class thumbsMVC extends Action
 	{
 		$this->disableLayout();
 
-		$output = array();
-		$output['thumbs'] = array();
+		$output = [];
+		$output['thumbs'] = [];
 
 		$id = $_SESSION['userid'];
 		$start = intval($_POST['start']) ? intval($_POST['start']) : 0;
@@ -322,8 +322,8 @@ class thumbsMVC extends Action
 
 		$result = $this->db->exec($sql);
 
-		$output = array();
-		$output['thumbs'] = array();
+		$output = [];
+		$output['thumbs'] = [];
 
 		foreach ($result as $k => $v) {
 			$locX = ($v['left'] + ( ($v['right'] - $v['left']) / 2)) * 72;
@@ -345,8 +345,8 @@ class thumbsMVC extends Action
 	{
 		$this->disableLayout();
 
-		$output = array();
-		$output['thumbs'] = array();
+		$output = [];
+		$output['thumbs'] = [];
 		
 		//the first one to post from
 		$start = $_POST['start'];
@@ -367,8 +367,8 @@ class thumbsMVC extends Action
 	{
 		$this->disableLayout();
 
-		$output = array();
-		$output['thumbs'] = array();
+		$output = [];
+		$output['thumbs'] = [];
 		
 		//the first one to post from
 		$start = $_POST['start'];

@@ -1,4 +1,4 @@
-<?
+<?php
 class mvc extends Action
 {
 
@@ -114,8 +114,8 @@ class mvc extends Action
 			$ $explode[0] = $explode[1];
 		}
 
-		dbug($src, 'src'); //src of image
-		dbug($page, 'page'); //page image is on
+		d($src, 'src'); //src of image
+		d($page, 'page'); //page image is on
 	}
 
 }

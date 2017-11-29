@@ -13,7 +13,7 @@
 		<td>action</td>
 	</tr>
 	
-	<? foreach( $info as $k=>$v ): ?>
+	<?php foreach( $info as $k=>$v ): ?>
 		<tr class="<? tableStripe();?>">
 			<td><?= $v['id']?></td>
 			<td><?= $v['email']?></td>

@@ -7,10 +7,10 @@ class Comment
 	private $id; //serial of image
 	private $user = false; //serial of current user
 	private $vote; //the users rating of selected image
-	private $comments = array(); //all comments for selected image
-	private $tags = array(); //all tags, unsorted and ungrouped;
+	private $comments = []; //all comments for selected image
+	private $tags = []; //all tags, unsorted and ungrouped;
 
-	function __construct(&$db)
+	public function __construct(&$db)
 	{
 		$this->db = $db;
 	}
@@ -35,7 +35,7 @@ class Comment
 					LIMIT 1";
 			$res = $this->db->exec($sql);
 		} else {
-			$res = array();
+			$res = [];
 		}
 
 		$vote = isset($res[0]['vote']) ? $res[0]['vote'] : 0;

@@ -1,4 +1,4 @@
-<?
+<?php 
 function base_dec2base($iNum, $iBase, $iScale = 0)
 { // cope with base 2..62
   $LDEBUG = false;
@@ -138,7 +138,6 @@ function base_base2dec($sNum, $iBase = 0, $iScale = 0)
 
 function base_base2base($iNum, $iBase, $oBase, $iScale = 0)
 {
-
   if ($iBase != 10) {
     $oNum = base_base2dec($iNum, $iBase, $iScale);
   } else {

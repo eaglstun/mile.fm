@@ -672,9 +672,6 @@ function receiveVote(json) {
 	};
 };
 
-
-
-
 function getThumb(vote, id) {
 	var voteBlock = "";
 

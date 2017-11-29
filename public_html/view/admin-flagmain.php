@@ -11,7 +11,7 @@
 		<td>user id</td>
 	</tr>
 	
-	<? foreach( $flags as $k=>$v ): ?>
+	<?php foreach( $flags as $k=>$v ): ?>
 		<tr class="<? tableStripe();?>">
 			<td><?= $v['object']?></td>
 			<td><?= $v['userid']?></td>

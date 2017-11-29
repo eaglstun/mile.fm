@@ -1,4 +1,4 @@
-<? dbug($user); ?>
+<? d($user); ?>
 
 <h3>user info</h3>
 
@@ -27,7 +27,7 @@
 		
 		(<?= count($invite) ?> sent, <?= count($accept) ?> accepted)
 		
-		<? //dbug($invite) ?>
+		<? //d($invite) ?>
 	</div>
 	
 	<div class="inputContainer">

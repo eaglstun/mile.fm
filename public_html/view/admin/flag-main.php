@@ -13,7 +13,7 @@
 		<td>action</td>
 	</tr>
 	
-	<? foreach( $flags as $k=>$v ): ?>
+	<?php foreach( $flags as $k=>$v ): ?>
 		<tr class="<? tableStripe();?>">
 			<td><?= $v['object']?></td>
 			<td><img src="/content/thumbs/<?= $v['thumb'];?>"/></td>

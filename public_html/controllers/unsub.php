@@ -1,4 +1,4 @@
-<?
+<?php
 class unsubMVC extends Action
 {
 	function init()

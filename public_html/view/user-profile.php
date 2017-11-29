@@ -57,7 +57,7 @@
 		<div>
 			<select id="profileNewLink" onchange="updateExt()" name="extid" class="stdInput">
 				<option value="">select</option>
-				<? foreach( $allsites as $k=>$v ): ?>
+				<?php foreach( $allsites as $k=>$v ): ?>
 					<option value="<?= $v['id'] ?>" url="<?= $v['url'] ?>" username="<?= $v['username'] ?>" uid="<?= $v['uid'] ?>"><?= $v['site'] ?></option>
 				<? endforeach ?>
 			</select>

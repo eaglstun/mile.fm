@@ -14,7 +14,7 @@
 		}
 	?>
 	
-	<? foreach( $tags as $k=>$v ): ?>
+	<?php foreach( $tags as $k=>$v ): ?>
 		<? 
 			$size = ((($v / $maxcount) * $spread) + $minFont) * $adj;
 			

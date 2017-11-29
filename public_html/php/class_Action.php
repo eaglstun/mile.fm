@@ -2,7 +2,6 @@
 
 class Action
 {
-
 	var $view;
 	public $db;
 	var $template = 'mainpage'; //the default template we are using
@@ -107,8 +106,8 @@ class Action
 		}
 		
 		
-		//dbug($controller,'controller' );
-		//dbug($model ,'model' );
+		//d($controller,'controller' );
+		//d($model ,'model' );
 
 		$mvc->vars = $this->vars;
 

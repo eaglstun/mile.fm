@@ -1,4 +1,5 @@
 <?php
+
 class contentMVC extends Action
 {
 	//called via ajax to insert content from external link 

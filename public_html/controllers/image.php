@@ -1,4 +1,4 @@
-<?
+<?php
 class imageMVC extends Action
 {
 	//render an image for the scaled mile
@@ -78,9 +78,7 @@ class imageMVC extends Action
 
 			imagejpeg($tmp, $path . $fileName, 60);
 			//imagecopyresampled($tmp, $source , 0, 0, 0, 0, $bkscale, $bkscale, 864, 864);
-			// 
 		}
-		//dbug($path.$fileName);
 		
 		//header("Cache-Control: no-cache, must-revalidate");
 		header("Content-type: image/jpeg");

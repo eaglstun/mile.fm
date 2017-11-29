@@ -1,5 +1,6 @@
-<?
-	//build a list of <options> for galleries with $sel selected
+<?php
+//build a list of <options> for galleries with $sel selected
+
 function buildGalleryOptions($db, $sel = 0)
 {
 	$sql = "SELECT * FROM galleries

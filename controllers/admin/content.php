@@ -80,21 +80,21 @@ class contentMVC extends Action{
 				WHERE `object` = '$id'";
 		
 		$this->db->execute($sql);
-		dbug($sql);
+		d($sql);
 				
 		//delete comments records
 		$sql = "DELETE FROM content_comments 
 				WHERE `object` = '$id'";
 		
 		$this->db->execute($sql);
-		dbug($sql);
+		d($sql);
 			
 		//delete flags
 		$sql = "DELETE FROM content_flag 
 				WHERE `object` = '$id'";
 		
 		$this->db->execute($sql);
-		dbug($sql);
+		d($sql);
 				
 		//delete location records
 		for($c = $res['tableCol']; $c <= $res['tableCol'] + 1; $c++ ){
@@ -121,4 +121,3 @@ class contentMVC extends Action{
 		dbug($sql);
 	}
 }
-?>

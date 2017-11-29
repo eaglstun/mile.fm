@@ -18,7 +18,7 @@
 		<td>sent</td>
 		<td>action</td>
 	</tr>
-<? foreach( $invited as $k=>$v ): ?>
+<?php foreach( $invited as $k=>$v ): ?>
 	<tr>
 		<td><?= $v['email']; ?></td>
 		

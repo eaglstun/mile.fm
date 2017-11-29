@@ -1,4 +1,4 @@
-<?
+<?php
 class indexMVC extends Action
 {
 	function init()

@@ -14,7 +14,7 @@
 		<td>on mailing list</td>
 	</tr>
 	
-	<? foreach( $users as $k=>$v ): ?>
+	<?php foreach( $users as $k=>$v ): ?>
 		<tr class="<? tableStripe();?>">
 			<td><?= $v['id']?></td>
 			<td><a href="/admin/users/view/id/<?= $v['id']?>"><?= $v['user']?></a></td>

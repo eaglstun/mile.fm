@@ -131,5 +131,4 @@ function updateExt() {
 	};
 
 	$j('#xlinklabel').html(b);
-
 };

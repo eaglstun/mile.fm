@@ -19,7 +19,7 @@
 		<td>Last Visit</td>
 		<td>Pages Viewed</td>
 	</tr>
-	<? foreach( $byip as $k=>$v ): ?>
+	<?php foreach( $byip as $k=>$v ): ?>
 		<tr class="<? tableStripe();?>">
 			<td><a href="admin/stats/detail/ip/<?= urlencode($v['ip']); ?>"><?= $v['ip']; ?></a></td>
 			<td><?= date("D M jS g:i a", $v['last'] - 3600); ?></td>
@@ -35,7 +35,7 @@
 		<td>count</td>
 		<td>page</td>
 	</tr>
-	<? foreach( $most as $k=>$v ): ?>
+	<?php foreach( $most as $k=>$v ): ?>
 		<tr class="<? tableStripe();?>">
 			<td><?= $v['count']; ?></td>
 			<td><a href="<?= $root.$v['page'];?>"><?= $root.$v['page'];?></a></td>
@@ -50,7 +50,7 @@
 		<td>count</td>
 		<td>page</td>
 	</tr>
-	<? foreach( $enter as $k=>$v ): ?>
+	<?php foreach( $enter as $k=>$v ): ?>
 		<tr class="<? tableStripe();?>">
 			<td><?= $v['count']; ?></td>
 			<td><a href="<?= $v['from'];?>"><?= $v['from'];?></a></td>

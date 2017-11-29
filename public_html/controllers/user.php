@@ -231,14 +231,14 @@ class userMVC extends Action
 	{
 		$this->disableLayout();
 
-		$success = array();
-		$errors = array();
+		$success = [];
+		$errors = [];
 
 		$user = new User($this->db);
 		$userid = $user->getID();
 
-		$argsU = array();
-		$argsP = array();
+		$argsU = [];
+		$argsP = [];
 		
 		//change username?
 		if (isset($_POST['username']) && trim($_POST['username'])) {
@@ -566,7 +566,6 @@ class userMVC extends Action
 
 		$body = $this->render('email-friendinvite');
 
-
 		$oEmail = new Email();
 		$oEmail->addTo($email);
 		$oEmail->addBcc('eeaglstun@yahoo.com');
@@ -578,11 +577,11 @@ class userMVC extends Action
 		$this->inviteAction();
 	}
 
-	function signupAction()
+	public function signupAction()
 	{
 		$this->disableLayout();
 
-		$errors = array();
+		$errors = [];
 		$success = false;
 
 		$email = trim($_POST['email']);

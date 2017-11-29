@@ -1,4 +1,4 @@
-<?
+<?php
 class profileMVC extends Action
 {
 

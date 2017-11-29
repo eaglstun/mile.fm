@@ -1,4 +1,4 @@
-<?
+<?php
 class statsMVC extends Action
 {
 	function init()

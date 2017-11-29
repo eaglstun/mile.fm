@@ -14,7 +14,7 @@ class RSS
     // image
     var $image_url;
     // items
-    var $items = array();
+    var $items = [];
     var $nritems = 0;
     
 // FUNCTIONS

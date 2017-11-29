@@ -2,19 +2,19 @@
 class Mile
 {
 
-	var $db; //database connection 
+	protected $db; //database connection 
 	
 	//dimensions
 	var $footX = 1;
 	var $footY = 1;
 	var $scale = 72;
 	var $mag = 1; //multiple feet in one block, kicks in at scale = 9
-	var $feet = array(); // each foot has an entry 
+	var $feet = []; // each foot has an entry 
 
-	var $rendered = array(); //passed back to js to build the foot, has series of images assigned to footblock
-	var $empty = array();
+	var $rendered = []; //passed back to js to build the foot, has series of images assigned to footblock
+	var $empty = [];
 
-	function __construct(&$db)
+	public function __construct(&$db)
 	{
 		$this->db = $db;
 		include_once 'php/functions_redir.php';
@@ -23,9 +23,8 @@ class Mile
 	//called to get the contents and echo as clickable images
 	public function build($ajax = TRUE)
 	{
-
 		$empty = $this->feet;
-		$emptyarr = array();
+		$emptyarr = [];
 
 		foreach ($empty as $k => $v) {
 			foreach ($v as $key => $val) {
@@ -35,7 +34,7 @@ class Mile
 
 		$empty = $emptyarr;
 
-		$rendered = array();
+		$rendered = [];
 
 		foreach ($this->feet as $col => $v) {
 
@@ -125,7 +124,7 @@ class Mile
 	}
 	
 	//called to build a static image with the contents, at a scale
-	function render()
+	public function render()
 	{
 		//the boundaries of the foot
 		$minX = ($this->footX * 12) - 12;
@@ -194,7 +193,7 @@ class Mile
 	}
 	
 	//takes posted array and sets to internal array
-	function setFeet($postArray)
+	public function setFeet($postArray)
 	{
 		foreach ($postArray as $k => $v) {
 			$a = explode(",", $v);
@@ -204,18 +203,12 @@ class Mile
 			$this->feet[$k] = $a;
 		}
 		
-		//dbug($this->feet, 'feet' );
+		//d($this->feet, 'feet' );
 	}
 	
 	//sets the scale 72 - down;
-	function setScale($scale = 72)
+	public function setScale($scale = 72)
 	{
 		$this->scale = $scale;
-	}
-	
-	//bye bye
-	function __destruct()
-	{
-
 	}
 }

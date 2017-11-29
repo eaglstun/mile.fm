@@ -1,4 +1,5 @@
-<?
+<?php
+
 class rssMVC extends Action
 {
 	function init()
@@ -34,7 +35,6 @@ class rssMVC extends Action
 		$this->RSS->SetImage(HTTPROOT . 'static/logo144.png');
 
 		foreach ($res as $k => $v) {
-			//dbug($v);
 			//$link = base_base2base($v['id'], 10, 59);
 			$x = ($v['left'] + ( ($v['right'] - $v['left']) / 2)) * 72;
 			$y = ($v['top'] + ( ($v['bottom'] - $v['top']) / 2)) * 72;

@@ -11,7 +11,7 @@
 		<td>added by</td>
 		<td>action</td>
 	</tr>
-	<? foreach( $list as $k=>$v ):?>
+	<?php foreach( $list as $k=>$v ):?>
 		<tr class="<? tableStripe();?>">
 			<td><?= $v['score'];?></td>
 			<td><img src="/content/thumbs/<?= $v['thumb'];?>"/></td>

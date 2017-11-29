@@ -30,5 +30,7 @@ content list
 
 </table>
 
-<? //dbug($sql);?>
-<? //dbug ($images); ?>
+<?php 
+
+//d($sql);
+//d($images); 

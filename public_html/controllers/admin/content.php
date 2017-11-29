@@ -1,4 +1,4 @@
-<?
+<?php
 class contentMVC extends Action
 {
 	function init()
@@ -13,7 +13,7 @@ class contentMVC extends Action
 
 	}
 
-	function indexAction()
+	public function indexAction()
 	{
 
 	}
@@ -86,21 +86,21 @@ class contentMVC extends Action
 				WHERE `object` = '$id'";
 
 		$this->db->execute($sql);
-		dbug($sql);
+		d($sql);
 				
 		//delete comments records
 		$sql = "DELETE FROM content_comments 
 				WHERE `object` = '$id'";
 
 		$this->db->execute($sql);
-		dbug($sql);
+		d($sql);
 			
 		//delete flags
 		$sql = "DELETE FROM content_flag 
 				WHERE `object` = '$id'";
 
 		$this->db->execute($sql);
-		dbug($sql);
+		d($sql);
 				
 		//delete location records
 		for ($c = $res['tableCol']; $c <= $res['tableCol'] + 1; $c++) {
@@ -114,7 +114,7 @@ class contentMVC extends Action
 						WHERE `historyId` = '$id'";
 
 				$this->db->execute($sql);
-				dbug($sql);
+				d($sql);
 			}
 		}
 		
@@ -124,6 +124,6 @@ class contentMVC extends Action
 				WHERE `id` = '$id'";
 
 		$this->db->execute($sql);
-		dbug($sql);
+		d($sql);
 	}
 }

@@ -1,4 +1,4 @@
-<?
+<?php
 class helpMVC extends Action
 {
 

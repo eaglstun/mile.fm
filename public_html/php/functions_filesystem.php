@@ -1,4 +1,4 @@
-<?
+<?php 
 //delete a directory and files, recursively
 //from http://us2.php.net/manual/en/function.rmdir.php#82208
 function deleteDir($path)

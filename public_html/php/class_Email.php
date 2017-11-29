@@ -2,10 +2,10 @@
 class Email
 {
 	var $subject = '';
-	var $to = array();
-	var $cc = array();
-	var $bcc = array();
-	var $attachments = array();
+	var $to = [];
+	var $cc = [];
+	var $bcc = [];
+	var $attachments = [];
 	var $body = array('text', 'html');
 	var $boundary = 'b1_ad6134701969402843dbdd701c17c17e';
 
@@ -91,7 +91,7 @@ class Email
 
 	private function buildTo($ary, $which = '')
 	{
-		$to = array();
+		$to = [];
 		if (is_numeric($which)) {
 			$to = $ary[$which]['name'] . ' <' . $ary[$which]['address'] . '>';
 		} else {

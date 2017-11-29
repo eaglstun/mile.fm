@@ -1,3 +1,3 @@
-<? foreach( $message as $k=>$v ): ?>
+<?php foreach( $message as $k=>$v ): ?>
 	<p><?= $v; ?></p>
 <? endforeach; ?>

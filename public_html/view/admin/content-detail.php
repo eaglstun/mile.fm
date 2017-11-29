@@ -4,7 +4,7 @@
 	<li>content details</li>
 </ul>
 
-<? //dbug ($det) ?>
+<? //d($det) ?>
 <img src="/content/original/<?= $det['content']; ?>"/>
 
 <ul>

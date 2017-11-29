@@ -1,4 +1,4 @@
-<?
+<?php
 class badMVC extends Action
 {
 	function init()

@@ -1,4 +1,5 @@
-<?
+<?php 
+
 function dbug($v = '', $k = 'DEBUG', $trace = TRUE)
 {
 

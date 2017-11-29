@@ -1,4 +1,5 @@
-<?
+<?php
+
 class renderMVC extends Action
 {
 	function init()

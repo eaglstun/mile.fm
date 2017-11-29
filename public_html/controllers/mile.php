@@ -1,4 +1,5 @@
-<?
+<?php
+
 class mileMVC extends Action
 {
 	function indexAction()

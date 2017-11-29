@@ -1,4 +1,4 @@
-<?
+<?php
 
 class searchMVC extends Action
 {

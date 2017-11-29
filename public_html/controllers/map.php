@@ -1,4 +1,5 @@
-<?
+<?php
+
 class mapMVC extends Action
 {
 

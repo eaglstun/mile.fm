@@ -1,4 +1,5 @@
-<?
+<?php
+
 class indexMVC extends Action
 {
 	public function init()
@@ -55,7 +56,7 @@ class indexMVC extends Action
 
 			$Mile = new Mile($this->db);
 			
-			//dbug(($_SESSION['x'] / 864));
+			//d(($_SESSION['x'] / 864));
 			$x = intval($_SESSION['x'] / 864);
 
 			$mileArray = array(
@@ -143,19 +144,20 @@ class indexMVC extends Action
 		$_SESSION['x'] = $x;
 		$_SESSION['y'] = $y;
 		
-		//dbug( ($res['right'] - $res['left']) / 2);
+		//d( ($res['right'] - $res['left']) / 2);
 		//show word balloon on redirect
 		$_SESSION['doSelect'] = $big;
 
 		$link = "#x=" . $x . "&y=" . $y . "&select=" . $big;
 
 		$this->Redirect($link);
-
 	}
 
-	function infoAction()
+	/**
+	 * 
+	 */
+	public function infoAction()
 	{
-		ob_end_clean();
 		phpinfo();
 		die();
 	}

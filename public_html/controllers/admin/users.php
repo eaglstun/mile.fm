@@ -1,4 +1,4 @@
-<?
+<?php
 class usersMVC extends Action
 {
 	function init()
