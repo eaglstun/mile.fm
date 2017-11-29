@@ -156,6 +156,14 @@ a.menuButton {
 div#control1 {
     float: left;
     left: 0px;
+    ul li a {
+        background-image: url(../../../static/menubkoff.png);
+        background-position: right center;
+        background-repeat: repeat-y;
+        &:hover {
+            background-image: url(../../../static/menubkon.png);
+        }
+    }
 }
 
 div#control2 {
@@ -165,16 +173,6 @@ div#control2 {
 
 div#control2 ul.submenu {
     display: none;
-}
-
-div#control1 ul li a {
-    background-image: url(../../../static/menubkoff.png);
-    background-position: right center;
-    background-repeat: repeat-y;
-}
-
-div#control1 ul li a:hover {
-    background-image: url(../../../static/menubkon.png);
 }
 
 ul#controlPanel li ul {
@@ -320,14 +318,12 @@ ul.profileEdit {
     margin: 0px auto;
     padding: 0px;
     text-align: center;
-
     li {
         display: inline;
         font-size: .6em;
         line-height: 1.2em;
         margin: 0px;
         padding: 0px;
-
         a {
             background-color: #fff;
             border: 1px solid #D16A38;
@@ -341,7 +337,6 @@ ul.profileEdit {
             -webkit-border-top-left-radius: 3px;
             -webkit-border-top-right-radius: 3px;
             white-space: nowrap;
-
             &:hover {
                 background-color: #D16A38;
                 color: #fff;

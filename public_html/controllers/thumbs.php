@@ -24,13 +24,12 @@ class thumbsMVC extends Action
 					C.stamp,
 					SUM(V.vote) AS total
 				FROM content_votes V, 
-					mile_users.user_list U, 
-					mile_users.content_history C
-				WHERE
-					V.vote = '1'
-				AND C.userid = U.id
-				AND V.object = C.id
-				GROUP BY object
+					user_list U, 
+					content_history C
+				WHERE V.vote = 1
+					AND C.userid = U.id
+					AND V.object = C.id
+				GROUP BY `object`
 				ORDER BY total DESC, stamp DESC
 				LIMIT $start, $limit";
 
@@ -214,8 +213,8 @@ class thumbsMVC extends Action
 		$output = [];
 		$output['thumbs'] = [];
 
-		$id = $_SESSION['userid'];
-		$start = intval($_POST['start']) ? intval($_POST['start']) : 0;
+		$id = (int) $_SESSION['userid'];
+		$start = (int) filter_input(INPUT_POST, 'start');
 
 		if ($start == 0) {
 			//recalc friends
@@ -258,19 +257,16 @@ class thumbsMVC extends Action
 		$now = time();
 		$online = $now - 300;
 
-
 		$sql = "SELECT U.user,
 				       U.id AS userid,
 				       IF(P.pic = '' OR pic IS NULL, 'defaultFriend.gif' , P.pic) AS thumb
-				FROM eric_mile_users.user_friends F
-				LEFT JOIN
-				mile_users.user_list U
-				ON F.friendid = U.id
-				LEFT JOIN
-				mile_users.user_profile P
-				ON U.id = P.userid
-				WHERE F.userid = '$id'
-				AND F.score > 0	
+				FROM user_friends F
+				LEFT JOIN user_list U
+					ON F.friendid = U.id
+				LEFT JOIN user_profile P
+					ON U.id = P.userid
+				WHERE F.userid = $id
+					AND F.score > 0	
 				ORDER BY score DESC
 				LIMIT $start, 9";
 

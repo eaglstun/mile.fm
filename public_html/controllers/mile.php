@@ -2,13 +2,13 @@
 
 class mileMVC extends Action
 {
-	function indexAction()
+	public function indexAction()
 	{
 		$this->disableLayout();
 	}
 	
 	//check overlap to see if we can add picture here 
-	function addAction()
+	public function addAction()
 	{
 		$start = microtime(true);
 		$stamp = time();
@@ -22,20 +22,20 @@ class mileMVC extends Action
 		}
 		
 		//the sql statements to insert the pic into the mile tables
-		$sqlInsert = array();
-
-		$delTables = array();
+		$sqlInsert = [];
+		$delTables = [];
 				
-		//image dimensions, in inches
-		$width = $_POST['width'];
-		$height = $_POST['height'];
+		// image dimensions, in inches
+		$width = (int) filter_input(INPUT_POST, 'width');
+		$height = (int) filter_input(INPUT_POST, 'height');
 		
-		//image position, in inches from top left, (0,0)
-		$inchX = $_POST['inchX'];
-		$inchY = $_POST['inchY'];
+		// image position, in inches from top left, (0,0)
+		$inchX = (int) filter_input(INPUT_POST, 'inchX');
+		$inchY = (int) filter_input(INPUT_POST, 'inchY');
 		
-		//the image we have been posted
-		$fileLoc = $_POST['fileLoc'];
+		// the image we have been posted
+		$fileLoc = filter_input(INPUT_POST, 'fileLoc');
+
 		$fileLoc = str_replace('http://localhost/newsquare/beta/content/original/', '', $fileLoc); //bad
 
 		$fileLoc = str_replace('http://mile.fm/', '', $fileLoc); //bad
@@ -43,7 +43,7 @@ class mileMVC extends Action
 
 		$fileLoc = str_replace('/content/original/', '', $fileLoc);
 		
-		//lets see if we can do it 
+		// lets see if we can do it 
 		$success = false;
 		
 		//the table this goes into, based on 80 feet square, 1-66 (960 inches)
@@ -96,36 +96,31 @@ class mileMVC extends Action
 		}
 		
 		//an array of all the tables we are updateing
-		$tables = array();
+		$tables = [];
 		
 		/*
 		//the relative inch within the 80 foot block, for the top left corner of the image 
 		$relX = ($inchX % 960) + 1;
 		$relY = ($inchY % 960) + 1;
-		 */
+		*/
 
-		$overlap = array();
-		$check = array();
+		$overlap = [];
+		$check = [];
 		
-		//the bounderies coordinates for the image in inches, top left is 1,1
+		// the bounderies coordinates for the image in inches, top left is 1,1
 		$top = $inchY;
 		$right = $inchX + $width;
 		$bottom = $inchY + $height;
 		$left = $inchX;
 		
-		
-		
-		
-		
-		//figure out all inches we are inserting 
+		// figure out all inches we are inserting 
 		for ($x = $inchX; $x < ($inchX + $width); $x++) {
 			for ($y = $inchY; $y < ($inchY + $height); $y++) {
-
 				$tableX = str_pad(floor( ($x / 960) + 1), 2, 0, STR_PAD_LEFT);
 				$tableY = str_pad(floor( ($y / 960) + 1), 2, 0, STR_PAD_LEFT);
 
 				if (!isset($check[$tableX])) {
-					$check[$tableX] = array();
+					$check[$tableX] = [];
 				}
 				
 				//the col and row within the 80 foot block, 1-960
@@ -149,37 +144,37 @@ class mileMVC extends Action
 					$check[$tableX][$tableY]['maxY'] = $relY;
 				}
 
-				$table = "c" . $tableX . "r" . $tableY;
+				$table = DBNAME_GRID.".c" . $tableX . "r" . $tableY;
 
 				$histSql = isset($historyId) ? $historyId : '';
-				$sql = "INSERT INTO eric_mile_mile.$table 
+				$sql = "INSERT INTO $table 
 						(col, row, userid, stamp ,historyId, type) 
 						VALUES 
 						('$relX', '$relY', '$userid', '$stamp', '$histSql', '1')";
 				
 				//adding the record into _squaremile
 				array_push($sqlInsert, $sql);
-
 			}
 		}
 
-		$result = array();
+		$result = [];
 
-		$sqlA = array();
-
+		$sqlA = [];
+		
 		foreach ($check as $c => $col) {
 			foreach ($col as $r => $row) {
-				$table = "c" . $c . "r" . $r;
+				$table = DBNAME_GRID.".c" . $c . "r" . $r;
 				array_push($tables, $table);
 
-				$sql = "SELECT col, row, historyId FROM eric_mile_mile.$table T 
+				$sql = "SELECT col, row, historyId 
+						FROM $table T 
 						LEFT JOIN content_history H 
-						ON T.historyId = H.id
-						WHERE H.id IS NOT NULL AND
-						T.col >= '{$row['minX']}' AND 
-						T.col <= '{$row['maxX']}' AND 
-						T.row >= '{$row['minY']}' AND 
-						T.row <= '{$row['maxY']}' ";
+							ON T.historyId = H.id
+						WHERE H.id IS NOT NULL 
+							AND T.col >= '{$row['minX']}' 
+							AND T.col <= '{$row['maxX']}' 
+							AND T.row >= '{$row['minY']}' 
+							AND T.row <= '{$row['maxY']}'";
 				
 				//$this->json['sql'] = $sql;
 				//return;
@@ -189,7 +184,7 @@ class mileMVC extends Action
 				}
 
 				$res = $this->db->exec($sql);
-
+				
 				array_push($sqlA, $sql);
 
 				if (count($res) > 0) {
@@ -199,10 +194,7 @@ class mileMVC extends Action
 							'y' => ( ($r - 1) * 960) + $v['row'],
 							'id' => $v['historyId']
 						));
-											/*'table' => $table,*/
 					}
-					
-					//$this->json['sql'] = $sql;
 				}
 			}
 		}
@@ -225,20 +217,20 @@ class mileMVC extends Action
 		}
 		
 		//all good. write the records 
-
 		$this->json['success'] = true;
-
 
 		if (count($delTables)) {
 			$this->json['deltables'] = $delTables;
-			$this->json['delSql'] = array();
+			$this->json['delSql'] = [];
 			
 			//delete the old mile records so we can update
 			foreach ($delTables as $k => $v) {
-				$delSql = "DELETE FROM eric_mile_mile.$v 
-						   WHERE `historyId` = '$historyId'";
+				$table = DBNAME_GRID.'.'.$v;
 
-				$this->db->execute($delSql);
+				$delSql = "DELETE FROM $table 
+						   WHERE `historyId` = ?";
+
+				$this->db->execute($delSql, [$historyId]);
 
 				array_push($this->json['delSql'], $delSql);
 
@@ -267,7 +259,6 @@ class mileMVC extends Action
 						 LIMIT 1";
 
 			$this->db->execute($updateSql);
-			
 			
 			//$this->json['updateSql'] = $updateSql;
 
@@ -306,7 +297,7 @@ class mileMVC extends Action
 			
 			//update the mile records with the insert id
 			foreach ($tables as $k => $v) {
-				$sql = "UPDATE eric_mile_mile.$v
+				$sql = "UPDATE $table
 						SET `historyId` = '$insertid'
 						WHERE `historyId` = '0'
 						AND `userid` = '$userid'

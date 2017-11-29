@@ -44,13 +44,13 @@ a.menuButton { cursor: pointer; display: block; float: right; height: 15px; marg
 
 div#control1 { float: left; left: 0px; }
 
-div#control2 { float: right; right: 0px; }
-
-div#control2 ul.submenu { display: none; }
-
 div#control1 ul li a { background-image: url(../../../static/menubkoff.png); background-position: right center; background-repeat: repeat-y; }
 
 div#control1 ul li a:hover { background-image: url(../../../static/menubkon.png); }
+
+div#control2 { float: right; right: 0px; }
+
+div#control2 ul.submenu { display: none; }
 
 ul#controlPanel li ul { display: none; }
 

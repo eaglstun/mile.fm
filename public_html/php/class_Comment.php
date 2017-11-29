@@ -15,9 +15,12 @@ class Comment
 		$this->db = $db;
 	}
 
+	/**
+	 * 
+	 */
 	public function setID($id)
 	{
-		$this->id = $id;
+		$this->id = (int) $id;
 	}
 
 	public function setCurrentUser($user)
@@ -29,7 +32,7 @@ class Comment
 	{
 		if ($this->user) {
 			//user logged in 
-			$sql = "SELECT vote FROM eric_mile_users.content_votes
+			$sql = "SELECT vote FROM content_votes
 					WHERE object = '{$this->id}' 
 					AND userid = '{$this->user}'
 					LIMIT 1";
@@ -46,7 +49,7 @@ class Comment
 	public function loadAllComments()
 	{
 		$sql = "SELECT C.*, U.user AS userName
-				FROM eric_mile_users.content_comments C, user_list U
+				FROM content_comments C, user_list U
 				WHERE C.object = '{$this->id}'
 				AND U.id = C.userid
 				ORDER BY C.id DESC";
@@ -59,7 +62,7 @@ class Comment
 
 	public function loadAllTags()
 	{
-		$sql = "SELECT tag, COUNT(tag) as cnt FROM eric_mile_users.content_tags
+		$sql = "SELECT tag, COUNT(tag) as cnt FROM content_tags
 				WHERE object = '{$this->id}'
 				GROUP BY tag
 				ORDER BY RAND()";

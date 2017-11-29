@@ -34,13 +34,13 @@ class DB
      */
     public function exec($sql, $index = '')
     {
-
         $return = [];
 
         $result = mysqli_query($this->connection, $sql);
 
-        if (!$result)
-            dd($sql);
+        if(!$result){
+            dd(mysqli_error($this->connection));
+        }
 
         if ($index == '') {
             while ($row = mysqli_fetch_assoc($result)) {
@@ -74,6 +74,10 @@ class DB
             mysqli_stmt_bind_param($stmt, $type, ...$params);
         }
         
+        if( is_bool($stmt) ){
+            dd($sql);
+        }
+
         mysqli_stmt_execute($stmt);
 
         $this->lastid = mysqli_stmt_insert_id($stmt);
