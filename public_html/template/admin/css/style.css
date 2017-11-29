@@ -1,0 +1,189 @@
+body, html{
+	width:100%;
+	height:100%;
+	padding:0px;
+	margin:auto;
+}
+
+body{
+	background-color: #D16A38;
+	font-family: "MGOpen Moderna", HelveticaNeue-Light, "Helvetica Neue Light", "Helvetica Neue",helvetica,arial,sans-serif;
+	color: #333;
+	font-size: 1em;
+	line-height: 1.2em;
+	min-width:810px;
+	background-position: top left;
+	background-repeat: repeat-x;
+}
+
+.mainContent{
+	margin:auto auto -3.6em auto;
+	padding:0px;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	width:80%;
+	min-width:800px;
+	background-color: #fff;
+}
+
+.mainContent p{
+	margin:0px auto .6em .48em;
+	text-align: justify;
+}
+
+h1,h2,h3,h4,h5,h6{
+	margin: 0px;
+}
+
+h1{
+	text-transform: uppercase;
+	margin:0px 0px 0px .4em;
+	padding:0px;
+	font-size:1.2em;
+	line-height:1em;
+}
+
+ul.crumbs{margin:0;padding:0}
+
+ul.crumbs li{ display:inline;padding:0 5px 0 0;font-size:.8em}
+
+a.forgotLink{
+	display:block;
+	text-align: right;
+	color:#333;
+	text-decoration: none;
+}
+
+#passwordAssist{
+	overflow: hidden;
+	height:0px;
+}
+
+#loginResult{
+	overflow: hidden;
+	height:0px;
+}
+
+#requestResult{
+	overflow: hidden;
+	height:0px;
+}
+
+.stdInput{
+	background-color: #FDC899;
+	border-width: 0px;
+	font-family: "MGOpen Moderna", HelveticaNeue-Light, "Helvetica Neue Light", "Helvetica Neue",helvetica,arial,sans-serif;
+	font-size: 1em;
+	margin:auto auto .48em .48em;
+	padding:.12em;
+}
+
+.stdButton{
+	font-size: 1em;
+	border-width: .12em;
+	font-family: "MGOpen Moderna", HelveticaNeue-Light, "Helvetica Neue Light", "Helvetica Neue",helvetica,arial,sans-serif;
+	cursor:pointer;
+	background-color:#F0F0F0;
+	color:#333;
+}
+
+.stdButton:hover{
+	background-color:#F6F6F6;
+	color:#444;
+}
+
+.push{
+	height:3.6em;
+}
+
+#footer{
+	text-align:center;
+	height:6em;
+	color:#DA4B26;
+	clear:both;
+	padding:0px 0px 0px 0px;
+	font-size:.6em;
+	line-height:6em;
+}
+
+.stdTable{
+	border-collapse: collapse;
+	width:80%;
+	margin:auto;
+}
+
+.tableStripe0{
+	background-color: #fff;
+}
+
+.tableStripe1{
+	background-color: #eee;
+}
+
+.tableStripe0:hover, .tableStripe1:hover{ 
+	background-color: #CFC;
+}
+
+.inputContainer{
+	clear:both;
+}
+
+.inputContainer input{
+	float:left;
+}
+
+.inputContainer label{
+	float:left;
+	width:150px;
+	text-align:right;
+	border-width: 0px;
+	font-size:.7em;
+    line-height:2em;
+}
+
+.buttonContainer{
+	clear:both;
+	margin:auto;
+	padding:5px 0px;
+	text-align:center;
+}
+
+.stdButton{
+	background-color : #D16A38;
+	border:1px solid #D16A38;
+	color:#fff;
+	cursor: pointer;
+	font-family: "MGOpen Moderna Regular", HelveticaNeue-Light, "Helvetica Neue Light","Helvetica Neue",helvetica,arial,sans-serif;
+	margin:auto;
+	padding:0px 2px;
+	text-align: center;
+	font-size:1em;
+	line-height:1em;
+}
+.stdButton:hover{
+	background-color : #fed;
+	color: #D16A38;
+}
+
+.stdText{
+	border:1px solid #DA4B26;
+	font-family: HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",helvetica,arial,sans-serif;
+	font-size:1em;
+	line-height:1em;
+	float:left;
+	width:15em;
+	height:10em;
+	padding:3px 2px 1px 2px;
+	margin:0px .5em 5px .5em;
+}
+
+textarea#body{
+	width:45em;
+	height:30em;
+	background-color: #fff;
+}
+
+iframe{
+	background-color: #fff;
+}

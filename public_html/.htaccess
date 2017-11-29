@@ -1,0 +1,11 @@
+RewriteEngine On
+    
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ churro.php?cPath=$1 [L]
+
+ExpiresActive On
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+Header set Cache-Control "max-age=1209600, public"
+</FilesMatch>
+
+
