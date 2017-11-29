@@ -1,14 +1,11 @@
 <?
 class indexMVC extends Action
 {
-	function init()
+	public function init()
 	{
-		//bad browser?
-		include('php/class_Browser.php');
-		$br = new browser();
-		$br = $br->get();
+		$br = new Browser();
 
-		if ($br['name'] == 'MSIE' && intval($br['version']) < 7) {
+		if ($br->getBrowser() == 'MSIE' && intval($br->getVersion()) < 7) {
 			$this->Redirect('bad/browser/ie' . intval($br['version']));
 		}
 		
@@ -22,10 +19,9 @@ class indexMVC extends Action
 			$_SESSION['x'] = (864 * 2640);
 			$_SESSION['y'] = (864 * 2640);
 		}
-
 	}
 
-	function indexAction()
+	public function indexAction()
 	{
 
 		$this->vars['cpanel'] = $this->Render('cpanel');
