@@ -27,12 +27,21 @@ class DB
 		}
 	}
 
-	function exec($sql, $index = '')
+	/**
+	 * 
+	 * @param string
+	 * @param 
+	 * @return array
+	 */
+	public function exec($sql, $index = '')
 	{
 
 		$return = array();
 
 		$result = mysqli_query($this->connection, $sql);
+
+		if( !$result )
+			dd($sql);
 
 		if ($index == '') {
 			while ($row = mysqli_fetch_assoc($result)) {
@@ -44,19 +53,22 @@ class DB
 			}
 		}
 
-
-		return ($return);
+		return $return;
 	}
 
-	function execute($sql)
+	/**
+	 * 
+	 * @param string
+	 * @return bool
+	 */
+	public function execute($sql)
 	{
-
 		$return = array();
 
-		$result = mysqli_query($sql, $this->connection);
+		$result = mysqli_query($this->connection, $sql);
 
-		$this->lastid = mysqli_insert_id();
+		$this->lastid = mysqli_insert_id( $this->connection );
 
-		return (true);
+		return true;
 	}
 }

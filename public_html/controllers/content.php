@@ -68,7 +68,7 @@ class contentMVC extends Action
 		} else {
 			$now = time();
 
-			$sql = "REPLACE INTO eric_mile_users.content_votes 
+			$sql = "REPLACE INTO content_votes 
 					(`userid`, `object`, `vote`, `stamp`) 
 					VALUES 
 					('$userid', '$objectid', '$vote', '$now')";

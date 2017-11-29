@@ -172,7 +172,7 @@ class mileMVC extends Action
 				array_push($tables, $table);
 
 				$sql = "SELECT col, row, historyId FROM eric_mile_mile.$table T 
-						LEFT JOIN eric_mile_users.content_history H 
+						LEFT JOIN content_history H 
 						ON T.historyId = H.id
 						WHERE H.id IS NOT NULL AND
 						T.col >= '{$row['minX']}' AND 

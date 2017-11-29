@@ -29,12 +29,11 @@ class thumbsMVC extends Action
 					C.content, C.thumb, 
 					C.stamp,
 					SUM(V.vote) AS total
-		
-				FROM eric_mile_users.content_votes V, 
-				mile_users.user_list U, 
-				mile_users.content_history C
+				FROM content_votes V, 
+					mile_users.user_list U, 
+					mile_users.content_history C
 				WHERE
-				V.vote = '1'
+					V.vote = '1'
 				AND C.userid = U.id
 				AND V.object = C.id
 				GROUP BY object
@@ -83,7 +82,7 @@ class thumbsMVC extends Action
 		$src = $_POST['src'];
 		$userid = $_SESSION['userid'];
 
-		$sql = "DELETE FROM eric_mile_users.content_waiting
+		$sql = "DELETE FROM content_waiting
 				WHERE loc='$src'
 				AND userid='$userid'
 				LIMIT 1";
@@ -113,7 +112,7 @@ class thumbsMVC extends Action
 			$xsql = "WHERE `stamp` <= '$stamp'";
 		} else {
 			$sql = "SELECT MAX(stamp) as max 
-					FROM eric_mile_users.content_history";
+					FROM content_history";
 			$result = $this->db->exec($sql);
 			$max = $result[0]['max'];
 			$output['stamp'] = $max;
@@ -122,7 +121,7 @@ class thumbsMVC extends Action
 		}
 
 		$sql = "SELECT `id`, `thumb`, `top`, `right`, `bottom`, `left` 
-				FROM eric_mile_users.content_history
+				FROM content_history
 				$xsql
 				ORDER BY `stamp` DESC
 				LIMIT $start, $limit";
@@ -169,7 +168,7 @@ class thumbsMVC extends Action
 		$userid = $_SESSION['userid'];
 		$start = isset($_POST['start']) ? intval($_POST['start']) : 0;
 
-		$sql = "SELECT `id`, `loc`, `loc` as `thumb`, `width`, `height` FROM eric_mile_users.content_waiting
+		$sql = "SELECT `id`, `loc`, `loc` as `thumb`, `width`, `height` FROM content_waiting
 				WHERE `userid` = '$userid'
 				ORDER BY `stamp` DESC
 				LIMIT $start, 25";

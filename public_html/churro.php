@@ -13,7 +13,7 @@ ini_set('memory_limit', '128M');
 ini_set('upload_max_filesize', '32M');
 ini_set('error_reporting', E_ALL | E_STRICT );
 
-$starttime = microtime();
+$starttime = microtime(TRUE);
 
 //sanitize
 foreach ($_POST as $k => $v) {
@@ -138,9 +138,9 @@ foreach ($action->scripts as $k => $v) {
 	$scripts .= "<script src=\"/js/$v.js\" type=\"text/javascript\"></script>\n";
 }
 
-$endtime = microtime();
+$endtime = microtime(TRUE);
 
-$rendertime = round($endtime - $starttime, 4);
+$rendertime = round( $endtime - $starttime, 4);
 
 if ($action->useLayout) {
 	include('template/' . $action->theme . '/' . $template . '.phtml');

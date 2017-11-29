@@ -28,7 +28,7 @@ class mapMVC extends Action
 
 			if ($userid) {
 
-				$sql = "INSERT INTO eric_mile_users.content_comments
+				$sql = "INSERT INTO content_comments
 						(userid, object, comment, stamp)
 						VALUES
 						('$userid', '$postId', '$postComment', '$stamp')";
@@ -95,7 +95,7 @@ class mapMVC extends Action
 		}
 
 		foreach ($newwords as $v) {
-			$sql = "REPLACE INTO eric_mile_users.content_tags 
+			$sql = "REPLACE INTO content_tags 
 					(`object`, `tag`, `userid`, `stamp`)
 					VALUES 
 					('$postid', '$v', '$userid', '$now')";
