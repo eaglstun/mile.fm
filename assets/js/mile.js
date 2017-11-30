@@ -1,48 +1,48 @@
 /*
-*
-*/
-function zoom(num) {
+ *
+ */
+function zoom( num ) {
 
-    if (num == 'in') {
+    if ( num == 'in' ) {
         num = mySize.scale * 2;
-    } else if (num == 'out') {
+    } else if ( num == 'out' ) {
         num = mySize.scale / 2;
     };
 
-    if (num > 72) {
+    if ( num > 72 ) {
         num = 72;
-    } else if (num < .0087) {
+    } else if ( num < .0087 ) {
         num = .0087890625;
     };
 
-    if (num == mySize.scale) {
+    if ( num == mySize.scale ) {
         return;
     };
 
-    if (m = $j('#mags')) {
+    if ( m = $j( '#mags' ) ) {
 
-        s = (72 / num);
-        n = Math.log(s) / Math.log(2);
+        s = ( 72 / num );
+        n = Math.log( s ) / Math.log( 2 );
 
-        left = 126 - (n * 9);
+        left = 126 - ( n * 9 );
 
-        m.css({ left: left + "px" });
+        m.css( { left: left + "px" } );
     };
 
     //get the css style sheet 
-    if (document.styleSheets[0].cssRules) {
+    if ( document.styleSheets[ 0 ].cssRules ) {
         //correct
-        footBlock = document.styleSheets[0].cssRules[0].style;
-    } else if (document.styleSheets[0].rules) {
+        footBlock = document.styleSheets[ 0 ].cssRules[ 0 ].style;
+    } else if ( document.styleSheets[ 0 ].rules ) {
         //ie
-        footBlock = document.styleSheets[0].rules[0].style;
+        footBlock = document.styleSheets[ 0 ].rules[ 0 ].style;
     } else {
         //who knows
         return false;
     };
 
-    if (num < 18) {
-        mySize.mag = (18 / num);
+    if ( num < 18 ) {
+        mySize.mag = ( 18 / num );
 
     } else {
         mySize.mag = 1;
@@ -50,78 +50,63 @@ function zoom(num) {
 
     mySize.scale = num;
 
-    width = (num * 12 * mySize.mag) + "px";
+    width = ( num * 12 * mySize.mag ) + "px";
     footBlock.height = width;
     footBlock.width = width;
 
-    for (var x = 0; x < mySize.numCols; x++) {
-        for (var y = 0; y < mySize.numRows; y++) {
+    for ( var x = 0; x < mySize.numCols; x++ ) {
+        for ( var y = 0; y < mySize.numRows; y++ ) {
 
-            if ($j("#c" + x + "r" + y)) {
+            if ( $j( "#c" + x + "r" + y ) ) {
 
-                $j("#c" + x + "r" + y).attr('forcereload', 1).html('');
+                $j( "#c" + x + "r" + y ).attr( 'forcereload', 1 ).html( '' );
             };
         };
     };
 
     //need to reverse the equation, to set the mag x based on the zoom facotr
-    leftX = (1 / num) * 72;
+    leftX = ( 1 / num ) * 72;
 
     setScreenClass();
-};
-
-function findTarget(e) {
-
-    try {
-        //teh fahx
-        t = e.target.id;
-    } catch (err) {
-        //teh sucx
-        t = e.srcElement.id;
-    };
-
-    if (t.match(/pic/)) {
-        doSelect(t);
-    };
 };
 
 //initialize feet divs
 function buildScreen() {
 
     //get rid of any divs due to scale or screen size 
-    if (mySize.oldCols > mySize.numCols) {
-        for (var x = mySize.oldCols; x >= mySize.numCols; x--) {
-            for (var y = mySize.oldRows; y >= 0; y--) {
+    if ( mySize.oldCols > mySize.numCols ) {
+        for ( var x = mySize.oldCols; x >= mySize.numCols; x-- ) {
+            for ( var y = mySize.oldRows; y >= 0; y-- ) {
 
-                if (x >= mySize.numCols || y >= mySize.numRows) {
-                    $j("#c" + x + "r" + y).remove();
+                if ( x >= mySize.numCols || y >= mySize.numRows ) {
+                    $j( "#c" + x + "r" + y ).remove();
                 };
 
             };
         };
     };
 
-    if (mySize.oldRows > mySize.numRows) {
-        for (var y = mySize.oldRows; y >= mySize.numRows; y--) {
-            for (var x = mySize.oldCols; x >= 0; x--) {
-                $j("#c" + x + "r" + y).remove();
+    if ( mySize.oldRows > mySize.numRows ) {
+        for ( var y = mySize.oldRows; y >= mySize.numRows; y-- ) {
+            for ( var x = mySize.oldCols; x >= 0; x-- ) {
+                $j( "#c" + x + "r" + y ).remove();
             };
         };
     };
 
-    for (var x = 0; x < mySize.numCols; x++) {
-        for (var y = 0; y < mySize.numRows; y++) {
+    for ( var x = 0; x < mySize.numCols; x++ ) {
+        for ( var y = 0; y < mySize.numRows; y++ ) {
 
-            if ($j("#c" + x + "r" + y).length == 0) {
+            if ( $j( "#c" + x + "r" + y ).length == 0 ) {
 
-                var newdiv = document.createElement('div');
+                var newdiv = document.createElement( 'div' );
 
-                newdiv.setAttribute('id', "c" + x + "r" + y);
+                newdiv.setAttribute( 'id', "c" + x + "r" + y );
                 newdiv.className = "footBlock";
 
-                $j('#squaremile').append(newdiv);
+                $j( '#squaremile' ).append( newdiv );
 
-                $j("#c" + x + "r" + y).attr('forcereload', 1);
+                $j( "#c" + x + "r" + y ).attr( 'forcereload', 1 );
             };
         };
     };
@@ -132,26 +117,26 @@ function buildScreen() {
 };
 
 //delay loading image into mile div
-function loadImage(cls, image) {
+function loadImage( cls, image ) {
     x = "doLoad('" + cls + "','" + image + "')";
-    setTimeout(x, 500);
+    setTimeout( x, 500 );
 };
 
 //load a scaled image into the foot
-function doLoad(cls, image) {
+function doLoad( cls, image ) {
 
     var obj;
 
-    if (obj = $j('.' + cls)) {
+    if ( obj = $j( '.' + cls ) ) {
 
         pic = new Image();
 
-        pic.onload = function () {
-            obj.html('<img src="' + image + '"/>');
-            obj.css({
+        pic.onload = function() {
+            obj.html( '<img src="' + image + '"/>' );
+            obj.css( {
                 backgroundImage: 'none',
                 backgroundColor: '#D16A38'
-            });
+            } );
         };
 
         pic.obj = obj;
@@ -164,108 +149,108 @@ function doLoad(cls, image) {
 function moveScreen() {
     scale = mySize.scale / 72;
 
-    xdiff = Math.floor(((mySize.myX) / mySize.totalWidth) * scale) * mySize.numCols * mySize.mag;
+    xdiff = Math.floor( ( ( mySize.myX ) / mySize.totalWidth ) * scale ) * mySize.numCols * mySize.mag;
     xdiff = xdiff < 0 ? 0 : xdiff;
 
-    ydiff = Math.floor(((mySize.myY) / mySize.totalHeight) * scale) * mySize.numRows * mySize.mag;
+    ydiff = Math.floor( ( ( mySize.myY ) / mySize.totalHeight ) * scale ) * mySize.numRows * mySize.mag;
     ydiff = ydiff < 0 ? 0 : ydiff;
 
-    adjX = mySize.myX / (scale);
+    adjX = mySize.myX / ( scale );
 
     //position target on map
     posMap();
 
-    widthDiff = (mySize.totalWidth - mySize.width) / 2;
-    heightDiff = (mySize.totalHeight - mySize.height) / 2;
+    widthDiff = ( mySize.totalWidth - mySize.width ) / 2;
+    heightDiff = ( mySize.totalHeight - mySize.height ) / 2;
 
-    var offsetLeftpx = Math.floor(((mySize.myX * scale) * -1) % (mySize.totalWidth)) + (mySize.width / 2);
-    var offsetToppx = Math.floor(((mySize.myY * scale) * -1) % (mySize.totalHeight)) + (mySize.height / 2);
+    var offsetLeftpx = Math.floor( ( ( mySize.myX * scale ) * -1 ) % ( mySize.totalWidth ) ) + ( mySize.width / 2 );
+    var offsetToppx = Math.floor( ( ( mySize.myY * scale ) * -1 ) % ( mySize.totalHeight ) ) + ( mySize.height / 2 );
     //offset Left goes from half the screen width(720) down to this minus width of all feet drawn ~ (-2735) 
 
-    if (mySize.myX < -1) {
-        var offsetLeftpx = ((mySize.myX * -1) * scale) + (mySize.width / 2);
+    if ( mySize.myX < -1 ) {
+        var offsetLeftpx = ( ( mySize.myX * -1 ) * scale ) + ( mySize.width / 2 );
     };
 
-    if (mySize.myY < -1) {
-        var offsetToppx = ((mySize.myY * -1) * scale) + (mySize.height / 2);
+    if ( mySize.myY < -1 ) {
+        var offsetToppx = ( ( mySize.myY * -1 ) * scale ) + ( mySize.height / 2 );
     };
 
-    offsetLeftpx = isNaN(offsetLeftpx) ? 0 : offsetLeftpx;
-    offsetToppx = isNaN(offsetToppx) ? 0 : offsetToppx;
+    offsetLeftpx = isNaN( offsetLeftpx ) ? 0 : offsetLeftpx;
+    offsetToppx = isNaN( offsetToppx ) ? 0 : offsetToppx;
 
-    $j('#offsetLeft').css({ left: offsetLeftpx + "px" });
-    $j('#offsetTop').css({ top: offsetToppx + "px" });
+    $j( '#offsetLeft' ).css( { left: offsetLeftpx + "px" } );
+    $j( '#offsetTop' ).css( { top: offsetToppx + "px" } );
 
     mySize.offsetLeft = offsetLeftpx;
     mySize.offsetTop = offsetToppx;
 
     //the limits of left and top value on screen before shifting
-    minL = (0 - (widthDiff));
-    maxL = (mySize.width + (widthDiff / 2));
+    minL = ( 0 - ( widthDiff ) );
+    maxL = ( mySize.width + ( widthDiff / 2 ) );
 
-    minT = (0 - (heightDiff / 2));
-    maxT = (mySize.height + (heightDiff / 2));
+    minT = ( 0 - ( heightDiff / 2 ) );
+    maxT = ( mySize.height + ( heightDiff / 2 ) );
 
     //$j('squaremile').style.backgroundPosition = offsetLeftpx+"px "+offsetToppx+"px";
 
-    for (var x = 0; x < mySize.numCols; x++) {
-        for (var y = 0; y < mySize.numRows; y++) {
+    for ( var x = 0; x < mySize.numCols; x++ ) {
+        for ( var y = 0; y < mySize.numRows; y++ ) {
 
             //new left is the offset + pixel feet * column we are on
-            newLeft = ((offsetLeftpx) + (x * mySize.oneFoot * mySize.mag));
-            newTop = ((offsetToppx) + (y * mySize.oneFoot * mySize.mag));
+            newLeft = ( ( offsetLeftpx ) + ( x * mySize.oneFoot * mySize.mag ) );
+            newTop = ( ( offsetToppx ) + ( y * mySize.oneFoot * mySize.mag ) );
 
             //this logic takes care of moving divs from left to right, up to down, etc
 
-            if (newLeft > maxL) {
-                newLeft -= (mySize.totalWidth);
-            } else if (newLeft < minL) {
-                newLeft += (mySize.totalWidth);
+            if ( newLeft > maxL ) {
+                newLeft -= ( mySize.totalWidth );
+            } else if ( newLeft < minL ) {
+                newLeft += ( mySize.totalWidth );
             };
 
-            if (newTop > maxT) {
-                newTop -= (mySize.totalHeight);
-            } else if (newTop < (0 - heightDiff) * mySize.mag) {
-                newTop += (mySize.totalHeight);
+            if ( newTop > maxT ) {
+                newTop -= ( mySize.totalHeight );
+            } else if ( newTop < ( 0 - heightDiff ) * mySize.mag ) {
+                newTop += ( mySize.totalHeight );
             };
             //end that logic block
 
             //figure out which foot we are actually looking at	
-            var mileX = ((newLeft - offsetLeftpx) / ((scale) * 864)) + 1 + xdiff;
-            var mileY = ((newTop - offsetToppx) / ((scale) * 864)) + 1 + ydiff;
+            var mileX = ( ( newLeft - offsetLeftpx ) / ( ( scale ) * 864 ) ) + 1 + xdiff;
+            var mileY = ( ( newTop - offsetToppx ) / ( ( scale ) * 864 ) ) + 1 + ydiff;
 
-            var object = $j("#c" + x + "r" + y);
+            var object = $j( "#c" + x + "r" + y );
 
 
-            object.css({
+            object.css( {
                 left: newLeft + "px",
                 top: newTop + "px"
-            });
+            } );
 
             //reset z index if not selected
-            if (object.attr('selected') != 'true') {
-                object.css({
+            if ( object.attr( 'selected' ) != 'true' ) {
+                object.css( {
                     //zIndex: (5280-(mileY))+(5280-(mileX))
-                    zIndex: defaultZIndex(mileY, mileX)
-                });
+                    zIndex: defaultZIndex( mileY, mileX )
+                } );
             };
 
-            object.get(0).className = "footBlock " + mileX + "" + mileY;
+            object.get( 0 ).className = "footBlock " + mileX + "" + mileY;
 
-            if (counter == 9 && object.html() == "") {
-                object.attr({
+            if ( counter == 9 && object.html() == "" ) {
+                object.attr( {
                     forcereload: 1
-                });
+                } );
             };
 
-            if ((object.attr('milex') != mileX) || (object.attr('miley') != mileY) || mySize.travelling == 99) {
-                object.attr({
+            if ( ( object.attr( 'milex' ) != mileX ) || ( object.attr( 'miley' ) != mileY ) || mySize.travelling == 99 ) {
+                object.attr( {
                     forcereload: 1,
                     milex: mileX,
                     miley: mileY
-                });
+                } );
 
-                object.html('');
+                object.html( '' );
             };
 
         };
@@ -274,145 +259,145 @@ function moveScreen() {
 };
 
 //do the ajax call to load mile content
-function makeMapCall(loc) {
-    if (mySize.scale > 9) {
+function makeMapCall( loc ) {
+    if ( mySize.scale > 9 ) {
         var arr = loc ? loc : loadArray;
 
-        if (arr.length > 0 || loc) {
-            postArray = js_array_to_php_array(arr);
+        if ( arr.length > 0 || loc ) {
+            postArray = js_array_to_php_array( arr );
         } else {
             return;
         };
 
-        loadFile = "array=" + escape(postArray);
+        loadFile = "array=" + escape( postArray );
         loadFile += "&scale=" + mySize.scale;
 
-        $j.ajax({
+        $j.ajax( {
             url: '/map/get',
             type: 'POST',
             data: loadFile,
             success: insertIntoFoot
-        });
+        } );
 
     };
 };
 
-function insertIntoFoot(json) {
+function insertIntoFoot( json ) {
 
-    if (init == false) {
+    if ( init == false ) {
         init = true;
 
-        $j('#squaremile').css({
+        $j( '#squaremile' ).css( {
             backgroundColor: '#fff'
-        });
+        } );
     };
 
-    eval('result = ' + json);
+    eval( 'result = ' + json );
 
-    for (var i in result.feet) {
+    for ( var i in result.feet ) {
 
-        foot = $j('.' + i);
+        foot = $j( '.' + i );
 
-        if (foot.get(0)) {
+        if ( foot.get( 0 ) ) {
 
-            content = result.feet[i];
-            foot.html(content);
-            loadImages(i);
+            content = result.feet[ i ];
+            foot.html( content );
+            loadImages( i );
 
-            foot.css({ backgroundImage: 'none' });
+            foot.css( { backgroundImage: 'none' } );
         } else {
 
         };
     };
 
-    for (var i in result.empty) {
+    for ( var i in result.empty ) {
 
-        foot = $j('.' + i);
-        if (foot) {
-            foot.html('<!-- -->'); //blank will cause reload
+        foot = $j( '.' + i );
+        if ( foot ) {
+            foot.html( '<!-- -->' ); //blank will cause reload
             //foot.css({ backgroundImage:'url(static/white.jpg)' });
         };
     };
 
-    if (selectedElement.toSelect) {
-        doSelect(selectedElement.toSelect);
+    if ( selectedElement.toSelect ) {
+        doSelect( selectedElement.toSelect );
     };
 };
 
 //called to load images from map
-function loadImages(footClass) {
+function loadImages( footClass ) {
 
     //console.log(footClass, 'footClass' ); //1143
     // all the images inside of foot
-    images = $j('div.' + footClass + ' a img');
+    images = $j( 'div.' + footClass + ' a img' );
 
     //replace the low res version w full
     //fix this - not preloading
-    images.each(function () {
-        src = this.src.replace("/thumbs", "/original");
+    images.each( function() {
+        src = this.src.replace( "/thumbs", "/original" );
         this.src = src;
-    });
+    } );
 
     //prevent tiny earl
-    foot.click(function () {
+    foot.click( function() {
         return false;
-    });
+    } );
 
 };
 
-function js_array_to_php_array(a) {
+function js_array_to_php_array( a ) {
     var a_php = "";
     var total = 0;
-    for (var key in a) {
+    for ( var key in a ) {
         total++;
         a_php = a_php + "s:" +
-            String(key).length + ":\"" + String(key) + "\";s:" +
-            String(a[key]).length + ":\"" + String(a[key]) + "\";";
+            String( key ).length + ":\"" + String( key ) + "\";s:" +
+            String( a[ key ] ).length + ":\"" + String( a[ key ] ) + "\";";
     };
     a_php = "a:" + total + ":{" + a_php + "}";
     return a_php;
 };
 
 //make a shadow - elelment is on screen
-function makeshadow(picID) {
+function makeshadow( picID ) {
 
     selectedElement.isSelected = picID;
     selectedElement.toSelect = null;
 
     //image selected
-    obj = $j('#' + picID);
-    obj.css({ zIndex: 50 });
+    obj = $j( '#' + picID );
+    obj.css( { zIndex: 50 } );
 
     //the foot image is in
-    p = obj.parents('div.footBlock');
-    p.css({
+    p = obj.parents( 'div.footBlock' );
+    p.css( {
         zIndex: 50000,
         //backgroundColor: '#f00' 
-    }).attr({ selected: 'true' });
+    } ).attr( { selected: 'true' } );
 
     //create in DOM
-    shadow = document.createElement('img');
+    shadow = document.createElement( 'img' );
 
-    $j(shadow).attr({
+    $j( shadow ).attr( {
         src: '/static/shadow.png',
-        width: (obj.width() * 1.25),
-        height: (obj.height() * 1.25),
+        width: ( obj.width() * 1.25 ),
+        height: ( obj.height() * 1.25 ),
         id: 'contentShadow'
-    }).css({
-        left: (parseFloat(obj.css('left')) - ((obj.width() * 1.25) - obj.width()) / 2) + 'px',
-        top: (parseFloat(obj.css('top')) - ((obj.height() * 1.25) - obj.height()) / 2) + 'px',
+    } ).css( {
+        left: ( parseFloat( obj.css( 'left' ) ) - ( ( obj.width() * 1.25 ) - obj.width() ) / 2 ) + 'px',
+        top: ( parseFloat( obj.css( 'top' ) ) - ( ( obj.height() * 1.25 ) - obj.height() ) / 2 ) + 'px',
         zIndex: 49
-    });
+    } );
 
-    obj.after(shadow);
+    obj.after( shadow );
 
     //the scale as relative to 72dpi
-    scale = (mySize.scale / 72);
+    scale = ( mySize.scale / 72 );
     pixelFoot = scale * 864;
 
     //offset left & top
-    lft = ((parseInt(obj.css('left'))) + (parseInt(obj.width()) / 2)) / scale;
-    tp = ((parseInt(obj.css('top'))) + (parseInt(obj.height()) / 2)) / scale;
+    lft = ( ( parseInt( obj.css( 'left' ) ) ) + ( parseInt( obj.width() ) / 2 ) ) / scale;
+    tp = ( ( parseInt( obj.css( 'top' ) ) ) + ( parseInt( obj.height() ) / 2 ) ) / scale;
 
     var goToCoords = {
         x: mySize.myX,
@@ -421,96 +406,96 @@ function makeshadow(picID) {
     };
 
     imgpos = obj.offset();
-    imgwid = parseInt(obj.width());
-    imghei = parseInt(obj.height());
+    imgwid = parseInt( obj.width() );
+    imghei = parseInt( obj.height() );
 
-    if (imgpos) {
-        if (imgpos.left < 0 || (imgpos.left + imgwid) > mySize.width) {
-            goToCoords.x = ((p.attr('mileX') - 1) * 864) + lft;
+    if ( imgpos ) {
+        if ( imgpos.left < 0 || ( imgpos.left + imgwid ) > mySize.width ) {
+            goToCoords.x = ( ( p.attr( 'mileX' ) - 1 ) * 864 ) + lft;
             goToCoords.move = true;
         }
 
-        if (imgpos.top < 0 || (imgpos.top + imghei) > mySize.height) {
-            goToCoords.y = ((p.attr('mileY') - 1) * 864) + tp;
+        if ( imgpos.top < 0 || ( imgpos.top + imghei ) > mySize.height ) {
+            goToCoords.y = ( ( p.attr( 'mileY' ) - 1 ) * 864 ) + tp;
             goToCoords.move = true;
         }
     };
 
     //fix if off bottom of screen
-    offsetY = parseInt(obj.height());
-    offsetX = parseInt(obj.width());
+    offsetY = parseInt( obj.height() );
+    offsetX = parseInt( obj.width() );
 
     //adjst for map overlap
-    if (offsetY > mySize.height) {
-        diffY = (offsetY - mySize.height) / 2;
-        goToCoords['y'] += diffY;
+    if ( offsetY > mySize.height ) {
+        diffY = ( offsetY - mySize.height ) / 2;
+        goToCoords[ 'y' ] += diffY;
     } else {
         diffY = 0;
     };
 
-    fig = (mySize.width - offsetX) / 2;
+    fig = ( mySize.width - offsetX ) / 2;
 
-    if (fig < 600) {
-        diffX = (500 - fig);
-        goToCoords['x'] += diffX;
+    if ( fig < 600 ) {
+        diffX = ( 500 - fig );
+        goToCoords[ 'x' ] += diffX;
     } else {
         diffX = 0;
     };
 
-    if (goToCoords.move == true) {
+    if ( goToCoords.move == true ) {
         //move to prevent overlap w map
-        goToLoc(goToCoords);
+        goToLoc( goToCoords );
     } else {
         //in the right spot
     };
 
     //show the word balloon
-    var comments = document.createElement('div');
+    var comments = document.createElement( 'div' );
 
-    $j(comments).css({
-        left: parseInt(obj.css('left')) + parseInt(obj.width()) - (40 * scale) + "px",
-        top: parseInt(obj.css('top')) + parseInt(obj.height()) - 322 + "px"
-    }).attr({
+    $j( comments ).css( {
+        left: parseInt( obj.css( 'left' ) ) + parseInt( obj.width() ) - ( 40 * scale ) + "px",
+        top: parseInt( obj.css( 'top' ) ) + parseInt( obj.height() ) - 322 + "px"
+    } ).attr( {
         id: 'wordBalloon'
-    }).html(
+    } ).html(
         '<div id="closeBalloon" onclick="doSelect(\'' + picID + '\' );"></div><div id="balloonContent"></div>'
-        );
+    );
 
-    p.append(comments);
+    p.append( comments );
 
-    getComments(picID);
+    getComments( picID );
 
     return true;
 };
 
-function defaultZIndex(row, col) {
-    return (5280 - row) + (5280 - col);
+function defaultZIndex( row, col ) {
+    return ( 5280 - row ) + ( 5280 - col );
 };
 
 //doubleclick on content function
-function doSelect(picID) {
+function doSelect( picID ) {
 
     selectedElement.toSelect = null;
 
     //something is selected? deselct it
-    if (o = selectedElement.isSelected) {
+    if ( o = selectedElement.isSelected ) {
 
         //the selected image
-        $j('#' + o).css({
+        $j( '#' + o ).css( {
             zIndex: '1'
-        });
+        } );
 
-        $j('#contentShadow').remove();
-        $j('#wordBalloon').remove();
+        $j( '#contentShadow' ).remove();
+        $j( '#wordBalloon' ).remove();
 
         //the foot the image is in
-        p = $j('#' + o).parents('div.footBlock');
-        p.css({
+        p = $j( '#' + o ).parents( 'div.footBlock' );
+        p.css( {
             backgroundColor: 'transparent',
-            zIndex: defaultZIndex(p.attr('mileY'), p.attr('mileX'))
-        });
+            zIndex: defaultZIndex( p.attr( 'mileY' ), p.attr( 'mileX' ) )
+        } );
 
-        if (selectedElement.isSelected == picID) {
+        if ( selectedElement.isSelected == picID ) {
             selectedElement.isSelected = null;
             return false;
         };
@@ -518,8 +503,8 @@ function doSelect(picID) {
 
     selectedElement.isSelected = picID;
 
-    if ($j('#' + picID)) {
-        makeshadow(picID);
+    if ( $j( '#' + picID ) ) {
+        makeshadow( picID );
     };
 
     return true;
@@ -527,7 +512,7 @@ function doSelect(picID) {
 
 //automatic travelling - goes in 10 steps
 //called on map double click
-function goToLoc(coords) {
+function goToLoc( coords ) {
     //coords - array - required:
     //x: x loc in 72 dpi pixels
     //y: y loc in 72 dpi pixels
@@ -536,26 +521,26 @@ function goToLoc(coords) {
     //id: element to select once travel is complete
 
     //cancel any existing travels
-    if (intInterval) {
-        intInterval = window.clearInterval(intInterval);
+    if ( intInterval ) {
+        intInterval = window.clearInterval( intInterval );
     };
 
     //select something once we get there
-    if (coords['id']) {
-        if (coords['id'].indexOf('pic') == -1) {
-            coords['id'] = 'pic' + coords['id'];
+    if ( coords[ 'id' ] ) {
+        if ( coords[ 'id' ].indexOf( 'pic' ) == -1 ) {
+            coords[ 'id' ] = 'pic' + coords[ 'id' ];
         };
-        selectedElement.toSelect = coords['id'];
+        selectedElement.toSelect = coords[ 'id' ];
     };
 
     mySize.travelling = 1;
 
     //55 is 10+9+8..etc
-    travelX = Math.floor(mySize.myX - coords['x']) / 55;
-    travelY = Math.floor(mySize.myY - coords['y']) / 55;
+    travelX = Math.floor( mySize.myX - coords[ 'x' ] ) / 55;
+    travelY = Math.floor( mySize.myY - coords[ 'y' ] ) / 55;
 
-    if (!isNaN(travelX) && !isNaN(travelY)) {
-        intInterval = window.setInterval("doTravel(travelX, travelY, 10)", 50);
+    if ( !isNaN( travelX ) && !isNaN( travelY ) ) {
+        intInterval = window.setInterval( "doTravel(travelX, travelY, 10)", 50 );
     } else {
         //dbug('error in goToLoc' );
     };
@@ -563,17 +548,17 @@ function goToLoc(coords) {
 };
 
 // automatically postitions the map, with parameters set in goToLoc()
-function doTravel(travelX, travelY, count) {
+function doTravel( travelX, travelY, count ) {
 
     counter++;
 
-    mySize.myX -= (travelX * counter);
-    mySize.myY -= (travelY * counter);
+    mySize.myX -= ( travelX * counter );
+    mySize.myY -= ( travelY * counter );
 
     moveScreen();
 
-    if (counter >= count) {
-        intInterval = window.clearInterval(intInterval);
+    if ( counter >= count ) {
+        intInterval = window.clearInterval( intInterval );
         counter = 0;
         mySize.travelling = 0;
 
@@ -582,74 +567,74 @@ function doTravel(travelX, travelY, count) {
 };
 
 //get all comments for a selected id
-function getComments(div) {
+function getComments( div ) {
 
-    $j('#balloonContent').html('<img src="/static/ajax-loader.gif" class="balloonLoader"/>');
+    $j( '#balloonContent' ).html( '<img src="/static/ajax-loader.gif" class="balloonLoader"/>' );
 
-    id = div.replace(/pic/, '');
+    id = div.replace( /pic/, '' );
 
-    $j.ajax({
+    $j.ajax( {
         url: '/map/get-comments',
         type: 'POST',
         data: {
             id: id
         },
         success: returnComments
-    });
+    } );
 
 };
 
-function returnComments(html) {
-    $j('#balloonContent').html(html);
+function returnComments( html ) {
+    $j( '#balloonContent' ).html( html );
 
     //activate comment submit
-    $j('form#commentForm').click(function () {
+    $j( 'form#commentForm' ).click( function() {
         submitComment();
-    });
+    } );
 
     activeVote();
 };
 
-function showComment(id) {
-    $j('div.commentSection').each(function () {
-        $j(this).css({ display: 'none' });
-    });
+function showComment( id ) {
+    $j( 'div.commentSection' ).each( function() {
+        $j( this ).css( { display: 'none' } );
+    } );
 
-    $j('#commentSection' + id).css({ display: 'block' });
+    $j( '#commentSection' + id ).css( { display: 'block' } );
 
-    $j('div#commentTabs div.commentTab').each(function () {
-        $j(this).addClass('deSelected');
-    });
+    $j( 'div#commentTabs div.commentTab' ).each( function() {
+        $j( this ).addClass( 'deSelected' );
+    } );
 
-    $j('#commentTab' + id).removeClass('deSelected');
+    $j( '#commentTab' + id ).removeClass( 'deSelected' );
 };
 
 //activate the voting block
 function activeVote() {
     //attach listeners to voting block
-    $j('#thDown').click(parseVote);
-    $j('#thUp').click(parseVote);
+    $j( '#thDown' ).click( parseVote );
+    $j( '#thUp' ).click( parseVote );
 };
 
 //get a vote
 function parseVote() {
 
-    objid = this.getAttribute('for');
-    val = this.getAttribute('value');
+    objid = this.getAttribute( 'for' );
+    val = this.getAttribute( 'value' );
 
     //dont do ajax if the is current vote
-    if (!$j(this).hasClass('up')) {
-        vote(objid, val);
+    if ( !$j( this ).hasClass( 'up' ) ) {
+        vote( objid, val );
     };
 };
 
 //send a vote in
-function vote(objectid, direction) {
+function vote( objectid, direction ) {
     //direction -1= down, 1 = up
 
-    $j('#voteBlock').html('<img src="/static/thumbs-loading.png" title="loading..."/>');
+    $j( '#voteBlock' ).html( '<img src="/static/thumbs-loading.png" title="loading..."/>' );
 
-    $j.ajax({
+    $j.ajax( {
         url: '/content/vote',
         type: 'POST',
         data: {
@@ -657,15 +642,15 @@ function vote(objectid, direction) {
             direction: direction
         },
         success: receiveVote
-    });
+    } );
 };
 
-function receiveVote(json) {
+function receiveVote( json ) {
 
-    eval('result = ' + json);
+    eval( 'result = ' + json );
 
-    if (result.success == true) {
-        $j('#voteBlock').html(result.vote);
+    if ( result.success == true ) {
+        $j( '#voteBlock' ).html( result.vote );
         activeVote();
     } else {
 
@@ -675,12 +660,12 @@ function receiveVote(json) {
 
 
 
-function getThumb(vote, id) {
+function getThumb( vote, id ) {
     var voteBlock = "";
 
-    if (vote == 1) {
+    if ( vote == 1 ) {
         voteBlock += '<img src="/static/tup.gif" onclick="vote(' + id + ',-1)"/>';
-    } else if (vote == -1) {
+    } else if ( vote == -1 ) {
         voteBlock += '<img src="/static/tdown.gif" onclick="vote(' + id + ',1)"/>';
     } else {
         voteBlock += '<img src="/static/tdown.gif" onclick="vote(' + id + ',-1)"/>';
@@ -692,24 +677,24 @@ function getThumb(vote, id) {
 
 //add a comment to a a section
 function addComment() {
-    showComment('3');
-    $j('#squareComment').focus();
+    showComment( '3' );
+    $j( '#squareComment' ).focus();
 };
 
 function addTag() {
-    showComment('4');
-    $j('#squareTag').focus();
+    showComment( '4' );
+    $j( '#squareTag' ).focus();
 };
 
 //submit a comment, put into comment record
 function submitComment() {
 
-    var id = $j('#squareID').val();
-    var comment = $j('#squareComment').val();
+    var id = $j( '#squareID' ).val();
+    var comment = $j( '#squareComment' ).val();
 
-    $j('#commentBlock').html('<img src="/static/ajax-loader.gif"/>');
+    $j( '#commentBlock' ).html( '<img src="/static/ajax-loader.gif"/>' );
 
-    $j.ajax({
+    $j.ajax( {
         url: '/map/comment',
         type: 'POST',
         data: {
@@ -718,19 +703,19 @@ function submitComment() {
             comment: comment
         },
         success: returnComments
-    });
+    } );
 
 };
 
 //submit a tag, put into comment record
 function submitTag() {
 
-    var id = $j('#squareID').val();
-    var tag = $j('#squareTag').val();
+    var id = $j( '#squareID' ).val();
+    var tag = $j( '#squareTag' ).val();
 
-    showComment('2');
+    showComment( '2' );
 
-    $j.ajax({
+    $j.ajax( {
         url: '/map/tag',
         type: 'POST',
         data: {
@@ -738,13 +723,13 @@ function submitTag() {
             tag: tag
         },
         success: returnComments
-    });
+    } );
 
 };
 
 //flag content as innaprropriate
-function doFlag(id, reason) {
-    $j.ajax({
+function doFlag( id, reason ) {
+    $j.ajax( {
         url: '/map/flag',
         type: 'POST',
         data: {
@@ -752,22 +737,22 @@ function doFlag(id, reason) {
             reason: reason
         },
         success: receiveFlag
-    });
+    } );
 };
 
-function receiveFlag(json) {
-    eval('result = ' + json);
+function receiveFlag( json ) {
+    eval( 'result = ' + json );
 
-    if (result.msg) {
-        $j('#lightboxcontent').html(result.msg);
+    if ( result.msg ) {
+        $j( '#lightboxcontent' ).html( result.msg );
     } else {
         closeLB();
     };
 };
 
 //do this when pic is missing
-function autoFlag(id) {
-    $j.ajax({
+function autoFlag( id ) {
+    $j.ajax( {
         url: '/map/flag',
         type: 'POST',
         data: {
@@ -775,10 +760,10 @@ function autoFlag(id) {
             reason: 'missing'
         },
         success: receiveFlag
-    });
+    } );
 };
 
-function receiveautoFlag(json) {
+function receiveautoFlag( json ) {
 
 };
 
@@ -794,25 +779,15 @@ function goToRandom() {
         y: Math.random() * 4561920
     };
 
-    goToLoc(coords);
-};
-
-//posMap positions the cursor to the appropriate location on the map
-function posMap() {
-    scale = (mySize.scale / 72);
-
-    $j('#marker').css({ left: (mySize.myX / 24000) + "px" });
-    $j('#marker').css({ top: (mySize.myY / 24000) + "px" });
-
-
+    goToLoc( coords );
 };
 
 //moves the mile when the map target is dragged
-function posMile(objectX, objectY) {
-    scale = (mySize.scale / 72);
+function posMile( objectX, objectY ) {
+    scale = ( mySize.scale / 72 );
 
-    mySize.myX = Math.floor(objectX * 24010.105);
-    mySize.myY = Math.floor(objectY * 24010.105);
+    mySize.myX = Math.floor( objectX * 24010.105 );
+    mySize.myY = Math.floor( objectY * 24010.105 );
 
     moveScreen();
 };
@@ -820,10 +795,10 @@ function posMile(objectX, objectY) {
 
 
 
-function getCoordinates(e) {
+function getCoordinates( e ) {
 
     //get mouse properties
-    var e = new MouseEvent(e);
+    var e = new MouseEvent( e );
 
     //relX=(e.x-12)-myX-(mySize.width/2);
     //relY=(e.y-12)-myY-(mySize.height/2);
@@ -831,22 +806,22 @@ function getCoordinates(e) {
     //the location of the mouse relative to the top left corner
     //top left (0,0)
     //bottom right (4561919,4561919)
-    relX = (mySize.myX) + (e.clientX) - (mySize.width / 2);
-    relY = (mySize.myY) + (e.clientY) - (mySize.height / 2);
+    relX = ( mySize.myX ) + ( e.clientX ) - ( mySize.width / 2 );
+    relY = ( mySize.myY ) + ( e.clientY ) - ( mySize.height / 2 );
 
     //the inch that the mouse is in.
     //top left(1,1)
     //bottom right(63360,63360)
-    squareX = Math.ceil(relX / 72);
-    squareY = Math.ceil(relY / 72);
+    squareX = Math.ceil( relX / 72 );
+    squareY = Math.ceil( relY / 72 );
 
     //footX and footY refer to square foot sized areas - 1 thru 5280 
-    footX = Math.ceil(squareX / 12);
-    footY = Math.ceil(squareY / 12);
+    footX = Math.ceil( squareX / 12 );
+    footY = Math.ceil( squareY / 12 );
 
     //the c0r0 div type
-    colType = ((footX - 1) % (mySize.numCols));
-    rowType = ((footY - 1) % (mySize.numRows));
+    colType = ( ( footX - 1 ) % ( mySize.numCols ) );
+    rowType = ( ( footY - 1 ) % ( mySize.numRows ) );
 
     msgText = "relX: " + relX + "\n";
     msgText += "relY: " + relY + "\n";
@@ -861,70 +836,70 @@ function getCoordinates(e) {
 
 //activate the add picture, link or upload - not waiting list
 function dragActivate() {
-    $j('#smallAdd').draggable({
+    $j( '#smallAdd' ).draggable( {
         start: activateSmallAdd,
         drag: smallAddDrag,
         stop: checkSmallAdd
-    });
+    } );
 };
 
 function activateSmallAdd() {
 
     //remove the base url
-    thumbsrc = (addPic.source);
+    thumbsrc = ( addPic.source );
 
-    posImg = document.createElement('img');
+    posImg = document.createElement( 'img' );
 
-    $j(posImg).attr({
+    $j( posImg ).attr( {
         id: 'posImg',
         src: thumbsrc,
-        width: (addPic.width * mySize.scale),
-        height: (addPic.height * mySize.scale)
-    }).css({
+        width: ( addPic.width * mySize.scale ),
+        height: ( addPic.height * mySize.scale )
+    } ).css( {
         left: '100px',
         top: '100px'
-    });
+    } );
 
-    $j('#squaremile').append(posImg);
+    $j( '#squaremile' ).append( posImg );
 
-    $j("#posImg").animate({
+    $j( "#posImg" ).animate( {
         opacity: .5
-    });
+    } );
 
 };
 
-function smallAddDrag(e) {
-    posImg = $j('#posImg');
+function smallAddDrag( e ) {
+    posImg = $j( '#posImg' );
 
     picWidth = addPic.width * mySize.scale;
     picHeight = addPic.height * mySize.scale;
 
-    smX = e.clientX - (picWidth / 2);
-    smY = e.clientY - (picHeight / 2);
+    smX = e.clientX - ( picWidth / 2 );
+    smY = e.clientY - ( picHeight / 2 );
 
     //the actual x and y coorinates, in inches, from the top left
-    mLeft = Math.floor(((mySize.myX + ((e.clientX - (mySize.width / 2)) * (72 / mySize.scale))) / 72) - (addPic.width / 2));
-    mTop = Math.floor(((mySize.myY + ((e.clientY - (mySize.height / 2)) * (72 / mySize.scale))) / 72) - (addPic.height / 2));
+    mLeft = Math.floor( ( ( mySize.myX + ( ( e.clientX - ( mySize.width / 2 ) ) * ( 72 / mySize.scale ) ) ) / 72 ) - ( addPic.width / 2 ) );
+    mTop = Math.floor( ( ( mySize.myY + ( ( e.clientY - ( mySize.height / 2 ) ) * ( 72 / mySize.scale ) ) ) / 72 ) - ( addPic.height / 2 ) );
 
     addPic.inchX = mLeft;
     addPic.inchY = mTop;
 
     //snap to grid / scale
-    adjX = (((mySize.myX * (mySize.scale / 72)) + e.clientX - (mySize.width / 2) - (picWidth / 2)) % mySize.scale);
-    adjY = ((mySize.myY * (mySize.scale / 72)) + e.clientY - (mySize.height / 2) - (picHeight / 2)) % mySize.scale;
+    adjX = ( ( ( mySize.myX * ( mySize.scale / 72 ) ) + e.clientX - ( mySize.width / 2 ) - ( picWidth / 2 ) ) % mySize.scale );
+    adjY = ( ( mySize.myY * ( mySize.scale / 72 ) ) + e.clientY - ( mySize.height / 2 ) - ( picHeight / 2 ) ) % mySize.scale;
 
-    if (adjX < 0) {
+    if ( adjX < 0 ) {
         adjX += mySize.scale;
     };
 
-    if (adjY < 0) {
+    if ( adjY < 0 ) {
         adjY += mySize.scale;
     };
 
-    smX -= (adjX);
-    smY -= (adjY);
+    smX -= ( adjX );
+    smY -= ( adjY );
 
-    posImg.css({ left: smX + "px", top: smY + "px" });
+    posImg.css( { left: smX + "px", top: smY + "px" } );
 };
 
 //check to see if dragged picture overlaps others on mouse up
@@ -932,27 +907,27 @@ function checkSmallAdd() {
 
     postVars = activateCpanelPlacer();
 
-    $j.ajax({
+    $j.ajax( {
         data: postVars,
         success: checkOverlap,
         type: 'POST',
         url: '/mile/add/',
-    });
+    } );
 };
 
 //response from ajax, to see if pic was inserted or overlaps
-function checkOverlap(json) {
+function checkOverlap( json ) {
     //not from waiting list
-    eval('result = ' + json);
+    eval( 'result = ' + json );
 
-    if (result.success == true) {
+    if ( result.success == true ) {
 
-        p = $j('#' + selectedElement.isSelected).parent();
+        p = $j( '#' + selectedElement.isSelected ).parent();
 
-        p.css({
+        p.css( {
             //zIndex: defaultZIndex(5280-(p.attr('mileY')))+(5280-(p.attr('mileX')))
-            zIndex: defaultZIndex(p.attr('mileY'), p.attr('mileX'))
-        });
+            zIndex: defaultZIndex( p.attr( 'mileY' ), p.attr( 'mileX' ) )
+        } );
 
         imageAdded();
 
@@ -963,56 +938,56 @@ function checkOverlap(json) {
 
 
 //move an image that is already placed on the mile
-function move(id) {
+function move( id ) {
 
     //remove the shadow
-    $j('#contentShadow').remove();
+    $j( '#contentShadow' ).remove();
 
     //remove the word balloon
-    $j('#wordBalloon').remove();
+    $j( '#wordBalloon' ).remove();
 
     //set up the positioning div		
     id = 'pic' + id;
-    milepic = $j('#' + id);
+    milepic = $j( '#' + id );
 
-    milepic.css({
+    milepic.css( {
         backgroundColor: '#D16A38',
         border: "2px solid #D16A38",
         opacity: .5,
         paddingBottom: "20px"
-    });
+    } );
 
     //set up the scaled thumb
-    $j('#smallAdd').remove();
+    $j( '#smallAdd' ).remove();
 
     //set up varialbes in global identifier
     addPic = {
-        height: Math.ceil(milepic.attr('height') / mySize.scale),
-        width: Math.ceil(milepic.attr('width') / mySize.scale),
-        source: milepic.attr('src'),
+        height: Math.ceil( milepic.attr( 'height' ) / mySize.scale ),
+        width: Math.ceil( milepic.attr( 'width' ) / mySize.scale ),
+        source: milepic.attr( 'src' ),
         move: {
-            x: milepic.css('left'),
-            y: milepic.css('top'),
+            x: milepic.css( 'left' ),
+            y: milepic.css( 'top' ),
             id: id
         }
     };
 
-    var smallAdd = document.createElement('img');
+    var smallAdd = document.createElement( 'img' );
 
-    src = milepic.attr('src');
+    src = milepic.attr( 'src' );
 
-    $j(smallAdd).attr({
+    $j( smallAdd ).attr( {
         id: 'smallAdd',
         src: src,
-        width: (addPic.width * mySize.scale),
-        height: (addPic.height * mySize.scale)
-    }).css({
-        left: milepic.css('left'),
-        top: milepic.css('top'),
+        width: ( addPic.width * mySize.scale ),
+        height: ( addPic.height * mySize.scale )
+    } ).css( {
+        left: milepic.css( 'left' ),
+        top: milepic.css( 'top' ),
         zIndex: 5000
-    });
+    } );
 
-    milepic.parent().append(smallAdd);
+    milepic.parent().append( smallAdd );
 
     //activate the add picture
     dragActivate();
@@ -1023,34 +998,34 @@ function setBrowserHash() {
 
     scale = mySize.scale / 72;
 
-    newHash = "x=" + Math.floor(mySize.myX) + "&y=" + Math.floor(mySize.myY);
+    newHash = "x=" + Math.floor( mySize.myX ) + "&y=" + Math.floor( mySize.myY );
     newHash += "&s=" + mySize.scale;
 
     oldHash = mySize.hash;
 
-    if ((newHash != oldHash) && (!isNaN(Math.floor(mySize.myX)))) {
+    if ( ( newHash != oldHash ) && ( !isNaN( Math.floor( mySize.myX ) ) ) ) {
         mySize.hash = "#" + newHash;
         window.location.hash = newHash;
     };
 };
 
 //flag an offensive, copyight image etc
-function startReport(id) {
+function startReport( id ) {
     content = "<h2>What do you want to report?<h2>";
 
-    image = $j('#pic' + id).attr('src');
+    image = $j( '#pic' + id ).attr( 'src' );
 
     var pic = new Image();
     pic.src = image;
     width = pic.width;
     height = pic.height;
 
-    if (addPic.height > addPic.width) {
+    if ( addPic.height > addPic.width ) {
         var smallH = 200;
-        var smallW = (width / height) * 200;
+        var smallW = ( width / height ) * 200;
     } else {
         var smallW = 200;
-        var smallH = (height / width) * 200;
+        var smallH = ( height / width ) * 200;
     };
 
     content += '<img src="' + image + '" style="float:right" width="' + smallW + '" height="' + smallH + '"/>';
@@ -1062,73 +1037,73 @@ function startReport(id) {
     content += '<li><a onclick="closeLB();">Never Mind</a></li>';
 
     //new Lightbox(content, true);
-    new Lightbox({
+    new Lightbox( {
         close: true,
         content: content,
         title: 'Report bad content'
-    });
+    } );
 };
 
 
 ///cpanel below
 
 //item from control1 is clicked, load submenu
-function getControl(which) {
+function getControl( which ) {
 
     //remove selected from others 
-    $j('#control1 a').each(function (index) {
-        $j(this).removeClass('selected');
-        if (this.id == 'menu_' + which) {
+    $j( '#control1 a' ).each( function( index ) {
+        $j( this ).removeClass( 'selected' );
+        if ( this.id == 'menu_' + which ) {
             arrowIndex = index;
         };
-    });
+    } );
 
     //add selected state 
-    $j('#menu_' + which).addClass('selected');
+    $j( '#menu_' + which ).addClass( 'selected' );
 
     var msgText = '<ul>';
 
-    for (var i = 0; i < cpanelControls[which].length; i += 2) {
+    for ( var i = 0; i < cpanelControls[ which ].length; i += 2 ) {
         msgText += '<li>';
-        msgText += '<a class="' + (arrowIndex == (i / 2) ? 'special' : '') + '" ' + cpanelControls[which][i + 1] + '>' + cpanelControls[which][i];
+        msgText += '<a class="' + ( arrowIndex == ( i / 2 ) ? 'special' : '' ) + '" ' + cpanelControls[ which ][ i + 1 ] + '>' + cpanelControls[ which ][ i ];
         msgText += '</a></li>';
     };
 
-    $j('#control2').html(msgText + '</ul>');
+    $j( '#control2' ).html( msgText + '</ul>' );
 };
 
 //get information about a friend
-function getFriendInfo(id, obj) {
+function getFriendInfo( id, obj ) {
 
-    $j('#friendProfilemain').html('Loading...');
-    $j('#friendAddmain').html('Loading...');
-    $j('#friendCommentmain').html('Loading...');
-    $j('#m4').slideDown();
+    $j( '#friendProfilemain' ).html( 'Loading...' );
+    $j( '#friendAddmain' ).html( 'Loading...' );
+    $j( '#friendCommentmain' ).html( 'Loading...' );
+    $j( '#m4' ).slideDown();
 
-    setTitle('m4', obj.getAttribute('user'));
-    setNav('m4', 'off');
+    setTitle( 'm4', obj.getAttribute( 'user' ) );
+    setNav( 'm4', 'off' );
 
-    $j.ajax({
+    $j.ajax( {
         url: '/profile/public',
         type: 'POST',
         data: {
             userid: id
         },
-        success: function (data) {
-            receiveFriendProfile(data, id);
+        success: function( data ) {
+            receiveFriendProfile( data, id );
         }
-    });
+    } );
 };
 
-function receiveFriendProfile(json, id) {
+function receiveFriendProfile( json, id ) {
 
-    eval('result = ' + json);
+    eval( 'result = ' + json );
     profile = result.profile;
 
-    $j('#friendProfilemain').html(profile);
+    $j( '#friendProfilemain' ).html( profile );
 
     //set up thumbs menu for friend recent adds
-    friendRecent = new thumbsMenu({
+    friendRecent = new thumbsMenu( {
         action: '/thumbs/recentAdds',
         title: 'Recently Added',
         container: 'friendAdd',
@@ -1136,105 +1111,105 @@ function receiveFriendProfile(json, id) {
         listThumbs: result.adds,
         rss: '/rss',
         vars: { userid: id }
-    });
+    } );
 
     //set up thumbs menu for friend recent comments
-    friendComents = new thumbsMenu({
+    friendComents = new thumbsMenu( {
         action: '/thumbs/recentComments',
         title: 'Recent Comments',
         container: 'friendComment',
         limit: 4,
         listThumbs: result.comments,
         vars: { userid: id }
-    });
+    } );
 
-    $j('#m4').slideDown();
+    $j( '#m4' ).slideDown();
 };
 
 //get friends of logged in user
 function getFriends() {
-    userFriends = new thumbsMenu({
+    userFriends = new thumbsMenu( {
         action: '/thumbs/friends',
         title: 'Your Friends',
         container: 'm2',
         rss: '/rss/friends/userid/93'
-    });
+    } );
 
-    $j('#m2').slideDown();
+    $j( '#m2' ).slideDown();
 };
 
 //get favorites of logged in user
 function getFaves() {
-    userFaves = new thumbsMenu({
+    userFaves = new thumbsMenu( {
         action: '/thumbs/favorites',
         title: 'Your Favorites',
         container: 'm2'
-    });
+    } );
 
-    $j('#m2').slideDown();
+    $j( '#m2' ).slideDown();
 };
 
 
 //retrieve user information
 function getAccount() {
 
-    $j('#m2main').html('Loading Your Account Info...<br/><img src="/static/ajax-loader.gif"/>');
-    $j('#m2err').html('');
+    $j( '#m2main' ).html( 'Loading Your Account Info...<br/><img src="/static/ajax-loader.gif"/>' );
+    $j( '#m2err' ).html( '' );
 
-    setTitle('m2', 'Your Account Info');
-    setNav('m2', 'off');
+    setTitle( 'm2', 'Your Account Info' );
+    setNav( 'm2', 'off' );
 
-    $j('#m2').slideDown();
+    $j( '#m2' ).slideDown();
 
-    $j.ajax({
+    $j.ajax( {
         url: '/profile/account',
         type: 'POST',
         success: receiveAccount
-    });
+    } );
 };
 
 //received user profile info
-function receiveAccount(html) {
+function receiveAccount( html ) {
 
     //output to screen
-    $j('#m2main').html(html);
-    $j('#m2').slideDown();
+    $j( '#m2main' ).html( html );
+    $j( '#m2' ).slideDown();
 };
 
 //takes new profile info and sends back to server
 function UpdateProfile() {
-    query = prepArrayForAjax(getFormVars('userAccount'));
+    query = prepArrayForAjax( getFormVars( 'userAccount' ) );
 
-    $j.ajax({
+    $j.ajax( {
         url: '/profile/update-account',
         type: 'POST',
         data: query,
         success: profileSuccess
-    });
+    } );
 
 };
 
 //called after user updates account information
-function profileSuccess(json) {
+function profileSuccess( json ) {
 
-    eval('result = ' + json);
+    eval( 'result = ' + json );
 
     format = '';
 
-    if (result.success.length > 0) {
-        for (i in result.success) {
-            format += '<li>' + result.success[i] + '</li>';
+    if ( result.success.length > 0 ) {
+        for ( i in result.success ) {
+            format += '<li>' + result.success[ i ] + '</li>';
         };
     };
 
-    if (result.errors.length > 0) {
-        for (i in result.success) {
-            format += '<li>' + result.errors[i] + '</li>';
+    if ( result.errors.length > 0 ) {
+        for ( i in result.success ) {
+            format += '<li>' + result.errors[ i ] + '</li>';
         };
     }
 
-    $j('#m2main').html(format);
-    $j('#m2').slideDown();
+    $j( '#m2main' ).html( format );
+    $j( '#m2' ).slideDown();
 };
 
 
@@ -1252,120 +1227,120 @@ function addImage() {
 
     msgText += '	<span class="helperText">Enter full path to the image, <br/>eg http://www.server.com/pic.jpg</span>';
 
-    setTitle('m1', 'Hotlink to an image on the web');
-    setNav('m1', 'off');
+    setTitle( 'm1', 'Hotlink to an image on the web' );
+    setNav( 'm1', 'off' );
 
-    $j('#m1main').html(msgText);
-    $j('#m1err').html();
-    $j('#m1').slideDown();
+    $j( '#m1main' ).html( msgText );
+    $j( '#m1err' ).html();
+    $j( '#m1' ).slideDown();
 };
 
 //hotlink to an image, step 2
 function addImage2() {
-    contentInsert = $j('#imgLoc').val();
-    if (contentInsert) {
-        $j('#imgLoc').val('');
-        $j.ajax({
+    contentInsert = $j( '#imgLoc' ).val();
+    if ( contentInsert ) {
+        $j( '#imgLoc' ).val( '' );
+        $j.ajax( {
             data: {
                 content: contentInsert
             },
             success: uploadComplete,
             type: 'POST',
             url: '/content/add',
-        });
+        } );
 
-        $j('#m1main').html('Please Wait');
+        $j( '#m1main' ).html( 'Please Wait' );
     } else {
-        $j('#m1err').html('Try linking to an image file');
+        $j( '#m1err' ).html( 'Try linking to an image file' );
     };
 };
 
-function uploadComplete(json) {
-    eval('result = ' + json);
+function uploadComplete( json ) {
+    eval( 'result = ' + json );
 
-    if (result.success == true) {
-        readyToAdd('/content/original/' + result.name, result.dims.width, result.dims.height);
+    if ( result.success == true ) {
+        readyToAdd( '/content/original/' + result.name, result.dims.width, result.dims.height );
 
         //activate the add picture
         dragActivate();
     } else {
-        $j('#m1main').html('There was an error loading the file.  Please check the address and try again.');
+        $j( '#m1main' ).html( 'There was an error loading the file.  Please check the address and try again.' );
     };
 };
 
 //upload from your cpu
 function startUpload() {
 
-    setTitle('m1', 'Upload an image from your computer');
-    setNav('m1', 'off');
+    setTitle( 'm1', 'Upload an image from your computer' );
+    setNav( 'm1', 'off' );
 
     msgText = "The uploader is not quite working yet!  You can link an image on the web for now.";
 
-    $j('#m1main').html(msgText);
-    $j('#m1err').html('');
+    $j( '#m1main' ).html( msgText );
+    $j( '#m1err' ).html( '' );
 
-    $j('#m1').slideDown();
+    $j( '#m1' ).slideDown();
 };
 
 //get the list of images that are waiting for this user 
 //from plugin or email
 var getWaiting;
 
-function getWaitingList(start) {
-    getWaiting = new thumbsMenu({
+function getWaitingList( start ) {
+    getWaiting = new thumbsMenu( {
         action: '/thumbs/waiting',
         title: 'Your Waiting List',
         container: 'm2'
-    });
+    } );
 
-    $j('#m2').slideDown();
+    $j( '#m2' ).slideDown();
 };
 
-function getPopular(start) {
+function getPopular( start ) {
 
-    $j('#m2main').html('Loading popular...');
-    $j('#m2').slideDown();
+    $j( '#m2main' ).html( 'Loading popular...' );
+    $j( '#m2' ).slideDown();
 
-    popularThumbs = new thumbsMenu({
+    popularThumbs = new thumbsMenu( {
         action: '/thumbs/popular',
         title: 'Most Popular',
         container: 'm2'
-    });
+    } );
 };
 
 
-function getRecent(start) {
-    recentThumbs = new thumbsMenu({
+function getRecent( start ) {
+    recentThumbs = new thumbsMenu( {
         action: '/thumbs/recent',
         title: 'Recently Added',
         container: 'm2'
-    });
+    } );
 
-    $j('#m2').slideDown();
+    $j( '#m2' ).slideDown();
 };
 
 //get the coordinates from the coords="" attribute of an elemnt, go there
 function findCoords() {
-    text = "coords = " + $j(this).attr('coords');
-    eval(text);
+    text = "coords = " + $j( this ).attr( 'coords' );
+    eval( text );
 
-    goToLoc(coords);
+    goToLoc( coords );
 };
 
 
-function recDel(json) {
+function recDel( json ) {
 
 };
 
 //object to handle building next / prev menu items
-function thumbsMenu(vars, customQuery) {
+function thumbsMenu( vars, customQuery ) {
 
     var options = {
         action: 'getRecent', //the function that does the ajax call
         container: 'm2', //where it goes
         index: 0, //where we are in our list
         limit: 8, //how many thumbs do we show at once
-        listThumbs: new Array(0), //holds the aray of thumbs /coordinates
+        listThumbs: new Array( 0 ), //holds the aray of thumbs /coordinates
         rss: '', // url to RSS feed
         selected: 0, //which one we have clicked on
         title: 'Thumbs Menu', //the text to display in menu header
@@ -1373,72 +1348,72 @@ function thumbsMenu(vars, customQuery) {
     };
 
     //set variables passes in into the option
-    for (i in vars) {
-        options[i] = vars[i];
+    for ( i in vars ) {
+        options[ i ] = vars[ i ];
     };
 
     //define other parts of the menu
-    options.titleId = $j('#' + options.container + " .cTitle").get(0);
+    options.titleId = $j( '#' + options.container + " .cTitle" ).get( 0 );
     options.nextId = options.container + "next";
     options.prevId = options.container + "prev";
     options.mainId = options.container + "main";
 
-    $j('#' + options.prevId).css({ display: 'none' });
-    $j('#' + options.nextId).css({ display: 'none' });
+    $j( '#' + options.prevId ).css( { display: 'none' } );
+    $j( '#' + options.nextId ).css( { display: 'none' } );
 
     //toggle rss feed
-    if (options.rss) {
+    if ( options.rss ) {
         disp = 'block';
     } else {
         disp = 'none';
     };
 
-    rssfeed = $j('#' + options.container + ' a.btnRSS').css({ display: disp });
+    rssfeed = $j( '#' + options.container + ' a.btnRSS' ).css( { display: disp } );
 
-    rssfeed.attr('href', options.rss);
+    rssfeed.attr( 'href', options.rss );
 
-    var ajaxCall = function () {
+    var ajaxCall = function() {
         //set the message title
 
         options.titleId.innerHTML = "Loading " + options.title + "...";
-        $j('#' + options.mainId).html('<img src="/static/ajax-loader.gif"/>');
+        $j( '#' + options.mainId ).html( '<img src="/static/ajax-loader.gif"/>' );
 
-        var query = "start=" + (options.listThumbs.length) + "&" + prepForQuery(options.vars);
+        var query = "start=" + ( options.listThumbs.length ) + "&" + prepForQuery( options.vars );
 
-        $j.ajax({
+        $j.ajax( {
             data: query,
             type: 'POST',
-            success: function (json) {
-                eval('result = ' + json);
+            success: function( json ) {
+                eval( 'result = ' + json );
 
-                if (result.success == 'false') {
-                    $j('#' + options.container + 'main').html(result.html);
+                if ( result.success == 'false' ) {
+                    $j( '#' + options.container + 'main' ).html( result.html );
 
                     options.titleId.innerHTML = options.title;
 
                 } else {
-                    concatTo(result);
+                    concatTo( result );
 
                 };
             },
             url: options.action
-        });
+        } );
     };
 
 
     //add the new records we received via ajax to the array	
-    var concatTo = function (newThumbs) {
-        if (newThumbs.thumbs) {
+    var concatTo = function( newThumbs ) {
+        if ( newThumbs.thumbs ) {
             oldThumbs = options.listThumbs;
 
-            x = oldThumbs.concat(newThumbs.thumbs);
+            x = oldThumbs.concat( newThumbs.thumbs );
 
             options.listThumbs = x;
         } else {
 
         };
 
-        if (newThumbs.stamp) {
+        if ( newThumbs.stamp ) {
             options.vars.stamp = newThumbs.stamp;
         };
 
@@ -1448,80 +1423,80 @@ function thumbsMenu(vars, customQuery) {
         formatTitle();
     };
 
-    var formatTitle = function (title) {
+    var formatTitle = function( title ) {
 
-        if (title) {
+        if ( title ) {
             options.title = title;
         };
 
-        len = (options.index + options.limit) < options.listThumbs.length ? (options.index + options.limit) : options.listThumbs.length;
+        len = ( options.index + options.limit ) < options.listThumbs.length ? ( options.index + options.limit ) : options.listThumbs.length;
 
-        newtitle = options.title + " ( " + (options.index + 1) + " - " + len + " )";
+        newtitle = options.title + " ( " + ( options.index + 1 ) + " - " + len + " )";
 
         options.titleId.innerHTML = newtitle;
     };
 
     //decide if next and prev buttons are to show
-    var setNav = function () {
+    var setNav = function() {
 
-        if (options.listThumbs.length > (options.index + options.limit)) {
-            $j('#' + options.nextId).css({ visibility: 'visible' });
-            $j('#' + options.nextId).css({ display: 'inline' });
+        if ( options.listThumbs.length > ( options.index + options.limit ) ) {
+            $j( '#' + options.nextId ).css( { visibility: 'visible' } );
+            $j( '#' + options.nextId ).css( { display: 'inline' } );
         } else {
-            $j('#' + options.nextId).css({ visibility: 'hidden' });
-            $j('#' + options.nextId).css({ display: 'inline' });
+            $j( '#' + options.nextId ).css( { visibility: 'hidden' } );
+            $j( '#' + options.nextId ).css( { display: 'inline' } );
         };
 
     };
 
     //set action for the previous and next buttons
-    var formatNav = function () {
+    var formatNav = function() {
 
         //set the next button to go to the next set of thumbs
-        $j('#' + options.nextId).unbind('click').click(function () {
-            $j('#' + options.prevId).css({ visibility: 'visible' });
-            $j('#' + options.prevId).css({ display: 'inline' });
+        $j( '#' + options.nextId ).unbind( 'click' ).click( function() {
+            $j( '#' + options.prevId ).css( { visibility: 'visible' } );
+            $j( '#' + options.prevId ).css( { display: 'inline' } );
 
             options.index += options.limit;
             formatTitle();
             setNav();
             //if we are past the limit, do another ajax call
-            if (options.index + options.limit >= (options.listThumbs.length)) {
+            if ( options.index + options.limit >= ( options.listThumbs.length ) ) {
                 //disable the next button
-                $j('#' + options.nextId).css({ visibility: 'hidden' });
+                $j( '#' + options.nextId ).css( { visibility: 'hidden' } );
                 ajaxCall();
             } else {
                 formatThumbs();
             };
 
             return false;
-        });
+        } );
 
 
         //set the prev button
-        $j('#' + options.prevId).unbind('click').click(function () {
+        $j( '#' + options.prevId ).unbind( 'click' ).click( function() {
             options.index -= options.limit;
 
             formatTitle();
             setNav();
 
-            if (options.index >= 0) {
+            if ( options.index >= 0 ) {
                 formatThumbs();
             } else {
                 options.index = 0;
             };
 
-            if (options.index == 0) {
-                $j('#' + options.prevId).css({ visibility: 'hidden' });
+            if ( options.index == 0 ) {
+                $j( '#' + options.prevId ).css( { visibility: 'hidden' } );
             };
-        });
+        } );
     };
 
     //build the html that goes into whatever div
-    var formatThumbs = function () {
+    var formatThumbs = function() {
 
         //where we are in the index, plus the number of how many we want to see
-        end = (options.index + options.limit) < options.listThumbs.length ? (options.index + options.limit) : options.listThumbs.length;
+        end = ( options.index + options.limit ) < options.listThumbs.length ? ( options.index + options.limit ) : options.listThumbs.length;
 
         //the html we insert into the appropriate menu
         output = '<div>';
@@ -1531,32 +1506,32 @@ function thumbsMenu(vars, customQuery) {
 
 
 
-        for (i = options.index; i < end; i++) {
-            if (options.listThumbs[i]) {
+        for ( i = options.index; i < end; i++ ) {
+            if ( options.listThumbs[ i ] ) {
 
-                id = options.mainId + 'Thumb' + options.listThumbs[i]['id'];
+                id = options.mainId + 'Thumb' + options.listThumbs[ i ][ 'id' ];
 
                 output += '<div class="panelThumbs" id="' + id + '" ';
                 //add location if is in there - want to go to
-                if (options.listThumbs[i]['locX']) {
+                if ( options.listThumbs[ i ][ 'locX' ] ) {
 
                     coords = {
-                        x: options.listThumbs[i]['locX'],
-                        y: options.listThumbs[i]['locY'],
-                        id: options.listThumbs[i]['id']
+                        x: options.listThumbs[ i ][ 'locX' ],
+                        y: options.listThumbs[ i ][ 'locY' ],
+                        id: options.listThumbs[ i ][ 'id' ]
                     };
 
-                    output += 'coords=\'' + serial(coords) + '\' ';
+                    output += 'coords=\'' + serial( coords ) + '\' ';
 
                     //attach listener to for go to loc
                     afterI += "$j('#" + id + "').click(findCoords);";
 
-                } else if (options.listThumbs[i]['loc']) {
+                } else if ( options.listThumbs[ i ][ 'loc' ] ) {
                     //if this is their waiting list
                     afterI += "$j('#" + id + "').click(function(e){waitingList(e, options.listThumbs[" + i + "], " + i + ")});";
-                } else if (options.listThumbs[i]['userid']) {
+                } else if ( options.listThumbs[ i ][ 'userid' ] ) {
                     //this is their friends list
-                    output += 'onclick="getFriendInfo(\'' + options.listThumbs[i]['userid'] + '\', this)" user=\'' + options.listThumbs[i]['user'] + '\' ';
+                    output += 'onclick="getFriendInfo(\'' + options.listThumbs[ i ][ 'userid' ] + '\', this)" user=\'' + options.listThumbs[ i ][ 'user' ] + '\' ';
                 } else {
                     //other?
                     output += ' ';
@@ -1566,7 +1541,7 @@ function thumbsMenu(vars, customQuery) {
                 output += '>';
 
                 //the actual thumbnail image
-                if (options.listThumbs[i]['userid']) {
+                if ( options.listThumbs[ i ][ 'userid' ] ) {
                     //user pic
                     dir = '/profile';
                 } else {
@@ -1574,27 +1549,27 @@ function thumbsMenu(vars, customQuery) {
                     dir = '/thumbs';
                 };
 
-                output += '	<img class="panelThumb" src="/static/72spacer.gif" style="background-image:url(/content/' + dir + '/' + options.listThumbs[i]['thumb'] + ')"/>';
+                output += '	<img class="panelThumb" src="/static/72spacer.gif" style="background-image:url(/content/' + dir + '/' + options.listThumbs[ i ][ 'thumb' ] + ')"/>';
 
                 //add in vote count if there
-                if (options.listThumbs[i]['votes']) {
-                    output += '	<span class="addedDate">' + plural(options.listThumbs[i]['votes'], 'vote') + '</span>';
+                if ( options.listThumbs[ i ][ 'votes' ] ) {
+                    output += '	<span class="addedDate">' + plural( options.listThumbs[ i ][ 'votes' ], 'vote' ) + '</span>';
                 };
 
                 //add user name if there
-                if (options.listThumbs[i]['user']) {
-                    output += '	<span class="addedDate">' + options.listThumbs[i]['user'] + '</span>';
+                if ( options.listThumbs[ i ][ 'user' ] ) {
+                    output += '	<span class="addedDate">' + options.listThumbs[ i ][ 'user' ] + '</span>';
                 };
 
                 //add in date added if there
-                if (options.listThumbs[i]['date']) {
-                    output += '	<span class="addedDate">' + options.listThumbs[i]['date'] + '</span>';
+                if ( options.listThumbs[ i ][ 'date' ] ) {
+                    output += '	<span class="addedDate">' + options.listThumbs[ i ][ 'date' ] + '</span>';
                 }
 
                 //add option to delete if this is waiting list 
-                if (options.listThumbs[i]['loc']) {
-                    output += '	<img class="deletePic" indx="' + i + '" del="' + options.listThumbs[i]['loc'] + '" src="/static/deletePic.png" id="del' + options.listThumbs[i]['id'] + '">';
-                    afterI += "$j('#del" + options.listThumbs[i]['id'] + "').click(function(e){confirmDelete(e, options.listThumbs)});";
+                if ( options.listThumbs[ i ][ 'loc' ] ) {
+                    output += '	<img class="deletePic" indx="' + i + '" del="' + options.listThumbs[ i ][ 'loc' ] + '" src="/static/deletePic.png" id="del' + options.listThumbs[ i ][ 'id' ] + '">';
+                    afterI += "$j('#del" + options.listThumbs[ i ][ 'id' ] + "').click(function(e){confirmDelete(e, options.listThumbs)});";
                 };
 
                 output += '</div>';
@@ -1606,17 +1581,17 @@ function thumbsMenu(vars, customQuery) {
 
         output += '<br style="clear:both"/></div>';
 
-        $j('#' + options.mainId).html(output);
+        $j( '#' + options.mainId ).html( output );
 
-        eval(afterI);
+        eval( afterI );
     };
 
-    var waitingList = function (e, obj, i) {
+    var waitingList = function( e, obj, i ) {
 
-        $j('#m1main').html('Please Wait...');
-        $j('#m1err').html('');
-        setTitle('m1', 'Add Your Picture');
-        setNav('m1', 'off');
+        $j( '#m1main' ).html( 'Please Wait...' );
+        $j( '#m1err' ).html( '' );
+        setTitle( 'm1', 'Add Your Picture' );
+        setNav( 'm1', 'off' );
 
         options.selected = i;
 
@@ -1626,20 +1601,20 @@ function thumbsMenu(vars, customQuery) {
 
         var pic = new Image();
 
-        pic.onerror = function () {
-            alert('there was an error! sorry!\n' + imgloc);
+        pic.onerror = function() {
+            alert( 'there was an error! sorry!\n' + imgloc );
         };
 
-        pic.onload = function () {
+        pic.onload = function() {
 
-            $j('#smallAdd').remove();
+            $j( '#smallAdd' ).remove();
 
-            if (addPic.move.id) {
-                $j('#' + addPic.move.id).css({
+            if ( addPic.move.id ) {
+                $j( '#' + addPic.move.id ).css( {
                     borderWidth: '0px',
                     opacity: 1,
                     padding: '0px'
-                });
+                } );
 
                 addPic.move = {
                     x: 0,
@@ -1648,7 +1623,7 @@ function thumbsMenu(vars, customQuery) {
                 };
             };
 
-            readyToAdd(imgloc, width, height);
+            readyToAdd( imgloc, width, height );
             dActivate();
         };
 
@@ -1657,37 +1632,37 @@ function thumbsMenu(vars, customQuery) {
 
     };
 
-    var dActivate = function () {
+    var dActivate = function() {
         //activate the add picture for wiating list - not upload / link
-        $j('#smallAdd').draggable({
+        $j( '#smallAdd' ).draggable( {
             start: activateSmallAdd,
             drag: smallAddDrag,
             stop: cSmallAdd
-        });
+        } );
     };
 
     //check to see if dragged picture overlaps others on mouse up
-    var cSmallAdd = function () {
+    var cSmallAdd = function() {
         //waiting list add
         postVars = activateCpanelPlacer();
 
-        $j.ajax({
+        $j.ajax( {
             data: postVars,
             success: cOverlap,
             type: 'POST',
             url: '/mile/add/'
-        });
+        } );
 
     };
 
-    var cOverlap = function (json) {
+    var cOverlap = function( json ) {
         //check overlaps on wiating list add
-        eval('result = ' + json);
+        eval( 'result = ' + json );
 
-        if (result.success == true) {
+        if ( result.success == true ) {
             //remove from waiting list
             i = options.selected;
-            options.listThumbs.splice(i, 1);
+            options.listThumbs.splice( i, 1 );
 
             formatThumbs();
             imageAdded();
@@ -1696,8 +1671,8 @@ function thumbsMenu(vars, customQuery) {
         };
     };
 
-    var confirmDelete = function (e, obj) {
-        if (e) {
+    var confirmDelete = function( e, obj ) {
+        if ( e ) {
             //moz
             e.stopPropagation();
         } else {
@@ -1705,47 +1680,47 @@ function thumbsMenu(vars, customQuery) {
             e = window.event;
         };
 
-        del = e.target.getAttribute('del');
-        indx = e.target.getAttribute('indx');
+        del = e.target.getAttribute( 'del' );
+        indx = e.target.getAttribute( 'indx' );
 
         uploadText = '<img src="/content/original/' + del + '" height="100" width="100" style="float:left;margin:10px"> Are you sure you want to delete this picture from your waiting list?<br/>';
 
         uploadText += '<a class="fakeButton" id="confirmDelete">Yes</a> <a class="fakeButton">No</a>';
-        $j('#m1main').html(uploadText);
+        $j( '#m1main' ).html( uploadText );
 
-        $j('#confirmDelete').click(function () {
-            doDelete(del, obj, indx);
-        });
+        $j( '#confirmDelete' ).click( function() {
+            doDelete( del, obj, indx );
+        } );
 
-        setTitle('m1', 'Confirm Delete');
-        setNav('m1', 'off');
+        setTitle( 'm1', 'Confirm Delete' );
+        setNav( 'm1', 'off' );
 
-        $j('#m1').slideDown();
+        $j( '#m1' ).slideDown();
     };
 
-    var doDelete = function (src, obj, indx) {
-        $j.ajax({
+    var doDelete = function( src, obj, indx ) {
+        $j.ajax( {
             data: {
                 src: src
             },
             success: recDel,
             type: 'post',
             url: '/thumbs/delete'
-        });
+        } );
 
-        obj.splice(indx, 1);
+        obj.splice( indx, 1 );
         formatThumbs();
 
-        if (options.listThumbs.length < (options.index + 8)) {
+        if ( options.listThumbs.length < ( options.index + 8 ) ) {
             ajaxCall();
         };
 
-        $j('#m1main').html('');
-        closeCpanel(1);
+        $j( '#m1main' ).html( '' );
+        closeCpanel( 1 );
     };
 
     //load initial content
-    if (!options.listThumbs.length) {
+    if ( !options.listThumbs.length ) {
         ajaxCall();
     } else {
         setNav();
@@ -1758,64 +1733,64 @@ function thumbsMenu(vars, customQuery) {
 //sign up form, validate all form info
 function signUp() {
 
-    v = getFormVars('signup');
+    v = getFormVars( 'signup' );
 
     var errmsg = [];
 
-    if (!v.user || v.user.length < 2) {
-        errmsg.push("Your user name must be at least 2 characters.");
+    if ( !v.user || v.user.length < 2 ) {
+        errmsg.push( "Your user name must be at least 2 characters." );
     };
 
-    if (v.email && !emailValidate(v.email)) {
-        errmsg.push("Your email address does not appear to be valid.");
+    if ( v.email && !emailValidate( v.email ) ) {
+        errmsg.push( "Your email address does not appear to be valid." );
     };
 
-    if (errmsg.length < 1) {
-        $j('#signupMsg').html('Processing..please wait...');
-        $j('#signupbutton').hide();
+    if ( errmsg.length < 1 ) {
+        $j( '#signupMsg' ).html( 'Processing..please wait...' );
+        $j( '#signupbutton' ).hide();
 
-        v = prepForQuery(v);
+        v = prepForQuery( v );
 
-        $j.ajax({
+        $j.ajax( {
             url: '/profile/signup',
             type: 'post',
             data: v,
             success: receiveSignup
-        });
+        } );
 
     } else {
         output = "Please fix the following errors: <br/>";
 
-        for (i = 0; i < errmsg.length; i++) {
-            output += errmsg[i] + "<br/>";
+        for ( i = 0; i < errmsg.length; i++ ) {
+            output += errmsg[ i ] + "<br/>";
         };
 
-        $j('#signupMsg').html(output);
+        $j( '#signupMsg' ).html( output );
     };
 
 };
 
-function receiveSignup(json) {
-    eval('result = ' + json);
+function receiveSignup( json ) {
+    eval( 'result = ' + json );
 
-    if (result.errors.length > 0) {
-        $j('#signupbutton').show();
+    if ( result.errors.length > 0 ) {
+        $j( '#signupbutton' ).show();
 
         output = "Please fix the following errors: <br/>";
 
-        for (i = 0; i < result.errors.length; i++) {
-            output += result.errors[i] + "<br/>";
+        for ( i = 0; i < result.errors.length; i++ ) {
+            output += result.errors[ i ] + "<br/>";
         };
 
-        $j('#signupMsg').html(output);
+        $j( '#signupMsg' ).html( output );
 
-    } else if (result.success == true) {
+    } else if ( result.success == true ) {
 
-        $j('div#control1').html(result.panelLeft);
-        $j('div#control2').html(result.panelRight);
+        $j( 'div#control1' ).html( result.panelLeft );
+        $j( 'div#control2' ).html( result.panelRight );
 
-        closeCpanel(6);
-        closeCpanel(5);
+        closeCpanel( 6 );
+        closeCpanel( 5 );
 
         activateCpanel();
 
@@ -1827,135 +1802,135 @@ function receiveSignup(json) {
 //get the users profile
 function getProfile() {
 
-    $j('#m2main').html('Loading Your Profile...');
-    $j('#m2').slideDown('normal');
+    $j( '#m2main' ).html( 'Loading Your Profile...' );
+    $j( '#m2' ).slideDown( 'normal' );
 
-    setTitle('m2', 'Loading Your Profile...');
-    setNav('m2', 'off');
+    setTitle( 'm2', 'Loading Your Profile...' );
+    setNav( 'm2', 'off' );
 
-    $j.ajax({
+    $j.ajax( {
         url: '/profile/get',
         type: 'POST',
         success: receiveProfile
-    });
+    } );
 };
 
-function receiveProfile(html) {
+function receiveProfile( html ) {
 
-    $j('#m2main').html(html);
+    $j( '#m2main' ).html( html );
 
-    setTitle('m2', 'Your Profile');
-    setNav('m2', 'off');
+    setTitle( 'm2', 'Your Profile' );
+    setNav( 'm2', 'off' );
 
-    $j('#m2').slideDown();
+    $j( '#m2' ).slideDown();
 };
 
 function openSearch() {
 
-    setTitle('m2', 'Search For an Image');
-    setNav('m2', 'off');
+    setTitle( 'm2', 'Search For an Image' );
+    setNav( 'm2', 'off' );
 
     var msgText = '<form name="searchParams" id="searchParams" action="/search" method="post">';
     msgText += '<input type="text" class="stdInput" name="searchTerm" id="searchTerm" />';
     msgText += '<input type="button" value="Search" class="stdButton" onclick="sendSearchParms();" />';
     msgText += '</form>';
 
-    $j('#m2main').html(msgText);
-    $j('#m2').slideDown();
+    $j( '#m2main' ).html( msgText );
+    $j( '#m2' ).slideDown();
 
-    $j('form#searchParams').submit(function () {
+    $j( 'form#searchParams' ).submit( function() {
         sendSearchParms();
         return false;
-    });
+    } );
 };
 
 
 
-function sendSearchParms(term) {
+function sendSearchParms( term ) {
 
-    search = term ? term : $j('#searchTerm').val();
-    search = encodeURIComponent(search);
+    search = term ? term : $j( '#searchTerm' ).val();
+    search = encodeURIComponent( search );
 
-    searchThumbs = new thumbsMenu({
+    searchThumbs = new thumbsMenu( {
         action: '/thumbs/search/query/' + search,
         title: 'Search Results',
         container: 'm2',
         limit: 4
-    });
+    } );
 
-    $j('#m2main').html('');
+    $j( '#m2main' ).html( '' );
 
-    setTitle('m2', 'Searching... Please Wait');
+    setTitle( 'm2', 'Searching... Please Wait' );
 
-    $j('#m2').slideDown();
+    $j( '#m2' ).slideDown();
 };
 
-function receiveSearch(xml) {
-    $j('#m3title').html('Search Results');
-    $j('#m3main').html(xml.responseText);
+function receiveSearch( xml ) {
+    $j( '#m3title' ).html( 'Search Results' );
+    $j( '#m3main' ).html( xml.responseText );
 
-    $j('#m3').slideDown();
+    $j( '#m3' ).slideDown();
 };
 
 //get the how to screens
 function getHelp() {
-    new Lightbox({
+    new Lightbox( {
         close: true,
         url: '/help/main',
         title: 'Help!'
-    });
+    } );
 };
 
 //get form to send in user feedback
 function startFeedback() {
-    new Lightbox({
+    new Lightbox( {
         close: true,
         url: '/help/feedback',
         title: 'Send Feedback'
-    });
+    } );
 };
 
 function sendFeedback() {
-    vars = prepForQuery(getFormVars('formFeedback'))
+    vars = prepForQuery( getFormVars( 'formFeedback' ) )
 
     var sendFeedback = new XHConn();
-    sendFeedback.connect("help/feedback", "POST", vars, returnFeedback);
+    sendFeedback.connect( "help/feedback", "POST", vars, returnFeedback );
 
-    $j('#formFeedback').html('Please Wait...');
+    $j( '#formFeedback' ).html( 'Please Wait...' );
 };
 
-function returnFeedback(json) {
-    eval('result = ' + json.responseText);
-    $j('#lightboxcontent').html(result.html);
+function returnFeedback( json ) {
+    eval( 'result = ' + json.responseText );
+    $j( '#lightboxcontent' ).html( result.html );
 };
 
 function getTerms() {
-    new Lightbox({
+    new Lightbox( {
         close: true,
         url: '/help/terms',
         title: 'Terms and Conditions / Privacy Policy'
-    });
+    } );
 };
 
 function getAbout() {
-    new Lightbox({
+    new Lightbox( {
         close: true,
         url: '/help/about',
         title: 'About the mile'
-    });
+    } );
 };
 
 function getAPI() {
-    new Lightbox({
+    new Lightbox( {
         close: true,
         url: 'help/api',
         title: 'API For Developers'
-    });
+    } );
 };
 
-function expandMethod(which) {
-    next = getNext(which);
-    if (next.style.display == "block") {
+function expandMethod( which ) {
+    next = getNext( which );
+    if ( next.style.display == "block" ) {
         next.style.display = "none";
     } else {
         next.style.display = "block";
@@ -1963,19 +1938,19 @@ function expandMethod(which) {
 };
 
 //linked an image, or from waiting list.
-function readyToAdd(imgloc, width, height) {
+function readyToAdd( imgloc, width, height ) {
     //set up varialbes in global identifier
-    addPic.height = Math.ceil(height / 72);
-    addPic.width = Math.ceil(width / 72);
+    addPic.height = Math.ceil( height / 72 );
+    addPic.width = Math.ceil( width / 72 );
     addPic.source = imgloc;
 
     //scale picture proportionally for thumbnail
-    if (height > width) {
+    if ( height > width ) {
         smallH = 100;
-        smallW = (width / height) * 100;
+        smallW = ( width / height ) * 100;
     } else {
         smallW = 100;
-        smallH = (height / width) * 100;
+        smallH = ( height / width ) * 100;
     };
 
     //format html 
@@ -1987,52 +1962,52 @@ function readyToAdd(imgloc, width, height) {
 
 
 
-    $j('#m1main').html(uploadText);
-    $j('#m1').slideDown('normal');
+    $j( '#m1main' ).html( uploadText );
+    $j( '#m1' ).slideDown( 'normal' );
 
 };
 
 //adding the image was unsuccessful.
 function removePlacer() {
-    $j('#posImg').remove();
+    $j( '#posImg' ).remove();
 
-    if (addPic.move.id) {
-        $j('#smallAdd').css({
+    if ( addPic.move.id ) {
+        $j( '#smallAdd' ).css( {
             left: addPic.move.x,
             top: addPic.move.y
-        });
+        } );
     } else {
         // or shoot back placer to cpanel
-        $j('#smallAdd').animate({
+        $j( '#smallAdd' ).animate( {
             left: '190px',
             top: '10px'
-        }, 1000);
+        }, 1000 );
     };
 
     //there were overlaps. figure out where they are 
     num = result.overlap.length;
 
-    overlapContainer = document.createElement('div');
-    overlapContainer.setAttribute('id', 'overlapContainer');
+    overlapContainer = document.createElement( 'div' );
+    overlapContainer.setAttribute( 'id', 'overlapContainer' );
 
     overlapContainerTop = mySize.height;
     overlapContainerLeft = mySize.width;
     overlapContainerWidth = 0;
     overlapContainerHeight = 0;
 
-    $j('#squaremile').append(overlapContainer);
+    $j( '#squaremile' ).append( overlapContainer );
 
-    overlapContainerWidth -= (overlapContainerLeft - mySize.scale);
-    overlapContainerHeight -= (overlapContainerTop - mySize.scale);
+    overlapContainerWidth -= ( overlapContainerLeft - mySize.scale );
+    overlapContainerHeight -= ( overlapContainerTop - mySize.scale );
 
-    for (o in result.overlap) {
-        x = result.overlap[o]['x'];
-        y = result.overlap[o]['y'];
+    for ( o in result.overlap ) {
+        x = result.overlap[ o ][ 'x' ];
+        y = result.overlap[ o ][ 'y' ];
 
-        div = document.createElement('div');
+        div = document.createElement( 'div' );
 
-        left = ((x * 72) - mySize.myX) * (mySize.scale / 72) - mySize.scale + (mySize.width / 2);
-        top = ((y * 72) - mySize.myY) * (mySize.scale / 72) - mySize.scale + (mySize.height / 2);
+        left = ( ( x * 72 ) - mySize.myX ) * ( mySize.scale / 72 ) - mySize.scale + ( mySize.width / 2 );
+        top = ( ( y * 72 ) - mySize.myY ) * ( mySize.scale / 72 ) - mySize.scale + ( mySize.height / 2 );
 
         overlapContainerLeft = left < overlapContainerLeft ? left : overlapContainerLeft;
         overlapContainerTop = top < overlapContainerTop ? top : overlapContainerTop;
@@ -2042,45 +2017,45 @@ function removePlacer() {
         left -= overlapContainerLeft;
         top -= overlapContainerTop;
 
-        $j(div).css({
+        $j( div ).css( {
             left: left + 'px',
             top: top + 'px',
             backgroundColor: '#D16A38',
-            width: (mySize.scale) + 'px',
-            height: (mySize.scale) + 'px',
+            width: ( mySize.scale ) + 'px',
+            height: ( mySize.scale ) + 'px',
             position: 'absolute'
-        });
+        } );
 
-        $j('#overlapContainer').append(div);
+        $j( '#overlapContainer' ).append( div );
 
     };
 
-    $j('#overlapContainer').css({
+    $j( '#overlapContainer' ).css( {
         left: overlapContainerLeft + "px",
         top: overlapContainerTop + "px",
         height: overlapContainerHeight + "px",
         width: overlapContainerWidth + "px"
-    });
+    } );
 
-    setTimeout("$j('#overlapContainer').fadeOut('normal', function(){$j('#overlapContainer').remove()})", 500);
+    setTimeout( "$j('#overlapContainer').fadeOut('normal', function(){$j('#overlapContainer').remove()})", 500 );
 
 };
 
 function imageAdded() {
 
-    $j('#posImg').remove();
-    $j('#smallAdd').remove();
+    $j( '#posImg' ).remove();
+    $j( '#smallAdd' ).remove();
 
-    closeCpanel(1);
-    $j('#m1main').html('');
+    closeCpanel( 1 );
+    $j( '#m1main' ).html( '' );
 
     //dbug(result.foot);
     //why do i have to eval this?  it doesnt like the result.foot.x part otherwise.
-    eval('makeMapCall({ ' + result.foot.x + ':' + result.foot.y + ' })');
+    eval( 'makeMapCall({ ' + result.foot.x + ':' + result.foot.y + ' })' );
 
-    if (addPic.move.id) {
+    if ( addPic.move.id ) {
         //moved an image successfully
-        $j('#' + addPic.move.id).remove();
+        $j( '#' + addPic.move.id ).remove();
 
         addPic.move = { x: 0, y: 0, id: 0 };
     };
@@ -2088,18 +2063,18 @@ function imageAdded() {
 
 function activateCpanelPlacer() {
 
-    $j("#posImg").animate({
+    $j( "#posImg" ).animate( {
         opacity: 1
-    });
+    } );
 
-    postVars = "width=" + (addPic.width);
-    postVars += "&height=" + (addPic.height);
-    postVars += "&inchX=" + (addPic.inchX);
-    postVars += "&inchY=" + (addPic.inchY);
-    postVars += "&fileLoc=" + (addPic.source);
+    postVars = "width=" + ( addPic.width );
+    postVars += "&height=" + ( addPic.height );
+    postVars += "&inchX=" + ( addPic.inchX );
+    postVars += "&inchY=" + ( addPic.inchY );
+    postVars += "&fileLoc=" + ( addPic.source );
 
-    if (addPic.move.id) {
-        postVars += "&id=" + (addPic.move.id);
+    if ( addPic.move.id ) {
+        postVars += "&id=" + ( addPic.move.id );
     };
 
     return postVars;
@@ -2107,27 +2082,27 @@ function activateCpanelPlacer() {
 
 //close lightbox
 function closeLB() {
-    $j('#lightboxbk').fadeOut('normal', function () {
-        $j('#lightboxbk').remove();
-    });
+    $j( '#lightboxbk' ).fadeOut( 'normal', function() {
+        $j( '#lightboxbk' ).remove();
+    } );
 };
 
-function Lightbox(options) {
-    var newdiv = document.createElement('div');
+function Lightbox( options ) {
+    var newdiv = document.createElement( 'div' );
 
-    newdiv.setAttribute('id', 'lightboxbk');
+    newdiv.setAttribute( 'id', 'lightboxbk' );
 
     lightboxHtml = '<img class="lbshadow" src="/static/shadow.png"/><div id="lightboxlight"><span class="lightboxTitle">' + options.title + '</span>';
 
     //add initial content 
-    if (!options.content) {
+    if ( !options.content ) {
         options.content = 'Loading...';
 
-        $j.ajax({
+        $j.ajax( {
             url: options.url,
             type: 'post',
             success: receiveLbPost
-        });
+        } );
 
     };
 
@@ -2136,43 +2111,40 @@ function Lightbox(options) {
 
     newdiv.innerHTML = lightboxHtml;
 
-    $j('#body').append(newdiv);
+    $j( '#body' ).append( newdiv );
 
     //add the close x 
-    if (options.close) {
-        $j('#lightboxlight').after('<div id="closeLB" onclick="closeLB();"></div>');
+    if ( options.close ) {
+        $j( '#lightboxlight' ).after( '<div id="closeLB" onclick="closeLB();"></div>' );
     };
 
     //set the size of the lightbox content to match the container
     sizeLB();
 };
 
-function receiveLbPost(json) {
-    eval("result = " + json);
+function receiveLbPost( json ) {
+    eval( "result = " + json );
 
-    $j('#lightboxcontent').html(result.html);
+    $j( '#lightboxcontent' ).html( result.html );
 };
 
-function sizeLB() {
-    containerHeight = $j('#lightboxlight').height();
-    $j('#lightboxcontent').css({ height: containerHeight - 25 + "px" });
-};
+
 
 //mapCoord is called when double click on scaled map - travels to that location.
-function mapCoord(e) {
+function mapCoord( e ) {
     //var e=new MouseEvent(e);
 
-    mapX = (e.clientX) - (mySize.width - 190);
-    mapY = (e.clientY) - (mySize.height - 190);
+    mapX = ( e.clientX ) - ( mySize.width - 190 );
+    mapY = ( e.clientY ) - ( mySize.height - 190 );
 
-    if (mapX < 0) { mapX = 0; };
-    if (mapX > 190) { mapX = 190; };
-    if (mapY > 190) { mapY = 190; };
+    if ( mapX < 0 ) { mapX = 0; };
+    if ( mapX > 190 ) { mapX = 190; };
+    if ( mapY > 190 ) { mapY = 190; };
 
     //goto variables to reflect changes in scale
     gotoX = mapX * 24000;
     gotoY = mapY * 24000;
     //go to this location
-    goToLoc(gotoX, gotoY);
+    goToLoc( gotoX, gotoY );
     return false;
 };

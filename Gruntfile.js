@@ -1,16 +1,16 @@
 "use strict";
 
-module.exports = function (grunt) {
-    grunt.initConfig({
+module.exports = function( grunt ) {
+    grunt.initConfig( {
         browserify: {
             dist: {
-                files: [{
+                files: [ {
                     cwd: 'assets/js',
                     dest: 'public_html/assets/js',
                     expand: true,
                     ext: '.js',
-                    src: ['**/*.js']
-                }],
+                    src: [ 'app.js' ]
+                } ],
                 options: {
                     browserifyOptions: {
                         debug: true,
@@ -31,13 +31,13 @@ module.exports = function (grunt) {
 
         cssmin: {
             target: {
-                files: [{
+                files: [ {
                     expand: true,
                     cwd: 'public/css',
-                    src: ['**/*.css', '!*.min.css'],
+                    src: [ '**/*.css', '!*.min.css' ],
                     dest: 'public/css',
                     ext: '.min.css'
-                }]
+                } ]
             }
         },
 
@@ -51,47 +51,47 @@ module.exports = function (grunt) {
                 options: {
                     outputStyle: 'compact'
                 },
-                files: [{
+                files: [ {
                     cwd: 'assets/scss',
                     dest: 'public_html/assets/css',
                     expand: true,
                     ext: '.css',
-                    src: ['app.scss']
-                }],
+                    src: [ 'app.scss' ]
+                } ],
             }
         },
 
         uglify: {
             scripts: {
-                files: [{
+                files: [ {
                     cwd: 'public/js',
                     dest: 'public/js',
                     expand: true,
                     ext: '.min.js',
-                    src: ['**/*.js', '!*.min.js']
-                }]
+                    src: [ '**/*.js', '!*.min.js' ]
+                } ]
             }
         },
 
         watch: {
             css: {
-                files: ['assets/scss/**/*.scss'],
-                tasks: ['sass']
+                files: [ 'assets/scss/**/*.scss' ],
+                tasks: [ 'sass' ]
             },
             scripts: {
-                files: ['assets/js/**/*.js'],
-                tasks: ['browserify']
+                files: [ 'assets/js/**/*.js' ],
+                tasks: [ 'browserify' ]
             },
         }
-    });
+    } );
 
-    grunt.loadNpmTasks('grunt-browserify');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-sass');
-    
-    grunt.registerTask('default', [
+    grunt.loadNpmTasks( 'grunt-browserify' );
+    grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
+    grunt.loadNpmTasks( 'grunt-contrib-uglify' );
+    grunt.loadNpmTasks( 'grunt-contrib-watch' );
+    grunt.loadNpmTasks( 'grunt-sass' );
+
+    grunt.registerTask( 'default', [
         'browserify', 'sass'
-    ]);
+    ] );
 };

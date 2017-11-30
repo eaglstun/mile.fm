@@ -9,12 +9,10 @@ require PATH_ROOT . '/vendor/autoload.php';
 
 //dd($_SESSION);
 
-ini_set('include_path', './');
 ini_set('magic_quotes_gpc', 'off');
 ini_set('max_execution_time', 60);
 ini_set('memory_limit', '128M');
 ini_set('upload_max_filesize', '32M');
-ini_set('error_reporting', E_ALL | E_STRICT);
 
 $starttime = microtime(TRUE);
 
@@ -27,11 +25,12 @@ foreach ($_POST as $k => $v) {
 require 'config.php';
 
 //include all the classes we may need.  the controller will extend the generic action class.
-require 'php/class_Action.php';
+require PATH_ROOT.'/src/php/class_Action.php';
 
-require 'php/functions_debug.php';
-require 'php/functions_filesystem.php';
-require 'php/functions_html.php';
+require PATH_ROOT.'/src/php/functions_debug.php';
+require PATH_ROOT.'/src/php/functions_filesystem.php';
+require PATH_ROOT.'/src/php/functions_html.php';
+require PATH_ROOT.'/src/php/functions_redir.php';
   
 //figure out how to route the url
 $path = $_GET['cPath'];
@@ -74,7 +73,7 @@ if (isset($explode[$pos]) && file_exists('controllers/' . $explode[$pos] . '.php
 }
 
 //instantiate the mvc - class Action
-include('controllers/' . $controller . '.php');
+include PATH_ROOT.'/src/controllers/' . $controller . '.php';
 $db = new DB();
 
 $action = new $className($db);
@@ -145,7 +144,7 @@ $endtime = microtime(TRUE);
 $rendertime = round($endtime - $starttime, 4);
 
 if ($action->useLayout) {
-	include('template/' . $action->theme . '/' . $template . '.phtml');
+	include PATH_ROOT.'/src/template/' . $action->theme . '/' . $template . '.phtml';
 } else if ($action->json) {
 	$json = json_encode($action->json);
 
