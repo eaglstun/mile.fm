@@ -14,7 +14,6 @@
 			
 			<ul class="">
 				<li><a href="/help/main" action="getHelp()">How To Use</a></li>
-				<li><a href="/user/feedback" action="startFeedback()">Feedback</a></li>
 				<li><a href="/help/terms" action="getTerms()">Terms / Privacy</a></li>
 				<li><a href="/help/about" action="getAbout()">About</a></li>
 			</ul>

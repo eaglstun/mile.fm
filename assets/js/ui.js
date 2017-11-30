@@ -15,3 +15,9 @@ $( 'ul.submenu a.recentlyadded' ).on( 'click', ( e ) => {
     Nav.getRecent( 0 );
     e.preventDefault();
 } );
+
+// X buttons
+$( 'a.btnX' ).on( 'click', ( e ) => {
+    Nav.closePanel( e.target );
+    e.preventDefault();
+} );

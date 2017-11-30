@@ -30,7 +30,7 @@
 		<div id="m1" class="cpanelMessage" style="display:none">
 			
 			<div class="menuHead">
-				<a class="menuButton btnX" onclick="closeCpanel(1);">Close</a>
+				<a class="menuButton btnX">Close</a>
 				<a class="menuButton btnMM" onclick="menuToggle(this);">Minimize</a>
 				
 				<div class="menuNav">
@@ -48,7 +48,7 @@
 		<div id="m2" class="cpanelMessage" style="<?= isset($menu2) ? '' : 'display:none'; ?>">
 			
 			<div class="menuHead">
-				<a class="menuButton btnX" onclick="closeCpanel(2);">Close</a>
+				<a class="menuButton btnX">Close</a>
 				<a class="menuButton btnMM" onclick="menuToggle(this);">Minimize</a>
 				<a class="menuButton btnRSS">RSS Feed</a>
 				
@@ -70,7 +70,7 @@
 		<div id="m3" class="cpanelMessage" style="display:none">
 			
 			<h5>
-				<a class="menuButton btnX" onclick="closeCpanel(3);"></a>
+				<a class="menuButton btnX"></a>
 				<a class="menuButton btnMM" onclick="menuToggle(this);"></a>
 					
 				<div class="menuNav">
@@ -88,7 +88,7 @@
 		<div id="m4" class="cpanelMessage" style="<?= isset($menu4) ? '' : 'display:none'; ?>">
 			
 			<h5>
-				<a class="menuButton btnX" onclick="closeCpanel(4);"></a>
+				<a class="menuButton btnX"></a>
 				<a class="menuButton btnMM" onclick="menuToggle(this);"></a>
 				
 				<div class="menuNav">
@@ -151,7 +151,7 @@
 		<div id="m5" class="cpanelMessage logIn" <?= isset( $_SESSION['userid'] ) || isset($hideLogin) ? 'style="display:none"' : ''; ?>>
 			
 			<h5>
-				<a class="menuButton btnX" onclick="closeCpanel(5);"></a>
+				<a class="menuButton btnX"></a>
 				<a class="menuButton btnMM" onclick="menuToggle(this);"></a>
 				
 				<span class="cTitle">Log In</span>
@@ -199,7 +199,7 @@
 		
 		<div id="m6" class="cpanelMessage logIn" style="<?= isset($_SESSION['userid']) || isset($hideLogin) ? 'display:none' : '' ?>">
 			<h5>
-				<a class="menuButton btnX" onclick="closeCpanel(6);">Close Signup</a>
+				<a class="menuButton btnX">Close Signup</a>
 				<a class="menuButton btnMM" onclick="menuToggle(this);">Minimize Signup</a>
 				<span class="cTitle">Sign Up</span>
 			</h5>

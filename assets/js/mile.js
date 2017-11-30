@@ -1462,29 +1462,6 @@ function getHelp() {
     } );
 };
 
-//get form to send in user feedback
-function startFeedback() {
-    new Lightbox( {
-        close: true,
-        url: '/help/feedback',
-        title: 'Send Feedback'
-    } );
-};
-
-function sendFeedback() {
-    vars = prepForQuery( getFormVars( 'formFeedback' ) )
-
-    var sendFeedback = new XHConn();
-    sendFeedback.connect( "help/feedback", "POST", vars, returnFeedback );
-
-    $j( '#formFeedback' ).html( 'Please Wait...' );
-};
-
-function returnFeedback( json ) {
-    eval( 'result = ' + json.responseText );
-    $j( '#lightboxcontent' ).html( result.html );
-};
-
 function getTerms() {
     new Lightbox( {
         close: true,

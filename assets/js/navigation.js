@@ -29,6 +29,15 @@ class Navigation {
 
         $j( '#m2' ).slideDown();
     };
+
+    /**
+     * 
+     */
+    closePanel( el ) {
+        console.log( 'closePanel el', el );
+
+        $j( el ).parents( '.cpanelMessage' ).slideUp();
+    }
 }
 
 module.exports = new Navigation;

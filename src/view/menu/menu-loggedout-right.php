@@ -6,7 +6,6 @@
 
 <ul class="submenu" id="sub-help">
 	<li><a href="/help/main" action="getHelp()">How To Use</a></li>
-	<li><a href="/help/feedback" class="special" action="startFeedback()">Feedback</a></li>
 	<li><a href="/help/terms" action="getTerms()">Terms / Privacy</a></li>
 	<li><a href="/help/about" action="getAbout()">About</a></li>
 	<li><a href="/help/api" action="getAPI()">API</a></li>
