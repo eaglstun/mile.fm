@@ -96,7 +96,7 @@ class indexMVC extends Action
 				$result = $Comment->loadAllTags();
 				
 				//merge and size for tag cloud
-				$mergedTags = array();
+				$mergedTags = [];
 				foreach ($result as $k => $v) {
 					$mergedTags[$v['tag']] = $v['cnt'];
 				}

@@ -39,14 +39,3 @@ function plural($number, $name)
 	}
 }
 
-function _convertToCamelCase(array $matches)
-{
-	return ucfirst($matches[1]);
-}
-
-function camelCase($str)
-{
-	$cc = preg_replace_callback('/-(\w)/', '_convertToCamelCase', $str);
-
-	return $cc;
-}

@@ -3,6 +3,20 @@
 /**
  * 
  *  @param string
+ *  @return string
+ */
+function camelCase($str)
+{
+	$cc = preg_replace_callback('/-(\w)/', function(array $matches){
+        return ucfirst($matches[1]);
+    }, $str);
+
+	return $cc;
+}
+
+/**
+ * 
+ *  @param string
  *  @return string absolute path to temp file
  */
 function get_remote_file($url)
