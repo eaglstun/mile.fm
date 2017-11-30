@@ -7,8 +7,6 @@ define('PATH_ROOT', dirname(__DIR__));
 
 require PATH_ROOT . '/vendor/autoload.php';
 
-//dd($_SESSION);
-
 ini_set('magic_quotes_gpc', 'off');
 ini_set('max_execution_time', 60);
 ini_set('memory_limit', '128M');
@@ -40,18 +38,18 @@ $explode = explode('/', $path);
 $pos = 0;
 
 //the controller is the first part of the url.  default to index if the controller is not found
-if (isset($explode[$pos]) && file_exists('controllers/' . $explode[$pos] . '.php')) {
+if (isset($explode[$pos]) && file_exists(PATH_ROOT.'/src/controllers/' . $explode[$pos] . '.php')) {
 	$controller = $explode[$pos];
 	$pos++;
 
 	$className = $controller . 'MVC';
-} else if (isset($explode[$pos]) && is_dir('controllers/' . $explode[$pos])) {
+} else if (isset($explode[$pos]) && is_dir(PATH_ROOT.'/src/controllers/' . $explode[$pos])) {
 	$dir = $explode[$pos];
 
 	if (isset($explode[$pos + 1])) {
-		$testController = 'controllers/' . $dir . '/' . $explode[$pos + 1] . '.php';
+		$testController = PATH_ROOT.'/src/controllers/' . $dir . '/' . $explode[$pos + 1] . '.php';
 	} else {
-		$testController = 'controllers/' . $dir . '/' . $explode[$pos] . '.php';
+		$testController = PATH_ROOT.'/src/controllers/' . $dir . '/' . $explode[$pos] . '.php';
 	}
 
 	if (isset($explode[$pos + 1]) && file_exists($testController)) {

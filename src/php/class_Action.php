@@ -79,16 +79,17 @@ class Action
 	public function parseURL($url)
 	{
 		$explode = explode('/', $url);
+		dd($explode);
 
 		$pos = 0;
 
-		if (isset($explode[$pos]) && file_exists('controllers/' . $explode[$pos] . '.php')) {
+		if (isset($explode[$pos]) && file_exists(PATH_ROOT.'/src/controllers/' . $explode[$pos] . '.php')) {
 			$controller = $explode[$pos];
 			$pos++;
-		} else if (isset($explode[$pos]) && is_dir('controllers/' . $explode[$pos])) {
+		} else if (isset($explode[$pos]) && is_dir(PATH_ROOT.'/src/controllers/' . $explode[$pos])) {
 			$dir = $explode[$pos] . '/';
 
-			if (isset($explode[$pos + 1]) && file_exists('controllers/' . $dir . $explode[$pos + 1] . '.php')) {
+			if (isset($explode[$pos + 1]) && file_exists(PATH_ROOT.'/src/controllers/' . $dir . $explode[$pos + 1] . '.php')) {
 				$controller = $dir . $explode[$pos + 1];
 				$pos += 2;
 			} else {
@@ -99,7 +100,7 @@ class Action
 			$controller = 'index';
 		}
 
-		include_once('controllers/' . $controller . '.php');
+		include_once PATH_ROOT.'/src/controllers/' . $controller . '.php';
 
 		$className = $controller . 'MVC';
 		$mvc = new $className($this->db);
@@ -113,7 +114,7 @@ class Action
 		
 		
 		//d($controller,'controller' );
-		//d($model ,'model' );
+		dd($model ,'model' );
 
 		$mvc->vars = $this->vars;
 

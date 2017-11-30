@@ -6,10 +6,10 @@ class thumbsMVC extends Action
 	{
 		if (isset($_POST['start'])) {
 			//ajax request
-			$start = $_POST['start'];
+			$start = (int) $_POST['start'];
 			$limit = 65;
 		} else if (isset($_REQUEST['start'])) {
-			$start = $_REQUEST['start'];
+			$start = (int) $_REQUEST['start'];
 			$limit = 8;
 		} else {
 			$start = 0;

@@ -1,6 +1,6 @@
 <ul class="submenu" id="sub-nav">
-	<li><a href="/thumbs/popular" class="special" action="getPopular(0)">Highest Voted</a></li>
-	<li><a href="/thumbs/recent" class="" action="getRecent(0)">Recently Added</a></li>
+	<li><a href="/thumbs/popular" class="special highestvoted">Highest Voted</a></li>
+	<li><a href="/thumbs/recent" class="recentlyadded">Recently Added</a></li>
 	<li><a href="" class="" action="getFriends()">Your Friends</a></li>
 	<li><a href="" class="" action="getFaves()">Your Favorites</a></li>
 	<li><a href="/search" action="openSearch()">Search</a></li>
