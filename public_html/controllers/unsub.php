@@ -6,7 +6,7 @@ class unsubMVC extends Action
 		include('php/functions_redir.php');
 	}
 
-	function indexAction()
+	public function indexAction()
 	{
 		$this->template = 'static';
 		$this->view = 'unsub';
@@ -17,7 +17,7 @@ class unsubMVC extends Action
 
 		$id = base_base2base($code, 59, 10);
 
-		$message = array();
+		$message = [];
 		
 		//see if they requested beta
 		$sql = "SELECT * FROM list_invite 

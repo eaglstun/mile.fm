@@ -76,7 +76,7 @@ class mapMVC extends Action
 		$normalized_valid_chars = 'a-zA-Z0-9';
 		$tags = preg_split('/(")/', $tag, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
-		$newwords = array();
+		$newwords = [];
 		$delim = 0;
 		foreach ($tags as $key => $word) {
 			$word = str_replace(",", "", $word);
@@ -138,7 +138,7 @@ class mapMVC extends Action
 		$result = $Comment->loadAllTags();
 		
 		//merge and size for tag cloud
-		$mergedTags = array();
+		$mergedTags = [];
 		foreach ($result as $k => $v) {
 			$mergedTags[$v['tag']] = $v['cnt'];
 		}
@@ -147,7 +147,7 @@ class mapMVC extends Action
 		$this->vars['tagcloud'] = $this->Render('tagcloud');
 		
 		//which word balloon section is showing
-		$this->vars['display'] = array();
+		$this->vars['display'] = [];
 		for ($i = 1; $i < 6; $i++) {
 			$this->vars['display'][$i] = "display:none";
 		}
@@ -189,7 +189,6 @@ class mapMVC extends Action
 	//called to load multiple feet at once, as clickable images
 	function getAction()
 	{
-
 		include('php/class_Mile.php');
 
 		$Mile = new Mile($this->db);
@@ -197,7 +196,7 @@ class mapMVC extends Action
 		$this->disableLayout();
 		
 		//the array of feet we want to get
-		$mileArray = isset($_POST['array']) ? unserialize(stripslashes(stripslashes($_POST['array']))) : array();
+		$mileArray = isset($_POST['array']) ? unserialize(stripslashes(stripslashes($_POST['array']))) : [];
 		$postArray = ($mileArray);
 
 		ksort($postArray);

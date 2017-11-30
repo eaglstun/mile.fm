@@ -1,4 +1,4 @@
-<?
+<?php
 class Email
 {
 	var $subject = '';
@@ -9,7 +9,7 @@ class Email
 	var $body = array('text', 'html');
 	var $boundary = 'b1_ad6134701969402843dbdd701c17c17e';
 
-	function __construct()
+	public function __construct()
 	{
 
 	}

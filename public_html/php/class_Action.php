@@ -1,18 +1,18 @@
-<?
+<?php
 
 class Action
 {
 	var $view;
 	public $db;
 	var $template = 'mainpage'; //the default template we are using
-	var $vars = array(); //all the variables that will be passed in to any rendered views
-	var $refer = array(); //populated after parseRefer() - varaibles from prev page 
-	var $json = array(); //ususally used in conjunction with disableLayout() 
+	var $vars = []; //all the variables that will be passed in to any rendered views
+	var $refer = []; //populated after parseRefer() - varaibles from prev page 
+	var $json = []; //ususally used in conjunction with disableLayout() 
 	var $download = ''; //raw data to be echoed out for downloading
 	var $theme = THEME;
 	public $outputRSS; // final output from bootstrap to output
 
-	var $scripts = array(); // any additional scripts we need to use;
+	var $scripts = []; // any additional scripts we need to use;
 	var $useLayout = true;
 
 	private $isAjax = false;

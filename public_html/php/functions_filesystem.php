@@ -86,7 +86,7 @@ function imagebmp(&$img, $filename = "")
   $result .= int_to_dword(0); // Number of important colour (4b)
       
       // is faster than chr()
-  $arrChr = array();
+  $arrChr = [];
   for ($i = 0; $i < 256; $i++) {
     $arrChr[$i] = chr($i);
   }
