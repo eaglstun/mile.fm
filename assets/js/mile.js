@@ -1152,7 +1152,6 @@ function getFaves() {
 
 //retrieve user information
 function getAccount() {
-
     $j( '#m2main' ).html( 'Loading Your Account Info...<br/><img src="/static/ajax-loader.gif"/>' );
     $j( '#m2err' ).html( '' );
 
@@ -1170,7 +1169,6 @@ function getAccount() {
 
 //received user profile info
 function receiveAccount( html ) {
-
     //output to screen
     $j( '#m2main' ).html( html );
     $j( '#m2' ).slideDown();
@@ -1178,12 +1176,10 @@ function receiveAccount( html ) {
 
 //takes new profile info and sends back to server
 function UpdateProfile() {
-    query = prepArrayForAjax( getFormVars( 'userAccount' ) );
-
     $j.ajax( {
         url: '/profile/update-account',
         type: 'POST',
-        data: query,
+        data: getFormVars( 'userAccount' ),
         success: profileSuccess
     } );
 
@@ -1314,7 +1310,7 @@ function recDel( json ) {
 //sign up form, validate all form info
 function signUp() {
 
-    v = getFormVars( 'signup' );
+    let v = getFormVars( 'signup' );
 
     var errmsg = [];
 
@@ -1329,8 +1325,6 @@ function signUp() {
     if ( errmsg.length < 1 ) {
         $j( '#signupMsg' ).html( 'Processing..please wait...' );
         $j( '#signupbutton' ).hide();
-
-        v = prepForQuery( v );
 
         $j.ajax( {
             url: '/profile/signup',

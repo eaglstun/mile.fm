@@ -65,10 +65,8 @@ function toggleProfile( which ) {
 
 //send in user profile
 function sendProfile() {
-    query = prepForQuery( getFormVars( 'cp_prof' ) );
-
     $j.ajax( {
-        data: query,
+        data: getFormVars( 'cp_prof' ),
         success: recProf,
         type: 'POST',
         url: 'profile/update'
@@ -85,12 +83,10 @@ function recProf( json ) {
 
 //send in external info
 function sendExt() {
-    query = prepForQuery( getFormVars( 'cp_ext' ) );
-
     $j.ajax( {
         url: 'profile/update-ext',
         type: 'POST',
-        data: query,
+        data: getFormVars( 'cp_ext' ),
         success: recExt
     } );
 

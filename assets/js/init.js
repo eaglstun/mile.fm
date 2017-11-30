@@ -9,14 +9,11 @@ $j( document ).ready( function() {
     } );
 
     $j( 'form#loginForgot' ).submit( function() {
-
-        query = prepArrayForAjax( getFormVars( 'loginForgot' ) );
-
         $j.ajax( {
             url: this.action,
             success: showForgotResponse,
             type: 'POST',
-            data: query
+            data: getFormVars( 'loginForgot' )
         } );
         return false;
     } );
@@ -342,15 +339,6 @@ function checkHash() {
 //from above
 var checkInterval = setInterval( checkHash, mySize.intervaltime );
 
-//turn an array of values into a post string for ajax
-function prepArrayForAjax( array ) {
-    output = "";
-    for ( i in array ) {
-        output += i + "=" + array[ i ] + "&";
-    }
-    return output;
-};
-
 function keyAction( e ) {
 
     key = e.which;
@@ -370,13 +358,10 @@ function keyAction( e ) {
 
 //log in from the mile control panel
 function sendLogin() {
-    //get loginform parms 
-    var params = prepForQuery( getFormVars( 'loginForm' ) );
-
     $j.ajax( {
         url: '/profile/login',
         type: 'post',
-        data: params,
+        data: getFormVars( 'loginForm' ),
         success: receiveLogin
     } );
 };
