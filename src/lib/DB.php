@@ -28,26 +28,38 @@ class DB
 
     /**
      * 
-     * @param string
-     * @param 
-     * @return array
+     *  @param string
+     *  @param array
+     *  @param 
+     *  @return array
      */
-    public function exec($sql, $index = '')
+    public function exec($sql, array $params = [], $index = '')
     {
         $return = [];
+        
+        $params = array_map('strval', $params); 
+        $type = str_repeat('s', count($params));
+        
+        $stmt = mysqli_prepare($this->connection, $sql); 
 
-        $result = mysqli_query($this->connection, $sql);
-
-        if(!$result){
-            dd(mysqli_error($this->connection));
+        if( count($params) ){
+            mysqli_stmt_bind_param($stmt, $type, ...$params);
         }
 
+        if( is_bool($stmt) ){
+            dd($sql);
+        }
+
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+
         if ($index == '') {
-            while ($row = mysqli_fetch_assoc($result)) {
+            while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                 $return[] = $row;
             }
         } else {
-            while ($row = mysqli_fetch_assoc($result)) {
+            while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                
                 $return[$row[$index]] = $row;
             }
         }

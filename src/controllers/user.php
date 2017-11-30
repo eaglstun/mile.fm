@@ -50,12 +50,12 @@ class userMVC extends Action
 					WHERE E.active = '1'
 					ORDER BY site ASC";
 
-			$allsites = $this->db->exec($sql, 'id');
+			$allsites = $this->db->exec($sql, [], 'id');
 
 			$sql = "SELECT * FROM user_external U 
 					WHERE U.userid = '$userid' ";
 
-			$usersites = $this->db->exec($sql, 'siteid');
+			$usersites = $this->db->exec($sql, [], 'siteid');
 			
 			//merge em
 			foreach ($usersites as $k => $v) {

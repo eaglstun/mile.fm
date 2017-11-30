@@ -31,7 +31,7 @@ class User
 				    ON U.id = P.userid
 				WHERE `user` = ? 
 				AND (`pass` = ? OR `passTemp` = ?)";
-
+        
         $result = $this->db->exec($sql, [$name, $pass, $pass]);
 		
 		//if there is not exactly 1 result, something went wrong

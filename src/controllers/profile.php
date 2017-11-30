@@ -170,12 +170,12 @@ class profileMVC extends Action
 					WHERE E.active = 1
 					ORDER BY site ASC";
 
-			$allsites = $this->db->exec($sql, 'id');
+			$allsites = $this->db->exec($sql, [], 'id');
 
 			$sql = "SELECT * FROM user_external U 
 					WHERE U.userid = '$userid' ";
 
-			$usersites = $this->db->exec($sql, 'siteid');
+			$usersites = $this->db->exec($sql, [], 'siteid');
 			
 			//merge em
 			foreach ($usersites as $k => $v) {
@@ -425,12 +425,11 @@ class profileMVC extends Action
 		$success = false;
 		$user = new User($this->db);
 
-		if (!$this->isAjax()) {
-			$_POST['pass'] = md5($_POST['pass']);
-		}
+		$username = filter_input( INPUT_POST, 'user' );
+		$password = filter_input( INPUT_POST, 'pass' );
 
-		$user->setName($_POST['user']);
-		$user->setPass($_POST['pass']);
+		$user->setName( $username );
+		$user->setPass( $password );
 
 		if ($user->doLogin()) {
 			$success = true;
