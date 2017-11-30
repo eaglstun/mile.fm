@@ -2,10 +2,6 @@
 class imageMVC extends Action
 {
 	//render an image for the scaled mile
-	function init()
-	{
-		include('php/class_Mile.php');
-	}
 
 	function indexAction()
 	{

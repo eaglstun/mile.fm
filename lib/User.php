@@ -15,6 +15,80 @@ class User
     {
         $this->db = $db;
     }
+
+    /**
+     *  perform a login
+     * 
+     */
+    function doLogin()
+    {
+        $name = $this->name;
+        $pass = $this->pass;
+
+        $sql = "SELECT `user`, `pass`, `id`, `priv`, `show_nudity`
+				FROM user_list U
+				LEFT JOIN user_prefs P
+				    ON U.id = P.userid
+				WHERE `user` = ? 
+				AND (`pass` = ? OR `passTemp` = ?)";
+
+        $result = $this->db->exec($sql, [$name, $pass, $pass]);
+		
+		//if there is not exactly 1 result, something went wrong
+        if (count($result) != 1) {
+            session_destroy();
+            return false;
+        }
+		
+		//set the userauth level to bitwise value
+		//standard user = 1
+		//advertiser = 4
+        $this->setAuth($result[0]['priv']);
+		
+		//set the userid to their primary key value
+        $this->setID($result[0]['id']);
+        $_SESSION['userid'] = $result[0]['id'];
+		
+		//set their username
+        $this->setName($result[0]['user']);
+        $this->setNameSession($result[0]['user']);
+		
+		//update last login time
+        $this->updateLogin();
+		
+		//show nudity or not
+        $_SESSION['show_nudity'] = $result[0]['show_nudity'];
+
+        return true;
+    }
+
+    /**
+    *
+    *   @return int
+    */
+    public static function get_logged_in(){
+        return (int) $_SESSION['userid'];
+    }
+
+    /**
+    *   returns the userid value
+    *   @return int
+    */
+    function getID()
+    {
+        $this->id = isset($_SESSION['userid']) ? $_SESSION['userid'] : false;
+
+        return $this->id;
+    }
+
+    /**
+    *   sets the userid value
+    *   @param int
+    */
+    function setID($id)
+    {
+        $this->id = (int) $id;
+    }
 	
     /**
      * set the login username
@@ -129,54 +203,6 @@ class User
         $this->maillist = $val;
     }
 	
-	//perform a login
-    function doLogin()
-    {
-        $name = $this->name;
-        $pass = $this->pass;
-
-        $sql = "SELECT `user`, `pass`, `id`, `priv`, `show_nudity`
-				FROM user_list U
-				LEFT JOIN user_prefs P
-				    ON U.id = P.userid
-				WHERE `user` = '$name' 
-				AND (`pass` = '$pass' OR `passTemp` = '$pass')";
-
-        $result = $this->db->exec($sql);
-		
-		//if there is not exactly 1 reusult, something went wrong
-        if (count($result) != 1) {
-            session_destroy();
-            return false;
-        }
-		
-		//if they are reffered, unset that
-        unset($_SESSION['ref']);
-		
-		//set the userauth level to bitwise value
-		//standard user = 1
-		//advertiser = 4
-        $this->setAuth($result[0]['priv']);
-		
-		//set the userid to their primary key value
-        $this->setID($result[0]['id']);
-        $_SESSION['userid'] = $result[0]['id'];
-		
-		//set their username
-        $this->setName($result[0]['user']);
-        $this->setNameSession($result[0]['user']);
-		
-		//update last login time
-        $this->updateLogin();
-		
-		//show nudity or not
-        $_SESSION['show_nudity'] = $result[0]['show_nudity'];
-
-        $_SESSION['pngs'] = 1;
-
-        return true;
-    }
-	
 	//finds a user by their username
 	//returns 1 if found and 0 if not found
     function findUserName()
@@ -196,10 +222,11 @@ class User
     {
         unset($_SESSION['userauth']);
         unset($_SESSION['userid']);
-        unset($_SESSION['ref']);
     }
 	
-	//create a new user with variables of object
+	/**
+     *  create a new user with variables of object
+     */
     public function createNew()
     {
         $user = $this->name;
@@ -225,67 +252,35 @@ class User
 
         $_SESSION['userid'] = $id;
 		
-		//if from refer, increment count 
-        if (isset($_SESSION['ref'])) {
-            $sql = "UPDATE eric_mile_users.ref 
-					SET `count` = (`count` + 1) 
-					WHERE `ref` = '$refer' LIMIT 1";
-
-            $this->db->execute($sql);
-			
-			//if they are reffered, unset that
-            unset($_SESSION['ref']);
-        }
-		
 		//user auth 
         $this->setAuth(1);
 		
 		//user name
         $this->setNameSession($user);
 		
-		//update the invite list
-        $sql = "UPDATE list_invite
-				SET accept='1',
-				date_accept='$now'
-				WHERE email LIKE '$refer'
-				OR email LIKE '$email'";
-
-        $this->db->execute($sql);
-		
 		//create profile record
         $sql = "INSERT INTO user_profile 
 				(userid, profile, pic) 
 				VALUES 
-				('$id', '', '')
-				ON DUPLICATE KEY UPDATE userid = '$id'";
+				(?, '', '')
+				ON DUPLICATE KEY UPDATE userid = ?";
 
-        $this->db->execute($sql);
+        $this->db->execute($sql, [$id, $id]);
     }
 	
-	//sets the userauth session amount.
-	//1 is standard user
+	/**
+     *  sets the userauth session amount. 1 is standard user
+     *  @param int
+     */
     function setAuth($privlevel)
     {
-        $_SESSION['userauth'] = $privlevel;
+        $_SESSION['userauth'] = (int) $privlevel;
     }
+
 	//returns the user priv level
     function getAuth()
     {
         return $_SESSION['userauth'];
-    }
-	
-	
-	//sets the userid value
-    function setID($id)
-    {
-        $this->id = $id;
-    }
-	
-	//returns the userid value
-    function getID()
-    {
-        $this->id = isset($_SESSION['userid']) ? $_SESSION['userid'] : false;
-        return $this->id;
     }
 	
 	//sets the username value
@@ -293,6 +288,7 @@ class User
     {
         $_SESSION['username'] = $user;
     }
+
 	//returns username value
     function getName()
     {
@@ -303,21 +299,19 @@ class User
     function updateLogin()
     {
         $browser = $_SERVER['HTTP_USER_AGENT'];
-        $id = $_SESSION['userid'];
+        $id = self::get_logged_in();
         $now = time();
 
         $sql = "UPDATE user_list
 				SET 
-				lastlogin = '$now',
-				browser = '$browser'
-				WHERE id = '$id'
+                    lastlogin = ?,
+                    browser = ?
+				WHERE id = $id
 				LIMIT 1";
 
-        $result = $this->db->execute($sql);
+        $result = $this->db->execute($sql, [$now, $browser]);
     }
-	
-	
-	
+
 	//changes the users name
     function changeNameTo($name)
     {
@@ -326,11 +320,11 @@ class User
         $id = $this->getID();
 
         $sql = "UPDATE user_list
-				SET user = '$name'
-				WHERE id = '$id'
+				SET user = ?
+				WHERE id = ?
 				LIMIT 1";
 
-        $this->db->execute($sql);
+        $this->db->execute($sql, [$name, $id]);
     }
 	
 	//update the users email status
@@ -410,8 +404,7 @@ class User
 	//loadAdds
     function loadAdds($start = 0, $limit = 17)
     {
-
-        $output = array();
+        $output = [];
 
         $sql = "SELECT * FROM content_history H 
 				WHERE `userid` = '{$this->id}'
@@ -439,8 +432,7 @@ class User
 	//loadComments
     function loadComments($start = 0, $limit = 17)
     {
-
-        $output = array();
+        $output = [];
 
         $sql = "SELECT H.* FROM content_comments C 
 				LEFT JOIN 
@@ -468,6 +460,11 @@ class User
         return $output;
     }
 
+    /**
+     * 
+     *  @param int
+     *  @param int
+     */
     function setLoc($x, $y)
     {
         $userid = $this->getID();
@@ -481,9 +478,9 @@ class User
         $sql = "REPLACE INTO user_currentActive
 				(userid, user_x, user_y, stamp)
 				VALUES
-				('$userid', '$x', '$y', '$now')";
+				(?, ?, ?, ?)";
 
-        $this->db->execute($sql);
+        $this->db->execute($sql, [$userid, $x, $y, $now]);
         return true;
     }
 }

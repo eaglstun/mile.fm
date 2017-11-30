@@ -189,8 +189,6 @@ class mapMVC extends Action
 	//called to load multiple feet at once, as clickable images
 	function getAction()
 	{
-		include('php/class_Mile.php');
-
 		$Mile = new Mile($this->db);
 
 		$this->disableLayout();
@@ -210,8 +208,6 @@ class mapMVC extends Action
 		$m = $Mile->build();
 		$empty = $Mile->empty;
 
-
-
 		if ($this->isAjax()) {
 			$this->json['empty'] = $empty;
 			$this->json['feet'] = $m;
@@ -228,7 +224,7 @@ class mapMVC extends Action
 
 		$objectid = $_POST['objectid'];
 		$reason = $_POST['reason'];
-		$user = isset($_SESSION['userid']) ? $_SESSION['userid'] : 0;
+		$user = User::get_logged_in();
 
 		$stamp = time();
 

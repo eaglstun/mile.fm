@@ -571,108 +571,15 @@ class profileMVC extends Action
 		$this->json['html'] = $outputHTML;
 	}
 	
-	//into ajax lightbox, invite a friend
-	function inviteAction()
-	{
-		$this->disableLayout();
-
-		$User = new User($this->db);
-		$id = $User->getID();
-		
-		//get total invitaions
-		$sql = "SELECT `invites` FROM user_list 
-				WHERE `id`='$id' 
-				LIMIT 1";
-
-		$res = $this->db->exec($sql);
-		$this->vars['invites'] = $res[0]['invites'];
-				
-		//get invitations already sent
-		$sql = "SELECT * FROM list_invite 
-				WHERE `friend` = '$id' 
-				ORDER BY `date` DESC";
-
-		$this->vars['invited'] = $this->db->exec($sql);
-
-		$this->json['html'] = $this->Render('invitation');
-	}
-	
-	//get html to send invitation
-	function getinviteAction()
+	/**
+	 *	get html to send invitation
+	 *
+	 */
+	public function getinviteAction()
 	{
 		$this->disableLayout();
 
 		$this->json['html'] = $this->render('invitation-form');
-	}
-	
-	//process sent invitation
-	function sendinviteAction()
-	{
-		$this->disableLayout();
-
-		$email = $_POST['email'];
-		//see if this person has already received an invitation
-		$sql = "SELECT * FROM list_invite 
-				WHERE `email` LIKE '$email' LIMIT 1";
-		$res = $this->db->exec($sql);
-
-		if (count($res)) {
-			$this->json['error'] = 'Sorry!  That person has already been invited!';
-			return;
-		}
-		
-		//see if this person has already on the mile
-		$sql = "SELECT * FROM user_list 
-				WHERE `email` LIKE '$email' LIMIT 1";
-		$res = $this->db->exec($sql);
-
-		if (count($res)) {
-			$this->json['error'] = 'Sorry!  That person is already on the mile!';
-			return;
-		}
-		
-		//put this person into the queue and fire an email
-		include_once('php/functions_redir.php');
-		include_once('php/class_Email.php');
-
-		$User = new User($this->db);
-		$id = $User->getID();
-		$now = time();
-		$custom = $_POST['custom'];
-
-		$sql = "INSERT INTO list_invite 
-				(`email`, `friend`, `date`, `last_sent`, `custom_text`) 
-				VALUES 
-				('$email', '$id', '$now', '$now', '$custom')";
-
-		$this->db->execute($sql);
-		
-		//get the email togehter
-		$sql = "SELECT `email` FROM user_list 
-				WHERE `id` = '$id' LIMIT 1";
-		$res = $this->db->exec($sql);
-
-		$fUniq = base_base2base($id, 10, 59);
-
-		$this->vars['link'] = HTTPROOT . "ref/friend/id/" . $fUniq . "/email/" . urlencode($email);
-		$this->vars['to'] = array(
-			'uniq' => $fUniq,
-			'email' => $email
-		);
-		$this->vars['friend'] = $res[0]['email'];
-
-		$body = $this->render('email-friendinvite');
-
-
-		$oEmail = new Email();
-		$oEmail->addTo($email);
-		$oEmail->addBcc('eeaglstun@yahoo.com');
-		$oEmail->setSubject('You have been invited to MILE.fm');
-		$oEmail->setBody($body);
-		$oEmail->sendMail();
-		
-		//$this->json['html'] = $body;
-		$this->inviteAction();
 	}
 
 	/**
@@ -691,14 +598,12 @@ class profileMVC extends Action
 
 		//strip double spaces
 		$user = trim(preg_replace('/\s\s+/', ' ', $user));
-		$ref = isset($_SESSION['ref']) ? $_SESSION['ref'] : '';
 
 		$User = new User($this->db);
 
 		$User->setName($user);
 		$User->setEmail($email);
 		$User->setPass($pass);
-		$User->setRefer($ref);
 
 		if ($User->findUserName()) {
 			array_push($errors, 'That user name is already taken!');

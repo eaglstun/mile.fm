@@ -24,7 +24,6 @@ class indexMVC extends Action
 
 	public function indexAction()
 	{
-
 		$this->vars['cpanel'] = $this->Render('cpanel');
 
 		$sql = "SELECT * FROM fm
@@ -51,9 +50,6 @@ class indexMVC extends Action
 		
 		//build initial mile load
 		if (!isset($this->vars['mileContent'])) {
-
-			include('php/class_Mile.php');
-
 			$Mile = new Mile($this->db);
 			
 			//d(($_SESSION['x'] / 864));

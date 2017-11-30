@@ -2,11 +2,6 @@
 
 class renderMVC extends Action
 {
-	function init()
-	{
-		include('php/class_Mile.php');
-	}
-
 	function indexAction()
 	{
 		$this->disableLayout();

@@ -56,7 +56,7 @@ class DB
     }
 
     /**
-     * 
+     * insert, update
      * @param string
      * @param array
      * @return bool
